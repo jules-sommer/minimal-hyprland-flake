@@ -74,11 +74,6 @@
           # Move .nix files to  `./nixos/` dir for organization.
           root = ./flake-src;
 
-          config = {
-            allowUnfree = true;
-            permittedUnfreePackages = [ "electron" ];
-          };
-
           meta = {
             name = "xeta";
             title = "Xetamine (jules@xeta) Sys Flake";
@@ -86,6 +81,13 @@
         };
       };
     in lib.mkFlake {
+      channels-config = {
+        allowUnfree = true;
+        permittedUnfreePackages =
+          [ "electron" "nix-2.15.3" "github-copilot-cli-0.1.36" ];
+        allowUnfreePredicate = pkg:
+          builtins.elem (lib.getName pkg) [ "github-copilot-cli-0.1.36" ];
+      };
       overlays = with inputs; [
         fenix.overlays.default
         snowfall-flake.overlays.default

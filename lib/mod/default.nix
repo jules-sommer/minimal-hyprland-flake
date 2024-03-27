@@ -14,9 +14,6 @@ with lib; rec {
   ##
   #@ Type -> Any -> Optional String -> mkOption
   mkOpt = type: default: description:
-    lib.mkOption { inherit type default description; };
-
-  mkOpt'' = type: default: description:
     mkOption { inherit type default description; };
 
   ## Create a NixOS module option without a description.

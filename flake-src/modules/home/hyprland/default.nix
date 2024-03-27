@@ -1,17 +1,94 @@
 { lib, pkgs, config, inputs, system, ... }:
 let
-  inherit (lib) types mkEnableOption mkIf;
-  inherit (lib.xeta) mkOpt getHyprlandPkg;
+  inherit (lib) types mkEnableOption mkIf mkOption;
+  inherit (lib.xeta) mkOpt getHyprlandPkg getTheme;
   cfg = config.xeta.home.desktop.hyprland;
   get_time = ''
     #!/bin/sh
     echo date '+%Y-%m-%d %H:%M:%S'
   '';
-  theme = cfg.theme;
+  theme = getTheme cfg.theme;
 in {
   options.xeta.home.desktop.hyprland = {
     enable = mkEnableOption "Enable Hyprland (@/home-manager)";
-    theme = mkOpt (lib.xeta.types.themes) "synth-midnight-dark" "Theme to use";
+    theme = mkOpt (types.nullOr types.str) "synth-midnight-dark" "Theme to use";
+
+    settings = {
+      modifier =
+        mkOpt (types.nullOr types.enum ([ "CTRL" "ALT" "SUPER" ])) "ALT"
+        "Modifier key to use for Hyprland keybindings.";
+      keybindings = mkOption {
+        type = types.listOf (types.submodule {
+          options = {
+            modifiers = mkOption {
+              type = types.listOf types.str;
+              default = [ ]; # Empty list means "$mod" will be used by default
+              description = ''
+                List of modifier keys for the binding. If empty, "$mod" is assumed as the default modifier.
+                Explicitly specify modifiers (e.g., ["ALT"], ["$mod", "SHIFT"]) to override the default.
+              '';
+            };
+            key = mkOption {
+              type = types.str;
+              description = "The key associated with the binding.";
+            };
+            action = mkOption {
+              type = types.str;
+              description = "The action to perform.";
+            };
+            args = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              description = "Optional arguments for the action.";
+            };
+          };
+        });
+        default = [ ];
+        description = "Keybindings for Hyprland.";
+      };
+
+      actions = mkOpt (types.attrsOf (types.submodule {
+        options = {
+          command = mkOpt (types.nullOr types.str) null
+            "The command to execute for this action.";
+          description =
+            mkOpt (types.nullOr types.str) null "A description of the action.";
+        };
+      })) { } "Default actions for Hyprland.";
+
+      applications = mkOpt (types.attrsOf (types.submodule { })) {
+        options = {
+          command = mkOpt (types.nullOr types.str) null
+            "The command to execute for this application.";
+          script = mkOpt (types.nullOr types.path) null
+            "The path of the script to execute for this application.";
+          description = mkOpt (types.nullOr types.str) null
+            "A description of the application or script and it's function.";
+        };
+      } "Default applications for Hyprland.";
+
+      defaults = {
+        terminal = mkOpt (types.nullOr types.str) "alacritty"
+          "Default terminal to use for Hyprland.";
+        file_manager = {
+          gui = mkOpt (types.nullOr types.str) "thunar"
+            "Default GUI file manager to use for Hyprland.";
+          tui = mkOpt (types.nullOr types.str) "alacritty -e ranger"
+            "Default TUI file manager to use for Hyprland.";
+        };
+        menu = mkOpt (types.nullOr types.str) "rofi -show drun"
+          "Default menu command to use for Hyprland.";
+        screenshot =
+          mkOpt (types.nullOr types.str) "nu ~/_dev/nu_tools/screenshot.nu"
+          "Default screenshot command to use for Hyprland.";
+        clipboard_manager = mkOpt (types.nullOr types.str)
+          "cliphist list | wofi --dmenu | cliphist decode | wl-copy"
+          "Default clipboard manager command to use for Hyprland.";
+        notifycmd = mkOpt (types.nullOr types.str)
+          "notify-send -h string:x-canonical-private-synchronous:hypr-cfg -u low"
+          "Default notification command to use for Hyprland.";
+      };
+    };
   };
 
   config = mkIf cfg.enable {
@@ -154,10 +231,10 @@ in {
             let
               ws = let c = (x + 1) / 10;
               in builtins.toString (x + 1 - (c * 10));
-            in ([
+            in [
               "$mod, ${ws}, workspace, ${toString (x + 1)}"
               "$mod SHIFT, ${ws}, movetoworkspace, ${toString (x + 1)}"
-            ])) 10));
+            ]) 10));
 
         # ▄▀█ █▄░█ █ █▀▄▀█ ▄▀█ ▀█▀ █ █▀█ █▄░█ █▀
         # █▀█ █░▀█ █ █░▀░█ █▀█ ░█░ █ █▄█ █░▀█ ▄█

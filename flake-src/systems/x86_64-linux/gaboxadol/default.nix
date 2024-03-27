@@ -1,7 +1,9 @@
 { pkgs, ... }: {
   imports = [ # Include the results of the hardware scan.
-    ./hardware-configuration.nix
+    ./hardware.nix
   ];
+
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -10,14 +12,10 @@
   boot.initrd.luks.devices."luks-e84e03e4-9df5-4bdf-8d37-5a7cd25e435b".device =
     "/dev/disk/by-uuid/e84e03e4-9df5-4bdf-8d37-5a7cd25e435b";
   networking.hostName = "gaboxadol"; # Define your hostname.
-  networking.wireless.enable =
-    true; # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  nixpkgs.config.permittedInsecurePackages = [ "nix-2.15.3" ];
 
   # Enable networking
   networking.networkmanager.enable = true;
@@ -74,10 +72,6 @@
       floorp
     ];
   };
-
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget

@@ -12,14 +12,11 @@ in {
       };
     };
   };
+
   home = {
-
     packages = with pkgs; [ neovim firefox ];
-
     sessionVariables = { EDITOR = "nvim"; };
-
     shellAliases = { vimdiff = "nvim -d"; };
-
     stateVersion = "23.11";
   };
 }
