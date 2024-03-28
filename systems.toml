@@ -1,0 +1,35 @@
+title = "Hyprxeta Nix"
+description = "A minimal Nix flake, called Xeta, that provides many modular configuration options for easy setup of Hyprland, Neovim, Nushell, xdg-portals, etc. It also has home-manager setup in a similarly modular way."
+flake = true
+license = "GPL-3.0-or-later"
+version = "0.1.0"
+namespace = "xeta"
+
+[[systems]]
+name = "xetamine"
+hostname = "xeta"
+
+  [[systems.users]]
+  username = "jules"
+  fullname = "Jules Sommer"
+  email = "jules@rcsrc.shop"
+  home = "/home/jules"
+  config = "/home/jules/005_dotfiles"
+
+[[systems]]
+name = "gaboxadol"
+hostname = "gaba"
+
+  [[systems.users]]
+  username = "jules"
+  fullname = "Jules Sommer"
+  email = "jules@rcsrc.shop"
+  home = "/home/jules"
+  config = "/home/jules/005_dotfiles"
+
+  [[systems.users]]
+  username = "guest"
+  fullname = "Guest"
+  email = "nobody@rcsrc.shop"
+  home = "/home/guest"
+  config = "/home/guest/005_dotfiles"

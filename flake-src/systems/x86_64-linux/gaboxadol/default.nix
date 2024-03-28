@@ -1,7 +1,20 @@
-{ pkgs, ... }: {
+{ pkgs, lib, ... }:
+let
+  meta = (builtins.fromTOML
+    (builtins.readFile (lib.snowfall.get-file "systems.toml")));
+in {
   imports = [ # Include the results of the hardware scan.
     ./hardware.nix
   ];
+
+  xeta.system = {
+    user = {
+      username = "jules";
+      fullname = "Jules Sommer";
+      home = /home/jules;
+    };
+    hostname = "xeta";
+  };
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
@@ -17,9 +30,6 @@
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-  # Enable networking
-  networking.networkmanager.enable = true;
-
   # Set your time zone.
   time.timeZone = "America/Toronto";
 
@@ -27,51 +37,11 @@
   i18n.defaultLocale = "en_CA.UTF-8";
 
   # Configure keymap in X11
-  services.xserver = {
-    enable = true;
-    xkb = {
-      layout = "us";
-      variant = "";
-    };
-    displayManager.gdm.enable = true;
-    desktopManager.gnome.enable = true;
-    libinput.enable = true;
-  };
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
   # Enable sound with pipewire.
-  sound.enable = true;
-  hardware.pulseaudio.enable = false;
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
-  };
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.jules = {
-    isNormalUser = true;
-    description = "Jules";
-    extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [
-      vesktop
-      github-desktop
-      warp-terminal
-      vscode-with-extensions
-      bitwarden
-      bitwarden-cli
-      floorp
-    ];
-  };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -103,8 +73,6 @@
     enable = true;
     enableSSHSupport = true;
   };
-
-  # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;

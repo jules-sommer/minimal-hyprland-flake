@@ -74,25 +74,48 @@
           # Move .nix files to  `./nixos/` dir for organization.
           root = ./flake-src;
 
+          channels-config = { allowUnfree = true; };
+
           meta = {
-            name = "xeta";
+            name = meta;
             title = "Xetamine (jules@xeta) Sys Flake";
           };
         };
       };
-    in lib.mkFlake {
+      meta = (lib.getMeta ./systems.toml);
+    in (lib.mkFlake {
       channels-config = {
-        allowUnfree = true;
-        permittedUnfreePackages =
-          [ "electron" "nix-2.15.3" "github-copilot-cli-0.1.36" ];
+        allowUnfree = lib.mkDefault true;
+        permittedUnfreePackages = [
+          "electron"
+          "nix-2.15.3"
+          "github-copilot-cli-0.1.36"
+          "warp-terminal-0.2024.03.19.08.01.stable_01"
+        ];
         allowUnfreePredicate = pkg:
-          builtins.elem (lib.getName pkg) [ "github-copilot-cli-0.1.36" ];
+          builtins.elem (lib.getName pkg) [
+            "github-copilot-cli-0.1.36"
+            "warp-terminal-0.2024.03.19.08.01.stable_01"
+          ];
       };
+
+      # Applies to all home-manager configs
+      home.modules = with inputs; [
+        hyprland.homeManagerModules.default 
+      ];
+
+      # Applies to all nixos systems
+      systems.modules.nixos = with inputs; [
+        home-manager.nixosModules.home-manager
+      ];
+
       overlays = with inputs; [
         fenix.overlays.default
         snowfall-flake.overlays.default
         snowfall-thaw.overlays.default
         snowfall-drift.overlays.default
       ];
+    }) // {
+      inherit meta;
     };
 }
