@@ -14,7 +14,10 @@ in {
   config = lib.mkIf cfg.enable {
     # Enable the user's custom fonts
     # in the user's home configuration
-    snowfallorg.user.xeta.home.config = { fonts.fontconfig = enabled; };
+    snowfallorg.user.xeta.home.config = {
+      home.packages = with pkgs; [ font-awesome ];
+      fonts.fontconfig = enabled;
+    };
 
     fonts = {
       enableDefaultPackages = true;
