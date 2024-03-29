@@ -20,7 +20,7 @@ in {
       fullname =
         mkOpt (types.nullOr types.str) null "The full name of the user";
       home =
-        mkOpt (types.nullOr types.path) null "The home directory of the user";
+        mkOpt (types.nullOr (types.either types.path types.str)) null "The home directory of the user";
     };
     hostname = mkOpt (types.nullOr types.str) null "The hostname of the system";
   };

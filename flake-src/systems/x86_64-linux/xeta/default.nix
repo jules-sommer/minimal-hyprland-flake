@@ -11,7 +11,7 @@ in  {
       user = {
         username = "jules";
         fullname = "Jules Sommer";
-        home = /home/jules;
+        home = "/home/jules";
       };
       hostname = "xeta";
       kbd = {
