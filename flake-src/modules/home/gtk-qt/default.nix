@@ -1,6 +1,9 @@
-{ pkgs, inputs, config, ... }: {
-  options.xeta.home.gtk = {
-    # nothing to configure yet
+{ pkgs, inputs, config, lib, ... }: let inherit (lib) types; inherit (lib.xeta) mkOpt; in {
+  options.xeta.home = {
+    dotfiles = mkOpt (types.nullOr types.str) null "where to put the dotfiles";
+    gtk = {
+      # nothing to configure yet
+    };
   };
   config = {
     # Configure Cursor Theme

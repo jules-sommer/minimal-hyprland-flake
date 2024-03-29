@@ -26,11 +26,6 @@ in {
 			};
 		};
 		security.polkit = enabled;
-		xdg.portal = {
-			enable = true;
-			extraPortals = with pkgs; [ xdg-desktop-portal ];
-			configPackages = with pkgs; [ xdg-desktop-portal-hyprland xdg-desktop-portal ];
-		};
 		environment.variables = {
 			POLKIT_BIN = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
 		};

@@ -5,6 +5,7 @@ let
 in {
   xeta = {
     home = {
+      dotfiles = "/home/jules/020_config";
       nushell = enabled;
       desktop = {
         hyprland = {

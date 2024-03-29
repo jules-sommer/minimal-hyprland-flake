@@ -12,7 +12,6 @@ let
   #   "You must set a home directory to use this flake @ config.xeta.system.user.home";
   # assert lib.assertMsg (cfg.hostname != null)
   #   "You must set a hostname to use this flake @ config.xeta.system.hostname";
-
 in {
   options.xeta.system = {
     user = {
@@ -21,6 +20,8 @@ in {
         mkOpt (types.nullOr types.str) null "The full name of the user";
       home =
         mkOpt (types.nullOr (types.either types.path types.str)) null "The home directory of the user";
+      dotfiles =
+        mkOpt (types.nullOr types.str) null "The dotfiles directory for the user's config.";
     };
     hostname = mkOpt (types.nullOr types.str) null "The hostname of the system";
   };
@@ -33,6 +34,19 @@ in {
       useDefaultShell = true;
       description = cfg.user.fullname;
       extraGroups = [ "networkmanager" "wheel" ];
+    };
+    
+    qt = {
+      enable = true;
+      platformTheme = "qt5ct";
+      style = "adwaita-dark";
+    };
+
+    snowfallorg.user.${cfg.user.username}.home.config = {
+      programs.home-manager.enable = true;
+      home.username = cfg.user.username;
+      home.homeDirectory = cfg.user.home;
+      home.stateVersion = config.system.stateVersion;
     };
   };
 }

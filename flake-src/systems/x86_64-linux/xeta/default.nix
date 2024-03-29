@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }: let
+{ pkgs, lib, config, ... }: let
   inherit (lib.xeta) enabled;
 in  {
 
@@ -12,6 +12,7 @@ in  {
         username = "jules";
         fullname = "Jules Sommer";
         home = "/home/jules";
+        dotfiles = "${config.xeta.system.user.home}/020_config";
       };
       
       hostname = "xeta";
