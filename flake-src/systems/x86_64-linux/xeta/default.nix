@@ -13,13 +13,17 @@ in  {
         fullname = "Jules Sommer";
         home = "/home/jules";
       };
+      
       hostname = "xeta";
       fonts = enabled;
+      env = enabled;
+      networking = enabled;
+      
       kbd = {
         enable = true;
         layout = "us";
       };
-      networking = enabled;
+      
       services = {
         polkit = enabled;
         audio.pipewire = {
