@@ -14,6 +14,7 @@ in  {
         home = "/home/jules";
       };
       hostname = "xeta";
+      fonts = enabled;
       kbd = {
         enable = true;
         layout = "us";
