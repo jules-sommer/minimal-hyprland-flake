@@ -1,7 +1,26 @@
 { pkgs, config, lib, ... }:
 let palette = lib.xeta.getTheme (config.xeta.home.desktop.hyprland.theme);
 in {
-  home.file.".config/rofi/config.rasi".text = ''
+  programs.rofi = {
+    enable = true;
+    terminal = "${pkgs.alacritty}/bin/alacritty";
+    cycle = true;
+    font = "JetBrainsMono";
+    package = pkgs.rofi-wayland;
+    plugins = with pkgs; [
+      rofimoji
+      rofi-vpn
+      rofi-rbw-wayland
+      rofi-file-browser
+      rofi-power-menu
+      rofi-pulse-select
+      rofi-systemd
+      rofi-screenshot
+      rofi-calc
+    ];
+  };
+  
+  home.file.${"${config.xeta.home.dotfiles}/rofi/config.rasi"}.text = ''
     @theme "/dev/null"
 
     * {
