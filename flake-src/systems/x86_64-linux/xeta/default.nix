@@ -16,16 +16,22 @@ in {
       };
 
       development = { rust = { fenix = enabled; }; };
+
+      programs = {
+        snowfall-utils = enabled;
+        distrobox = enabled;
+      };
+
       hostname = "xeta";
       fonts = enabled;
       env = enabled;
       networking = enabled;
-      
+
       kbd = {
         enable = true;
         layout = "us";
       };
-      
+
       services = {
         polkit = enabled;
         audio.pipewire = {
@@ -39,7 +45,7 @@ in {
       };
     };
   };
-  
+
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Bootloader
@@ -56,7 +62,8 @@ in {
     };
     plymouth = {
       enable = true;
-      font = "${pkgs.jetbrains-mono}/share/fonts/truetype/JetBrainsMono-Regular.ttf";
+      font =
+        "${pkgs.jetbrains-mono}/share/fonts/truetype/JetBrainsMono-Regular.ttf";
     };
   };
 
@@ -66,7 +73,7 @@ in {
     useGlobalPkgs = true;
     useUserPackages = true;
   };
-  
+
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
