@@ -20,6 +20,10 @@ in {
       programs = {
         snowfall-utils = enabled;
         distrobox = enabled;
+        rustdesk = {
+          enable = true;
+          relayIP = "24.141.46.69";
+        };
       };
 
       hostname = "xeta";
