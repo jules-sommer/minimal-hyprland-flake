@@ -6,7 +6,8 @@ let
 in {
   options.xeta.system.fonts = {
     enable = mkEnableOption "Enable theming and fonts";
-    fonts = mkOpt (types.nullOr types.enum [ "JetBrainsMono" "FiraCode" ]) "JetBrainsMono"
+    fonts = mkOpt (types.nullOr types.enum [ "JetBrainsMono" "FiraCode" ])
+      "JetBrainsMono"
       "Which Nerdfonts to install on the system. Default is JetBrainsMono";
   };
 
@@ -31,6 +32,7 @@ in {
     };
 
     environment.systemPackages = with pkgs; [
+      font-awesome
       jetbrains-mono
       fira-code
       (nerdfonts.override { fonts = [ "JetBrainsMono" "FiraCode" ]; })
