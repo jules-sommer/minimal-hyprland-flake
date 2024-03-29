@@ -1,6 +1,6 @@
-{ pkgs, lib, config, ... }: let
-  inherit (lib.xeta) enabled;
-in  {
+{ pkgs, lib, config, ... }:
+let inherit (lib.xeta) enabled;
+in {
 
   imports = [ ./hardware.nix ];
 
@@ -14,7 +14,8 @@ in  {
         home = "/home/jules";
         dotfiles = "${config.xeta.system.user.home}/020_config";
       };
-      
+
+      development = { rust = { fenix = enabled; }; };
       hostname = "xeta";
       fonts = enabled;
       env = enabled;
