@@ -18,6 +18,7 @@ in {
           theme = "synth-midnight-dark";
         };
       };
+      misc = enabled;
     };
   };
 

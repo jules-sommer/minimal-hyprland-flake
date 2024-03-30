@@ -7,7 +7,6 @@ in {
 
   imports = [ ./hardware.nix ];
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
   boot.initrd.luks.devices."luks-e84e03e4-9df5-4bdf-8d37-5a7cd25e435b".device =
     "/dev/disk/by-uuid/e84e03e4-9df5-4bdf-8d37-5a7cd25e435b";
   networking.hostName = "gaboxadol"; # Define your hostname.
@@ -23,6 +22,11 @@ in {
         dotfiles = "${config.xeta.system.user.home}/020_config";
       };
 
+      graphics = {
+        opengl = true;
+        drivers = [ "nouveau" ];
+      };
+
       development = { rust = { fenix = enabled; }; };
       desktop = { hyprland = enabled; };
       programs = {
@@ -30,11 +34,11 @@ in {
         distrobox = enabled;
         rustdesk = {
           enable = true;
-          # relayIP = "24.141.46.69";
+          relayIP = "24.141.46.69";
         };
       };
 
-      hostname = "xeta";
+      hostname = "gaboxadol";
       fonts = enabled;
       env = enabled;
       networking = enabled;
