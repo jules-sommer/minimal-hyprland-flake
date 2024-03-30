@@ -1,12 +1,17 @@
 { lib, pkgs, config, systems, ... }:
 # User information gathered by Snowfall Lib is available.
 let
+  inherit (lib.xeta) enabled;
   meta = (builtins.fromTOML
     (builtins.readFile (lib.snowfall.fs.get-file "systems.toml")));
   traced = builtins.trace meta "meta";
 in {
   xeta = {
     home = {
+      dotfiles = "/home/jules/020_config";
+      starship = enabled;
+      alacritty = enabled;
+      nushell = enabled;
       desktop = {
         hyprland = {
           enable = true;
@@ -17,17 +22,18 @@ in {
   };
 
   home = {
-    username = lib.mkDefault "meta.systems.gaboxadol.username";
+    username = lib.mkDefault "jules";
     packages = with pkgs; [
       vesktop
       github-desktop
+      neofetch
       warp-terminal
       vscode-with-extensions
       bitwarden
       bitwarden-cli
       floorp
     ];
-    shellAliases = { vimdiff = "nvim -d"; };
+    shellAliases = { };
   };
 
   programs = {
@@ -49,7 +55,7 @@ in {
     };
     git = {
       enable = true;
-      userName = "jule-ssommer";
+      userName = "jules-sommer";
       userEmail = "jules@rcsrc.shop";
     };
   };
@@ -61,5 +67,6 @@ in {
       createDirectories = true;
     };
   };
+
   home.stateVersion = "23.11";
 }

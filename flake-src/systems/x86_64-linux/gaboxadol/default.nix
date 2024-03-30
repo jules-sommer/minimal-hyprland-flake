@@ -1,30 +1,87 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, system, config, ... }:
 let
   meta = (builtins.fromTOML
     (builtins.readFile (lib.snowfall.get-file "systems.toml")));
+  inherit (lib.xeta) enabled;
 in {
-  imports = [ # Include the results of the hardware scan.
-    ./hardware.nix
-  ];
 
-  xeta.system = {
-    user = {
-      username = "jules";
-      fullname = "Jules Sommer";
-      home = /home/jules;
-    };
-    hostname = "xeta";
-  };
+  imports = [ ./hardware.nix ];
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
-
-  # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-
   boot.initrd.luks.devices."luks-e84e03e4-9df5-4bdf-8d37-5a7cd25e435b".device =
     "/dev/disk/by-uuid/e84e03e4-9df5-4bdf-8d37-5a7cd25e435b";
   networking.hostName = "gaboxadol"; # Define your hostname.
+
+  # our custom namespace where we defined
+  # config settings for modularity :3
+  xeta = {
+    system = {
+      user = {
+        username = "jules";
+        fullname = "Jules Sommer";
+        home = "/home/jules";
+        dotfiles = "${config.xeta.system.user.home}/020_config";
+      };
+
+      development = { rust = { fenix = enabled; }; };
+      desktop = { hyprland = enabled; };
+      programs = {
+        snowfall-utils = enabled;
+        distrobox = enabled;
+        rustdesk = {
+          enable = true;
+          # relayIP = "24.141.46.69";
+        };
+      };
+
+      hostname = "xeta";
+      fonts = enabled;
+      env = enabled;
+      networking = enabled;
+
+      kbd = {
+        enable = true;
+        layout = "us";
+      };
+
+      services = {
+        polkit = enabled;
+        audio.pipewire = {
+          enable = true;
+          support = {
+            alsa = true;
+            pulse = true;
+            jack = true;
+          };
+        };
+      };
+    };
+  };
+
+  # Bootloader
+  boot = {
+    loader = {
+      systemd-boot = {
+        enable = true;
+        consoleMode = "auto";
+        editor = false;
+        netbootxyz = enabled;
+        memtest86 = enabled;
+      };
+      efi.canTouchEfiVariables = true;
+    };
+    plymouth = {
+      enable = true;
+      font =
+        "${pkgs.jetbrains-mono}/share/fonts/truetype/JetBrainsMono-Regular.ttf";
+    };
+  };
+
+  users.defaultUserShell = pkgs.nushell;
+  home-manager = {
+    useGlobalPkgs = true;
+    useUserPackages = true;
+  };
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -36,12 +93,8 @@ in {
   # Select internationalisation properties.
   i18n.defaultLocale = "en_CA.UTF-8";
 
-  # Configure keymap in X11
-
   # Enable CUPS to print documents.
   services.printing.enable = true;
-
-  # Enable sound with pipewire.
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -53,7 +106,6 @@ in {
     lazygit
     starship
     rnr
-    macchina
     btop
     gh
     nil
@@ -69,10 +121,20 @@ in {
 
   # Some programs need SUID wrappers, can be configured further or are
   #  started in user sessions.
-  programs.mtr.enable = true;
-  programs.gnupg.agent = {
-    enable = true;
-    enableSSHSupport = true;
+  programs = {
+    xfconf = enabled;
+    dconf = enabled;
+    mtr = enabled;
+    gnupg.agent = {
+      enable = true;
+      enableSSHSupport = true;
+    };
+    steam = {
+      enable = true;
+      gamescopeSession = enabled;
+      remotePlay.openFirewall = true;
+      dedicatedServer.openFirewall = true;
+    };
   };
 
   # Enable the OpenSSH daemon.
@@ -86,4 +148,5 @@ in {
 
   system.stateVersion =
     "23.11"; # This is not the system version, don't change it!!
+
 }
