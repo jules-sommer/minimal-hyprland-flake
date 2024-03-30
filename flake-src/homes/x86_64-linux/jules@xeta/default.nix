@@ -1,11 +1,12 @@
 { lib, pkgs, config, ... }:
 # User information gathered by Snowfall Lib is available.
-let
-  inherit (lib.xeta) enabled;
+let inherit (lib.xeta) enabled;
 in {
   xeta = {
     home = {
       dotfiles = "/home/jules/020_config";
+      starship = enabled;
+      alacritty = enabled;
       nushell = enabled;
       desktop = {
         hyprland = {
@@ -28,7 +29,7 @@ in {
       bitwarden-cli
       floorp
     ];
-    shellAliases = {};
+    shellAliases = { };
   };
 
   programs = {
@@ -62,6 +63,6 @@ in {
       createDirectories = true;
     };
   };
-  
+
   home.stateVersion = "23.11";
 }

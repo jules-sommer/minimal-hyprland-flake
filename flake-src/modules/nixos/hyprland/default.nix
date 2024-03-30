@@ -2,9 +2,9 @@
 let
   inherit (lib) types mkEnableOption mkIf;
   inherit (lib.xeta) mkOpt disabled;
-  cfg = config.xeta.desktop.hyprland;
+  cfg = config.xeta.system.desktop.hyprland;
 in {
-  options.xeta.desktop.hyprland = {
+  options.xeta.system.desktop.hyprland = {
     enable = mkEnableOption "Enable Hyprland.";
   };
   config = mkIf cfg.enable {
@@ -15,11 +15,11 @@ in {
         gdm = disabled;
       };
       desktopManager.gnome = disabled;
-      desktopManager.xterm= disabled;
+      desktopManager.xterm = disabled;
     };
 
     environment.systemPackages = with pkgs; [
-      greetd
+      greetd.greetd
       greetd.tuigreet
       swaybg
       wl-clipboard
@@ -46,7 +46,6 @@ in {
       enable = true;
       package = lib.xeta.getHyprlandPkg system;
       xwayland.enable = true;
-      enableNvidiaPatches = true;
     };
   };
 }

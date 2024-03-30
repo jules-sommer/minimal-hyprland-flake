@@ -3,6 +3,12 @@ let
   inherit (lib) types mkEnableOption;
   inherit (lib.xeta) enabled mkOpt;
   cfg = config.xeta.system.fonts;
+  fonts_pkgs = with pkgs; [
+    font-awesome
+    jetbrains-mono
+    fira-code
+    (nerdfonts.override { fonts = [ "JetBrainsMono" "FiraCode" ]; })
+  ];
 in {
   options.xeta.system.fonts = {
     enable = mkEnableOption "Enable theming and fonts";
@@ -15,7 +21,7 @@ in {
     # Enable the user's custom fonts
     # in the user's home configuration
     snowfallorg.user.xeta.home.config = {
-      home.packages = with pkgs; [ font-awesome ];
+      home.packages = fonts_pkgs;
       fonts.fontconfig = enabled;
     };
 
@@ -34,11 +40,6 @@ in {
       };
     };
 
-    environment.systemPackages = with pkgs; [
-      font-awesome
-      jetbrains-mono
-      fira-code
-      (nerdfonts.override { fonts = [ "JetBrainsMono" "FiraCode" ]; })
-    ];
+    environment.systemPackages = fonts_pkgs;
   };
 }

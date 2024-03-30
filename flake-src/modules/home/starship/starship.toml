@@ -1,0 +1,160 @@
+## Custom Starship Prompt ##
+## https://starship.rs/config/
+
+format = '''
+[╭─ ](#ff3311)$directory$container$all$shell$cmd_duration$time$line_break[╰─](#ff3311)$jobs$status$username$hostname$character
+'''
+command_timeout = 2000
+right_format = """$time$shell$sudo"""
+
+[directory]
+format = "[$path ]($style)"
+#format = "[$path ]($style)"
+style = "#ffd81f"
+truncation_length = 3
+truncate_to_repo = true
+truncation_symbol = "../"
+# home_symbol = " "
+home_symbol = "~"
+read_only_style = "#ff2200"
+
+[directory.substitutions]
+"Documents" = " "
+"Downloads" = " "
+"Music" = " "
+"Pictures" = " "
+
+[container]
+format = '[\[$symbol$name\] ]($style)'
+style = 'bold #cc0d00'
+
+[git_status]
+style = "white"
+ahead = "⇡${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+behind = "⇣${count}"
+deleted = "x"
+
+[shell]
+bash_indicator = "^^BASH"
+fish_indicator = "fish"
+zsh_indicator = "**ZSH"
+nu_indicator = "nu"
+unknown_indicator = "sh??"
+format = ' [$indicator]($style)[|](#5f5d5a)'
+style = "#04e165e8"
+disabled = false
+
+[cmd_duration]
+min_time = 1
+format = '[$duration]($style)[|](#5f5d5a)'
+style = "#30a0ff"
+disabled = false
+
+[time]
+format = '[$time]($style)'
+#             "(Sun 12:34:60 AM|2024/04/15)"
+time_format = "[%a %l:%M %p|%y/%m/%d]"
+style = "#cc39d1"
+disabled = false
+
+[sudo]
+format = '[$symbol]($style)[|](#5f5d5a)'
+symbol = 'sudo'
+style = '#c50044'
+disabled = true
+
+[username]
+format = "[$user:]($style)"
+style_user = "bold #cc39d1"
+style_root = "bold #ff11e4"
+disabled = false
+show_always = true
+
+# Prompt: 2 parameters 
+[character]
+success_symbol = " [λ_](bold #fff6ed)"
+error_symbol = " [X>>](bold #ff1144)"
+
+## Disabled Modules ##
+[hostname]
+format = "[$hostname]($style) in "
+style = "bold dimmed red"
+trim_at = "-"
+ssh_only = true
+disabled = true
+
+[battery]
+disabled = true
+
+# LANGUAGES
+
+[c]
+symbol = ""
+style = "fg:#ffffff bg:#840a2c"
+format = '[ $symbol ($version) ]($style)'
+disabled = false
+
+[kubernetes]
+style = "fg:#ffffff bg:#326ce5"
+format = '[ on ﴱ ($user on )($cluster in )$context \($namespace\) ]($style)'
+disabled = false
+
+[gcloud]
+symbol = " "
+style = "fg:#ffffff bg:#0f9d58"
+format = '[ on $symbol $account(@$domain)(\($region\)) ]($style) '
+# format = '[ on $symbol account@company.iam.gserviceaccount.com(\($region\)) ]($style) ' # for testing purposes
+disabled = false
+
+[golang]
+symbol = ""
+style = "fg:#ffffff bg:#007d9c"
+format = '[ $symbol ($version) ]($style)'
+disabled = false
+
+[java]
+symbol = ""
+style = "fg:#ffffff bg:#007396"
+format = '[ $symbol ($version) ]($style)'
+disabled = false
+
+[lua]
+symbol = ""
+style = "fg:#ffffff bg:#000080"
+format = '[ $symbol ($version) ]($style)'
+disabled = false
+
+[nodejs]
+symbol = ""
+style = "fg:#ffffff bg:#5fa04e"
+format = '[ $symbol ($version) ]($style)'
+disabled = false
+
+[package]
+symbol = ""
+style = "fg:#ffffff bg:#cb3837"
+format = '[ $symbol ($version) ]($style)'
+disabled = false
+
+[php]
+symbol = ''
+style = "fg:#ffffff bg:#4F5B93"
+format = '[ $symbol ($version) ]($style)'
+disabled = false
+
+[python]
+symbol = ''
+style = "fg:#000000 bg:#ffdf76"
+format = '[ $symbol ($version) ]($style)'
+disabled = false
+
+[rust]
+symbol = ""
+style = "fg:#ffffff bg:#a72145"
+format = '[ $symbol ($version) ]($style)'
+disabled = false
+
+# ╭─
+# ╰─
+# └─

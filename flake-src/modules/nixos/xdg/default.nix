@@ -30,9 +30,18 @@ in {
         CLUTTER_BACKEND = "wayland";
       };
       xdg = {
+        configHome = dotfiles;
         userDirs = {
           enable = true;
           createDirectories = true;
+          documents = "${config.home.homeDirectory}/010_documents";
+          download = "${config.home.homeDirectory}/040_downloads";
+          music = "${config.home.homeDirectory}/060_media/030_music";
+          videos = "${config.home.homeDirectory}/060_media/020_videos";
+          pictures = "${config.home.homeDirectory}/060_media/020_videos";
+          templates = "${config.home.homeDirectory}/110_misc/030_templates";
+          publicShare = "${config.home.homeDirectory}/110_misc/020_public";
+          desktop = "${config.home.homeDirectory}/110_misc/040_desktop";
         };
       };
     };

@@ -53,6 +53,7 @@ in {
     lazygit
     starship
     rnr
+    macchina
     btop
     gh
     nil

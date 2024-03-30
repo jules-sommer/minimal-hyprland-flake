@@ -176,10 +176,6 @@ $env.config = {
         pre_execution: [{ null }] # run before the repl input is run
         env_change: {
           PWD: [
-            { |before, after| 
-                (1..50) | each { print $"\n" }; neofetch;
-            }
-
             { |before, after|
               # direnv: https://direnv.net/docs/hook.html
               if (which direnv | is-empty) {
@@ -717,6 +713,9 @@ source ~/.config/broot/launcher/nushell/br
 # source ~/.zoxide.nu
 use ~/.cache/starship/init.nu
 
+export use ~/000_dev/030_nushell/;
+use nix/
+
 alias ll = ls -la
 alias nf = neofetch --gap 15 --color_blocks off --memory_percent on --disk_percent on
 alias br = broot -hips
@@ -742,6 +741,10 @@ def get_extension [type: string, --string] {
     return $ext_list | str join "|" | into string
   }
   return $ext_list;
+} 
+
+def zfix [] {
+  (1..50) | each { print $"\n" }
 }
 
 def find [

@@ -18,31 +18,73 @@ in {
       username = mkOpt (types.nullOr types.str) null "The username of the user";
       fullname =
         mkOpt (types.nullOr types.str) null "The full name of the user";
-      home =
-        mkOpt (types.nullOr (types.either types.path types.str)) null "The home directory of the user";
-      dotfiles =
-        mkOpt (types.nullOr types.str) null "The dotfiles directory for the user's config.";
+      home = mkOpt (types.nullOr (types.either types.path types.str)) null
+        "The home directory of the user";
+      dotfiles = mkOpt (types.nullOr types.str) null
+        "The dotfiles directory for the user's config.";
     };
     hostname = mkOpt (types.nullOr types.str) null "The hostname of the system";
   };
 
   config = {
+    # This will additionally add your inputs to the system's legacy channels
+    # Making legacy nix commands consistent as well, awesome!
+    environment.etc = lib.mapAttrs' (name: value: {
+      name = "${cfg.user.home}/.nix-defexpr/channels_root/nixos/${name}";
+      value.source = value.flake;
+    }) config.nix.registry;
+
+    # Configure the Nix package manager
+    nix = {
+      # This will add each flake input as a registry
+      # To make nix3 commands consistent with your flake
+      registry = (lib.mapAttrs (_: flake: { inherit flake; }))
+        ((lib.filterAttrs (_: lib.isType "flake")) inputs);
+      nixPath = [ "${cfg.user.home}/.nix-defexpr/channels_root/nixos" ];
+
+      settings = {
+        warn-dirty = false;
+        # Enable flakes and new 'nix' command
+        experimental-features = "nix-command flakes";
+        # Deduplicate and optimize nix store
+        auto-optimise-store = true;
+        # Use binary caches
+        substituters = [ "https://hyprland.cachix.org" ];
+        trusted-public-keys = [
+          "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+        ];
+      };
+      gc = {
+        automatic = true;
+        dates = "daily";
+        options = "--delete-older-than 7d";
+      };
+    };
+
+    time.timeZone = "America/Toronto";
+    i18n.defaultLocale = "en_CA.UTF-8";
+
     # Define a user account. Don't forget to set a password with ‘passwd’.
     users.users.${cfg.user.username} = {
       isNormalUser = true;
       homeMode = "755";
       useDefaultShell = true;
       description = cfg.user.fullname;
-      extraGroups = [ "networkmanager" "wheel" ];
-    };
-    
-    qt = {
-      enable = true;
-      platformTheme = "qt5ct";
-      style = "adwaita-dark";
+      extraGroups =
+        [ "networkmanager" "wheel" "vboxusers" "docker" "libvirtd" "fuse" ];
     };
 
+    programs.dconf.enable = true;
+    programs.xfconf.enable = true;
+
     snowfallorg.user.${cfg.user.username}.home.config = {
+      dconf.settings = {
+        "org/virt-manager/virt-manager/connections" = {
+          autoconnect = [ "qemu:///system" ];
+          uris = [ "qemu:///system" ];
+        };
+      };
+
       programs.home-manager.enable = true;
       home.username = cfg.user.username;
       home.homeDirectory = cfg.user.home;

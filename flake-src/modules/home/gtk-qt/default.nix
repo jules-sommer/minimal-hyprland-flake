@@ -1,4 +1,8 @@
-{ pkgs, inputs, config, lib, ... }: let inherit (lib) types; inherit (lib.xeta) mkOpt; in {
+{ pkgs, inputs, config, lib, ... }:
+let
+  inherit (lib) types;
+  inherit (lib.xeta) mkOpt;
+in {
   options.xeta.home = {
     dotfiles = mkOpt (types.nullOr types.str) null "where to put the dotfiles";
     gtk = {
@@ -42,7 +46,7 @@
     # Theme QT -> GTK
     qt = {
       enable = true;
-      platformTheme = "qtct";
+      platformTheme = "gtk";
       style = {
         name = "adwaita-dark";
         package = pkgs.adwaita-qt;

@@ -16,7 +16,7 @@ in {
       };
 
       development = { rust = { fenix = enabled; }; };
-
+      desktop = { hyprland = enabled; };
       programs = {
         snowfall-utils = enabled;
         distrobox = enabled;
@@ -49,8 +49,6 @@ in {
       };
     };
   };
-
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Bootloader
   boot = {

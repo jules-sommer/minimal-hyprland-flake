@@ -92,6 +92,7 @@ in {
   };
 
   config = mkIf cfg.enable {
+    home.packages = with pkgs; [ swww eww hyprpaper swayidle swaylock swaybg ];
     wayland.windowManager.hyprland = {
       enable = true;
       package = getHyprlandPkg system;
@@ -107,7 +108,11 @@ in {
         "$menu" = "rofi -show drun";
         "$notifycmd" =
           "notify-send -h string:x-canonical-private-synchronous:hypr-cfg -u low";
-        monitor = [ "WL-1,2560x1080@80,0x0,1" ",preferred,auto,1" ];
+        monitor = [
+          "DP-1,2560x1080@74.99,1920x0,1"
+          "HDMI-A-1,1920x1080@100,0x0,1"
+          ",highres,auto,1"
+        ];
         env = [
           "NIXOS_OZONE_WL, 1"
           "NIXPKGS_ALLOW_UNFREE, 1"
@@ -288,6 +293,33 @@ in {
           "layout" = "dwindle";
           "resize_on_border" = "true";
         };
+
+        input = {
+          kb_layout = "us";
+          # kb_options = [ "grp:alt_shift_toggle" "caps:super" ];
+          kb_options = [ "caps:swapescape" "grp:alt_shift_toggle" ];
+          follow_mouse = 1;
+          touchpad = { natural_scroll = false; };
+          sensitivity = 0.5; # -1.0 - 1.0, 0 means no modification.
+          accel_profile = "adaptive";
+        };
+
+        gestures = {
+          workspace_swipe = true;
+          workspace_swipe_fingers = 3;
+        };
+
+        misc = {
+          mouse_move_enables_dpms = true;
+          key_press_enables_dpms = false;
+        };
+
+        dwindle = {
+          pseudotile = true;
+          preserve_split = true;
+        };
+
+        master = { new_is_master = true; };
 
         plugin = {
           # optional plugin configuration here

@@ -1,7 +1,7 @@
 { pkgs, config, lib, inputs, ... }:
 let
-	inherit (lib.xeta) getTheme mkOpt;
-	theme = getTheme (config.xeta.home.desktop.hyprland.theme);
+  inherit (lib.xeta) getTheme mkOpt;
+  theme = getTheme (config.xeta.home.desktop.hyprland.theme);
 in {
   programs.waybar = {
     enable = true;
@@ -10,7 +10,8 @@ in {
       layer = "top";
       position = "top";
 
-      modules-left = [ "hyprland/window" "custom/startmenu" ];
+      modules-left =
+        [ "custom/startmenu" "hyprland/window" "pulseaudio" "cpu" "memory" ];
       modules-center = [
         "network"
         "custom/themeselector"
@@ -21,8 +22,18 @@ in {
         "disk"
         "clock"
       ];
-      modules-right =
-        [ "idle_inhibitor" "custom/notification" "battery" "tray" "privacy" ];
+
+      modules-right = [
+        "custom/hyprbindings"
+        "custom/exit"
+        "idle_inhibitor"
+        "custom/themeselector"
+        "custom/notification"
+        "battery"
+        "clock"
+        "tray"
+      ];
+
       "hyprland/workspaces" = {
         format = "{icon}";
         format-icons = {
@@ -161,7 +172,7 @@ in {
     }];
     style = ''
       * {
-        font-size: 15px;
+        font-size: 16px;
         font-family: 'JetBrains Mono', Font Awesome, monospace;
             font-weight: 600;
       }
@@ -175,9 +186,7 @@ in {
             color: #${theme.base0F};
       }
       #workspaces {
-            background: linear-gradient(180deg, #${theme.base00}, #${
-              theme.base01
-            });
+            background: linear-gradient(180deg, #${theme.base00}, #${theme.base01});
             margin: 5px;
             padding: 0px 1px;
             border-radius: 15px;
