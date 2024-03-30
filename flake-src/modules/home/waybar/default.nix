@@ -173,7 +173,7 @@ in {
     style = ''
       * {
         font-size: 16px;
-        font-family: 'JetBrains Mono', Font Awesome, monospace;
+        font-family: 'JetBrains Mono', Font Awesome;
             font-weight: 600;
       }
       window#waybar {

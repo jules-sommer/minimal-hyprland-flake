@@ -48,13 +48,22 @@ in {
 
     xdg = {
       portal = {
+        wlr = {
+          enable = true;
+
+        };
         enable = true;
-        extraPortals = with pkgs; [ xdg-desktop-portal ];
-        configPackages = with pkgs;
-          lib.mkMerge ([
-            [ xdg-desktop-portal ]
-            (mkIf isHyprland [ xdg-desktop-portal-hyprland ])
-          ]);
+        extraPortals = with pkgs; [
+          xdg-desktop-portal
+          xdg-desktop-portal-gtk
+          xdg-desktop-portal-wlr
+          xdg-desktop-portal-hyprland
+        ];
+        # configPackages = with pkgs;
+        #   lib.mkMerge ([
+        #     [ xdg-desktop-portal ]
+        #     (mkIf isHyprland [ xdg-desktop-portal-hyprland ])
+        #   ]);
       };
     };
   };

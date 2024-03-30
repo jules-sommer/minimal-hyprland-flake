@@ -110,7 +110,7 @@ in {
           "notify-send -h string:x-canonical-private-synchronous:hypr-cfg -u low";
         monitor = [
           "DP-1,2560x1080@74.99,1920x0,1"
-          "HDMI-A-1,1920x1080@100,0x0,1"
+          "HDMI-A-2,1920x1080@100,0x0,1"
           ",highres,auto,1"
         ];
         env = [
