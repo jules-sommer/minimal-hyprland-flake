@@ -1,4 +1,3 @@
-
 { channels, ... }:
 
 (final: prev: {
@@ -7,7 +6,7 @@
     (prev.vscode.override { isInsiders = true; }).overrideAttrs (oldAttrs: rec {
       src = (builtins.fetchTarball {
         url = "https://update.code.visualstudio.com/latest/linux-x64/insider";
-        sha256 = "0z3gir3zkswcyxg9l12j5ldhdyb0gvhssvwgal286af63pwj9c66";
+        sha256 = "0yi11c7kj4cz1f0glsmrkqk8x1l0dwcdwbkr5lkj7pavanrnbl4w";
       });
       version = "latest";
     });
