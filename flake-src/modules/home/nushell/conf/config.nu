@@ -715,10 +715,29 @@ use ~/.cache/starship/init.nu
 
 export use ~/000_dev/030_nushell/;
 use nix/
+neofetch --gap 15 --color_blocks off --memory_percent on --disk_percent on
+
+source ~/.config/broot/launcher/nushell/br
+# source ~/.config/z/.oxide.nu
+use ~/.cache/starship/init.nu
+
+def cjq_meta [] {
+    (cargo metadata | jq '[.packages[] | {name, version, source, dependencies: (reduce .dependencies[] as $dep ({}; .[$dep.name] = {req: $dep.req, kind: $dep.kind}))}]' | wl-copy)
+}
 
 alias ll = ls -la
 alias nf = neofetch --gap 15 --color_blocks off --memory_percent on --disk_percent on
 alias br = broot -hips
+alias hx_conf = hx $nu.config-path
+alias hx_env = hx $nu.env-path
+alias cd = z
+alias cdi = zi
+alias copy = wl-copy
+alias paste = wl-paste
+alias sync = rsync -avh --progress
+alias mirror_sync = rsync -avzHAX --delete --numeric-ids --info=progress2
+alias cp = sync
+alias tree = dutree
 
 let extensions = {
   archive: ["zip", "rar", "7z", "tar", "gz", "bz2", "xz", "tar.gz", "tgz"],

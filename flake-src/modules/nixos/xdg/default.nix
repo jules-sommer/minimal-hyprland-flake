@@ -48,10 +48,7 @@ in {
 
     xdg = {
       portal = {
-        wlr = {
-          enable = true;
-
-        };
+        wlr = { enable = true; };
         enable = true;
         extraPortals = with pkgs; [
           xdg-desktop-portal

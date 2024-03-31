@@ -8,6 +8,7 @@ in {
       starship = enabled;
       alacritty = enabled;
       nushell = enabled;
+      misc = enabled;
       desktop = {
         hyprland = {
           enable = true;

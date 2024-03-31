@@ -12,6 +12,7 @@ in {
       "Keyboard layout variant to use, i.e 'colemak', 'dvorak', etc.";
   };
   config = mkIf cfg.enable {
+    console.useXkbConfig = true;
     services.xserver = {
       libinput.enable = true;
       xkb = {

@@ -13,6 +13,10 @@ in {
     networking.networkmanager.enable = true;
     networking.hostName = config.xeta.system.hostname;
 
+    # Fixes an issue that normally causes nixos-rebuild to fail.
+    # https://github.com/NixOS/nixpkgs/issues/180175
+    systemd.services.NetworkManager-wait-online.enable = false;
+
     # NETWORKING TWEAKS
     # (source: https://github.com/nh2/nixos-configs/blob/master/configuration.nix)
 

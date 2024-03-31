@@ -12,11 +12,15 @@ in {
         username = "jules";
         fullname = "Jules Sommer";
         home = "/home/jules";
-        dotfiles = "${config.xeta.system.user.home}/020_config";
+        dotfiles =
+          "${config.xeta.system.user.home}/070_dotfiles/010_nix-managed";
       };
 
       development = { rust = { fenix = enabled; }; };
-      desktop = { hyprland = enabled; };
+      desktop = {
+        hyprland = enabled;
+        greeter = enabled;
+      };
       programs = {
         snowfall-utils = enabled;
         distrobox = enabled;
@@ -53,6 +57,10 @@ in {
           };
         };
       };
+    };
+    security = {
+      doas = enabled;
+      keyring = enabled;
     };
   };
 
@@ -146,6 +154,12 @@ in {
       remotePlay.openFirewall = true;
       dedicatedServer.openFirewall = true;
     };
+  };
+
+  security.pam.services.tuigreet = {
+    text = ''
+      auth include login
+    '';
   };
 
   # Enable the OpenSSH daemon.

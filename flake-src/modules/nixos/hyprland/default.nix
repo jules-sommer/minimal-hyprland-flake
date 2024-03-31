@@ -18,30 +18,6 @@ in {
       desktopManager.xterm = disabled;
     };
 
-    environment.systemPackages = with pkgs; [
-      greetd.greetd
-      greetd.tuigreet
-      swaybg
-      wl-clipboard
-      swaynotificationcenter
-      font-awesome
-      polkit_gnome
-      slurp
-      xclip
-      grim
-      grimblast
-    ];
-
-    services.greetd = {
-      enable = true;
-      package = pkgs.greetd.greetd;
-      settings = {
-        default_session = {
-          command = "${pkgs.greetd.greetd}/bin/agreety --cmd Hyprland";
-        };
-      };
-    };
-
     programs.hyprland = {
       enable = true;
       package = lib.xeta.getHyprlandPkg system;

@@ -101,12 +101,10 @@ in {
       settings = {
         "$mod" = "ALT";
         "$terminal" = "alacritty";
-        "$tui_files" = "alacritty -e joshuto";
-        "$more_files" = "alacritty -e ranger";
-        "$gui_files" = "thunar";
+        "$files" = "alacritty -e joshuto";
         "$screenshot" = "nu ~/_dev/nu_tools/screenshot.nu";
         "$menu" = "rofi -show drun";
-        "$notifycmd" =
+        "$notify" =
           "notify-send -h string:x-canonical-private-synchronous:hypr-cfg -u low";
         monitor = [
           "DP-1,2560x1080@74.99,1920x0,1"
@@ -119,18 +117,23 @@ in {
           "XDG_CURRENT_DESKTOP, Hyprland"
           "XDG_SESSION_TYPE, wayland"
           "XDG_SESSION_DESKTOP, Hyprland"
-          "GDK_BACKEND, wayland"
+          "GDK_BACKEND=wayland,x11" # use wayland if available, fallback to x11
           "CLUTTER_BACKEND, wayland"
           "SDL_VIDEODRIVER, wayland"
           "XCURSOR_SIZE, 24"
           "XCURSOR_THEME, Bibata-Modern-Ice"
-          "QT_QPA_PLATFORM, wayland"
+          "QT_QPA_PLATFORM,wayland;xcb"
           "QT_WAYLAND_DISABLE_WINDOWDECORATION, 1"
           "QT_AUTO_SCREEN_SCALE_FACTOR, 1"
           "MOZ_ENABLE_WAYLAND, 1"
           "WLR_NO_HARDWARE_CURSORS,1"
           "XCURSOR_SIZE,24"
           "QT_QPA_PLATFORMTHEME,qt5ct"
+          "LIBVA_DRIVER_NAME,nvidia"
+          "XDG_SESSION_TYPE,wayland"
+          "GBM_BACKEND,nvidia-drm"
+          "__GLX_VENDOR_LIBRARY_NAME,nvidia"
+          "WLR_NO_HARDWARE_CURSORS,1"
         ];
 
         # █░█░█ █ █▄░█ █▀▄ █▀█ █░█░█   █▀█ █░█ █░░ █▀▀ █▀
@@ -161,18 +164,16 @@ in {
           "hyprpaper"
           "pueued -dv"
           "$POLKIT_BIN"
-          "eww daemon"
-          "eww open bar"
           "nm-applet --indicator"
-          "dbus-update-activation-environment --systemd --all"
-          # "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
+          # "dbus-update-activation-environment --systemd --all"
+          "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
           "systemctl --user import-environment QT_QPA_PLATFORMTHEME WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
           "hyprctl setcursor Bibata-Modern-Ice 24"
           "swww init"
           "waybar"
           "swaync"
           "swayidle -w timeout 720 'swaylock -f' timeout 800 'hyprctl dispatch dpms off' resume 'hyprctl dispatch dpms on' before-sleep 'swaylock -f -c 000000'"
-          "swww img - -filter Lanczos3 ~/Pictures/wallpapers/zoelove.jpg"
+          "swww img --filter Lanczos3 ~/Pictures/wallpapers/zoelove.jpg"
           # "swaybg - m fill - i ~/Pictures/wallpapers/zoelove.jpg" # alternative to swww for wallpaper
         ];
 
@@ -238,7 +239,7 @@ in {
               in builtins.toString (x + 1 - (c * 10));
             in [
               "$mod, ${ws}, workspace, ${toString (x + 1)}"
-              "$mod SHIFT, ${ws}, movetoworkspace, ${toString (x + 1)}"
+              "$mod SHIFT, ${ws}, movetoworkspacesilent, ${toString (x + 1)}"
             ]) 10));
 
         # ▄▀█ █▄░█ █ █▀▄▀█ ▄▀█ ▀█▀ █ █▀█ █▄░█ █▀
@@ -297,7 +298,7 @@ in {
         input = {
           kb_layout = "us";
           # kb_options = [ "grp:alt_shift_toggle" "caps:super" ];
-          kb_options = [ "caps:swapescape" "grp:alt_shift_toggle" ];
+          kb_options = [ "caps:swapescape" ];
           follow_mouse = 1;
           touchpad = { natural_scroll = false; };
           sensitivity = 0.5; # -1.0 - 1.0, 0 means no modification.
