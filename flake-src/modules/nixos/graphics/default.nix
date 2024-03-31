@@ -8,9 +8,12 @@ let
   cfg = config.xeta.system.graphics or { };
 in {
   options.xeta.system.graphics = with types; {
+    nvidia = {
+      enable = mkEnableOption "Enable nvidia drivers, either open-source nouveau or proprietary.";
+      drivers = mkOpt (nullOr (listOf str)) [ ] "If nvidia drivers are enabled, this setting specifies a list of driver pkgs to use.";
+      channel = mkOpt (nullOr (types.enum (["stable" "beta" "production" "vulkan_beta"]))) null "Nvidia driver channel to track, must be stable, beta, or production.";
+    };
     opengl = mkEnableOption "Enable OpenGL support";
-    drivers = mkOpt (nullOr (listOf str)) [ ] "Video drivers";
-    nvidiaDriverChannel = mkOpt (nullOr (types.enum (["stable" "beta" "production" "vulkan_beta"]))) null "Nvidia driver channel to track, must be stable, beta, or production.";
   };
 
   config = mkMerge [
@@ -22,11 +25,11 @@ in {
       };
     })
 
-    (mkIf (cfg.drivers != null) {
-      services.xserver.videoDrivers = cfg.drivers; # "nvidia" or "nouveau"
+    (mkIf (cfg.nvidia.drivers != null) {
+      services.xserver.videoDrivers = cfg.nvidia.drivers; # "nvidia" or "nouveau"
       boot.blacklistedKernelModules =
-        mkIf (lib.lists.elem "nvidia" cfg.drivers) [ "nouveau" ];
-      hardware.nvidia = mkIf (lib.lists.elem "nvidia" cfg.drivers) {
+        mkIf (lib.lists.elem "nvidia" cfg.nvidia.drivers) [ "nouveau" ];
+      hardware.nvidia = mkIf (lib.lists.elem "nvidia" cfg.nvidia.drivers) {
         # Modesetting is required.
         modesetting.enable = true;
         # Nvidia power management. Experimental, and can cause sleep/suspend to fail.
@@ -46,7 +49,7 @@ in {
         # accessible via `nvidia-settings`.
         nvidiaSettings = true;
         # Optionally, you may need to select the appropriate driver version for your specific GPU.
-        package = config.boot.kernelPackages.nvidiaPackages.${cfg.nvidiaDriverChannel};
+        package = config.boot.kernelPackages.nvidiaPackages.${cfg.nvidia.channel};
       };
     })
   ];

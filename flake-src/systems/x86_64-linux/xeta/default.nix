@@ -20,10 +20,12 @@ in {
         rust = enabled;
         zig = enabled;
       };
+
       desktop = {
         hyprland = enabled;
         greeter = enabled;
       };
+
       programs = {
         snowfall-utils = enabled;
         distrobox = enabled;
@@ -34,9 +36,13 @@ in {
       };
 
       graphics = {
+        nvidia = {
+          enable = true;
+          drivers = [ "nouveau" ];
+          channel = "stable";
+        };
         opengl = true;
-        drivers = [ "nvidia" ];
-        nvidiaDriverChannel = "stable";
+        electron_support = enabled;
       };
 
       hostname = "xeta";
@@ -87,6 +93,7 @@ in {
   };
 
   users.defaultUserShell = pkgs.nushell;
+  environment.shells = with pkgs; [ nushell zsh ];
 
   home-manager = {
     useGlobalPkgs = true;
@@ -121,6 +128,11 @@ in {
     btop
     gh
     nil
+    zoxide
+    broot
+    ripgrep
+    fd
+    bat
     github-copilot-cli
     gitoxide
     helix
@@ -131,6 +143,28 @@ in {
     ntfs3g
     fuseiso
     kitty
+
+    xz
+    jq
+    fd
+    jql
+    jq-lsp
+    zoxide
+    apx
+
+    obsidian
+    grim
+    grimblast
+    slurp
+
+    networkmanagerapplet
+    polkit_gnome
+
+    lcsync
+    librespot
+    libresprite
+    # librecad
+    # librepcb
 
     deploy-rs
     nixfmt

@@ -11,8 +11,8 @@ in {
   };
 
   config = mkIf cfg.enable {
-    snowfallorg.user.xeta.home = {
-      configFile."electron-flags.conf".source = ./electron-flags.conf;
+    snowfallorg.user.xeta.home.config = {
+      xdg.configFile."electron-flags.conf".source = ./electron-flags.conf;
     };
     environment.sessionVariables = { NIXOS_OZONE_WL = "1"; };
   };
