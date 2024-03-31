@@ -16,7 +16,10 @@ in {
           "${config.xeta.system.user.home}/070_dotfiles/010_nix-managed";
       };
 
-      development = { rust = { fenix = enabled; }; };
+      development = {
+        rust = enabled;
+        zig = enabled;
+      };
       desktop = {
         hyprland = enabled;
         greeter = enabled;

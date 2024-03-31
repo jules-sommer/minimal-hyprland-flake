@@ -2,10 +2,10 @@
 let
   inherit (lib) types mkEnableOption mkIf;
   inherit (lib.xeta) mkOpt;
-  cfg = config.xeta.system.development.rust.fenix;
+  cfg = config.xeta.system.development.rust;
 in {
-  options.xeta.system.development.rust.fenix = {
-    enable = mkEnableOption "Enable Fenix overlay of Rust toolchain.";
+  options.xeta.system.development.rust = {
+    enable = mkEnableOption "Enable Rust toolchain via/Fenix overlay.";
     profile = mkOpt (types.enum [ "default" "minimal" "complete" ]) "complete"
       "Profile of Rust toolchain to use, must be one of: default, minimal, complete.";
   };
