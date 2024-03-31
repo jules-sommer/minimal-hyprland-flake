@@ -26,6 +26,12 @@ in {
         };
       };
 
+      graphics = {
+        opengl = true;
+        drivers = [ "nvidia" ];
+        nvidiaDriverChannel = "stable";
+      };
+
       hostname = "xeta";
       fonts = enabled;
       env = enabled;
