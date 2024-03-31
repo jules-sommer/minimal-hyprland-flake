@@ -53,12 +53,19 @@ in {
         trusted-public-keys = [
           "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
         ];
+        http-connections = 50;
+        log-lines = 50;
+        sandbox = "relaxed";
       };
       gc = {
         automatic = true;
         dates = "daily";
         options = "--delete-older-than 7d";
       };
+      # flake-utils-plus
+      generateRegistryFromInputs = true;
+      generateNixPathFromInputs = true;
+      linkInputs = true;
     };
 
     time.timeZone = "America/Toronto";

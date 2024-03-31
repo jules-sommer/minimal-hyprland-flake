@@ -117,7 +117,17 @@ in {
     nixfmt
     nushell
     alacritty
+    ntfs3g
+    fuseiso
     kitty
+
+    deploy-rs
+    nixfmt
+    nix-index
+    nix-prefetch-git
+    nix-output-monitor
+    flake-checker
+
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
