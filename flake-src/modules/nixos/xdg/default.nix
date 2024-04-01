@@ -2,7 +2,7 @@
 let
   inherit (lib) types mkIf;
   inherit (lib.xeta) mkOpt;
-  isHyprland = config.xeta.system.desktop.hyprland;
+  isHyprland = config.xeta.system.desktop.hyprland.enable;
   cfg = config.xeta.system.portals;
   username = config.xeta.system.user.username;
   home = config.xeta.system.user.home;
@@ -16,7 +16,12 @@ in {
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs;
       lib.mkMerge ([
-        [ xdg-utils xdg-desktop-portal xdg-desktop-portal-gtk ]
+        [ 
+          xdg-utils
+          xdg-desktop-portal
+          xdg-desktop-portal-gtk
+          xdg-desktop-portal-wlr
+        ]
         (mkIf (isHyprland) [ xdg-desktop-portal-hyprland ])
       ]);
 
@@ -34,14 +39,14 @@ in {
         userDirs = {
           enable = true;
           createDirectories = true;
-          documents = "${config.home.homeDirectory}/010_documents";
-          download = "${config.home.homeDirectory}/040_downloads";
-          music = "${config.home.homeDirectory}/060_media/030_music";
-          videos = "${config.home.homeDirectory}/060_media/020_videos";
-          pictures = "${config.home.homeDirectory}/060_media/020_videos";
-          templates = "${config.home.homeDirectory}/110_misc/030_templates";
-          publicShare = "${config.home.homeDirectory}/110_misc/020_public";
-          desktop = "${config.home.homeDirectory}/110_misc/040_desktop";
+          documents = "${home}/010_documents";
+          download = "${home}/040_downloads";
+          music = "${home}/060_media/030_music";
+          videos = "${home}/060_media/020_videos";
+          pictures = "${home}/060_media/020_videos";
+          templates = "${home}/110_misc/030_templates";
+          publicShare = "${home}/110_misc/020_public";
+          desktop = "${home}/110_misc/040_desktop";
         };
       };
     };
@@ -54,13 +59,17 @@ in {
           xdg-desktop-portal
           xdg-desktop-portal-gtk
           xdg-desktop-portal-wlr
-          xdg-desktop-portal-hyprland
+          # xdg-desktop-portal-hyprland
         ];
-        # configPackages = with pkgs;
-        #   lib.mkMerge ([
-        #     [ xdg-desktop-portal ]
-        #     (mkIf isHyprland [ xdg-desktop-portal-hyprland ])
-        #   ]);
+        configPackages = with pkgs;
+          lib.mkMerge ([
+            [ 
+              xdg-desktop-portal
+              xdg-desktop-portal-gtk
+              xdg-desktop-portal-wlr
+            ]
+            (mkIf isHyprland [ xdg-desktop-portal-hyprland ])
+          ]);
       };
     };
   };

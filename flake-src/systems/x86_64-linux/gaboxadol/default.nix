@@ -19,16 +19,22 @@ in {
         username = "jules";
         fullname = "Jules Sommer";
         home = "/home/jules";
-        dotfiles = "${config.xeta.system.user.home}/020_config";
+        dotfiles =
+          "${config.xeta.system.user.home}/020_config";
       };
 
-      graphics = {
-        opengl = true;
-        drivers = [ "nouveau" ];
+      portals = enabled;
+
+      development = {
+        rust = enabled;
+        zig = enabled;
       };
 
-      development = { rust = { fenix = enabled; }; };
-      desktop = { hyprland = enabled; };
+      desktop = {
+        hyprland = enabled;
+        greeter = enabled;
+      };
+
       programs = {
         snowfall-utils = enabled;
         distrobox = enabled;
@@ -36,6 +42,16 @@ in {
           enable = true;
           relayIP = "24.141.46.69";
         };
+      };
+
+      graphics = {
+        nvidia = {
+          enable = true;
+          drivers = [ "nouveau" ];
+          channel = "stable";
+        };
+        opengl = true;
+        electron_support = enabled;
       };
 
       hostname = "gaboxadol";
@@ -59,6 +75,10 @@ in {
           };
         };
       };
+    };
+    security = {
+      doas = enabled;
+      keyring = enabled;
     };
   };
 
@@ -152,5 +172,4 @@ in {
 
   system.stateVersion =
     "23.11"; # This is not the system version, don't change it!!
-
 }

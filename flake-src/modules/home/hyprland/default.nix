@@ -2,14 +2,14 @@
 let
   inherit (lib) types mkEnableOption mkIf mkOption;
   inherit (lib.xeta) mkOpt getHyprlandPkg getTheme;
-  cfg = config.xeta.home.desktop.hyprland;
+  cfg = config.xeta.desktop.hyprland;
   get_time = ''
     #!/bin/sh
     echo date '+%Y-%m-%d %H:%M:%S'
   '';
   theme = getTheme cfg.theme;
 in {
-  options.xeta.home.desktop.hyprland = {
+  options.xeta.desktop.hyprland = {
     enable = mkEnableOption "Enable Hyprland (@/home-manager)";
     theme = mkOpt (types.nullOr types.str) "synth-midnight-dark" "Theme to use";
 

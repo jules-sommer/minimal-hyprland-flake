@@ -12,13 +12,13 @@ in {
       starship = enabled;
       alacritty = enabled;
       nushell = enabled;
-      desktop = {
-        hyprland = {
-          enable = true;
-          theme = "synth-midnight-dark";
-        };
-      };
       misc = enabled;
+    };
+    desktop = {
+      hyprland = {
+        enable = true;
+        theme = "synth-midnight-dark";
+      };
     };
   };
 

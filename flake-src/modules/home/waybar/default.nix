@@ -1,7 +1,7 @@
 { pkgs, config, lib, inputs, ... }:
 let
   inherit (lib.xeta) getTheme mkOpt;
-  theme = getTheme (config.xeta.home.desktop.hyprland.theme);
+  theme = getTheme (config.xeta.desktop.hyprland.theme);
 in {
   programs.waybar = {
     enable = true;

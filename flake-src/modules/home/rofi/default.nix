@@ -1,7 +1,7 @@
 { pkgs, config, lib, ... }:
 let
   inherit (config.lib.formats.rasi) mkLiteral;
-  palette = lib.xeta.getTheme (config.xeta.home.desktop.hyprland.theme);
+  palette = lib.xeta.getTheme (config.xeta.desktop.hyprland.theme);
 in {
   programs.rofi = {
     enable = true;
