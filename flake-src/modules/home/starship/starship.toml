@@ -2,7 +2,7 @@
 ## https://starship.rs/config/
 
 format = '''
-[╭─ ](#ff3311)$directory$container$all$shell$cmd_duration$time$line_break[╰─](#ff3311)$jobs$status$username$hostname$character
+[╭─ ](#ff3311)$directory$container$all$cmd_duration$line_break[╰─](#ff3311)$jobs$status$username$hostname$character
 '''
 command_timeout = 2000
 right_format = """$time$shell$sudo"""
@@ -42,7 +42,7 @@ zsh_indicator = "**ZSH"
 nu_indicator = "nu"
 unknown_indicator = "sh??"
 format = ' [$indicator]($style)[|](#5f5d5a)'
-style = "#04e165e8"
+style = "#04e165"
 disabled = false
 
 [cmd_duration]

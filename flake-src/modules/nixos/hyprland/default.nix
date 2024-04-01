@@ -1,7 +1,7 @@
 { lib, pkgs, config, inputs, system, ... }:
 let
   inherit (lib) types mkEnableOption mkIf;
-  inherit (lib.xeta) mkOpt disabled;
+  inherit (lib.xeta) mkOpt disabled enabled;
   cfg = config.xeta.system.desktop.hyprland;
 in {
   options.xeta.system.desktop.hyprland = {
@@ -11,6 +11,7 @@ in {
     services.xserver = {
       enable = true;
       displayManager = {
+        sddm = enabled;
         lightdm = disabled;
         gdm = disabled;
       };

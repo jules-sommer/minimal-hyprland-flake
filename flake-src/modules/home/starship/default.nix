@@ -2,10 +2,10 @@
 let
   inherit (lib) types mkEnableOption recursiveUpdate;
   inherit (lib.xeta) mkOpt;
-  cfg = config.xeta.home.starship;
+  cfg = config.xeta.starship;
 
 in {
-  options.xeta.home.starship = {
+  options.xeta.starship = {
     enable = mkEnableOption "Enable starship prompt";
     theme = mkOpt types.str "mocha"
       "Starship prompt theme ( one of: `latte`, `frappe`, `macchiato`, or `mocha` )";
@@ -27,7 +27,7 @@ in {
       settings = (recursiveUpdate (cattpuccin_palette // config) {
         # Other config here
         format =
-          "[╭─ ](#ff3311)$directory$container$all$shell$cmd_duration$time$line_break[╰─](#ff3311)$jobs$status$username$hostname$character"; # Remove this line to disable the default prompt format
+          "[╭─ ](#ff3311)$directory$container$all$cmd_duration$line_break[╰─](#ff3311)$jobs$status$username$hostname$character"; # Remove this line to disable the default prompt format
         right_format = "$time$shell$sudo";
         palette = "catppuccin_${cfg.theme}";
       });

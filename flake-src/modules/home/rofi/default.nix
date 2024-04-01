@@ -105,7 +105,7 @@ in {
     ];
   };
 
-  home.file.${"${config.xeta.home.dotfiles}/rofi/config.rasi"}.text = ''
+  home.file.${"${config.xeta.dotfiles}/rofi/config.rasi"}.text = ''
     @theme "/dev/null"
 
     * {

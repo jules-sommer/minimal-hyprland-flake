@@ -3,17 +3,15 @@
 let inherit (lib.xeta) enabled;
 in {
   xeta = {
-    home = {
-      dotfiles = "/home/jules/020_config";
-      starship = enabled;
-      alacritty = enabled;
-      nushell = enabled;
-      misc = enabled;
-      desktop = {
-        hyprland = {
-          enable = true;
-          theme = "synth-midnight-dark";
-        };
+    dotfiles = "/home/jules/020_config";
+    starship = enabled;
+    alacritty = enabled;
+    nushell = enabled;
+    misc = enabled;
+    desktop = {
+      hyprland = {
+        enable = true;
+        theme = "synth-midnight-dark";
       };
     };
   };

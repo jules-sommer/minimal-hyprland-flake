@@ -2,9 +2,9 @@
 let
   inherit (lib) types mkEnableOption;
   inherit (lib.xeta) mkOpt;
-  cfg = config.xeta.home.alacritty;
+  cfg = config.xeta.alacritty;
 in {
-  options.xeta.home.alacritty = { enable = mkEnableOption "Enable Alacritty"; };
+  options.xeta.alacritty = { enable = mkEnableOption "Enable Alacritty"; };
 
   config = lib.mkIf cfg.enable {
     programs = {

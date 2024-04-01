@@ -7,13 +7,11 @@ let
   traced = builtins.trace meta "meta";
 in {
   xeta = {
-    home = {
-      dotfiles = "/home/jules/020_config";
-      starship = enabled;
-      alacritty = enabled;
-      nushell = enabled;
-      misc = enabled;
-    };
+    dotfiles = "/home/jules/020_config";
+    starship = enabled;
+    alacritty = enabled;
+    nushell = enabled;
+    misc = enabled;
     desktop = {
       hyprland = {
         enable = true;

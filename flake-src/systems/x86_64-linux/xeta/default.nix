@@ -21,6 +21,7 @@ in {
         zig = enabled;
       };
 
+      portals = enabled;
       desktop = {
         hyprland = enabled;
         greeter = enabled;
@@ -38,7 +39,7 @@ in {
       graphics = {
         nvidia = {
           enable = true;
-          drivers = [ "nouveau" ];
+          drivers = [ "nvidia" ];
           channel = "stable";
         };
         opengl = true;
@@ -144,6 +145,8 @@ in {
     fuseiso
     kitty
 
+    nufmt
+
     xz
     jq
     fd
@@ -163,8 +166,12 @@ in {
     lcsync
     librespot
     libresprite
-    # librecad
-    # librepcb
+
+    # broken due to 'freeimage-unstable-2021-11-01',
+    # see /overlays/librepcb-stable/default.nix
+    librepcb
+
+    ungoogled-chromium
 
     deploy-rs
     nixfmt

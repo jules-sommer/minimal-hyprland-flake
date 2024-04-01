@@ -2,9 +2,9 @@
 let
   inherit (lib) types;
   inherit (lib.xeta) mkOpt;
-  cfg = config.xeta.home.services.pueued;
+  cfg = config.xeta.services.pueued;
 in {
-  options.xeta.home.services.pueued = {
+  options.xeta.services.pueued = {
     enable = lib.mkEnableOption
       "Enable pueue daemon for background tasks and CLI scheduler/manager.";
     default_parallel_tasks =

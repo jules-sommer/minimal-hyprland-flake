@@ -4,8 +4,8 @@ let
   inherit (lib.xeta) mkOpt getHyprlandPkg getTheme;
   cfg = config.xeta.desktop.hyprland;
   get_time = ''
-    #!/bin/sh
-    echo date '+%Y-%m-%d %H:%M:%S'
+    #!/run/current-system/sw/bin/nu
+    date now | date to-timezone "America/Toronto" | format date "%a, %B %d %I:%M %p"
   '';
   theme = getTheme cfg.theme;
 in {

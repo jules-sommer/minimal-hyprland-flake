@@ -5,13 +5,18 @@ let
   inherit (lib.lists) optional;
   inherit (lib.xeta) enabled mkOpt mkListOf mkBoolOpt;
 
-  cfg = config.xeta.system.graphics or { };
+  cfg = config.xeta.system.graphics;
 in {
   options.xeta.system.graphics = with types; {
     nvidia = {
-      enable = mkEnableOption "Enable nvidia drivers, either open-source nouveau or proprietary.";
-      drivers = mkOpt (nullOr (listOf str)) [ ] "If nvidia drivers are enabled, this setting specifies a list of driver pkgs to use.";
-      channel = mkOpt (nullOr (types.enum (["stable" "beta" "production" "vulkan_beta"]))) null "Nvidia driver channel to track, must be stable, beta, or production.";
+      enable = mkEnableOption
+        "Enable nvidia drivers, either open-source nouveau or proprietary.";
+      drivers = mkOpt (nullOr (listOf str)) [ ]
+        "If nvidia drivers are enabled, this setting specifies a list of driver pkgs to use.";
+      channel = mkOpt
+        (nullOr (types.enum ([ "stable" "beta" "production" "vulkan_beta" ])))
+        null
+        "Nvidia driver channel to track, must be stable, beta, or production.";
     };
     opengl = mkEnableOption "Enable OpenGL support";
   };
@@ -26,7 +31,8 @@ in {
     })
 
     (mkIf (cfg.nvidia.drivers != null) {
-      services.xserver.videoDrivers = cfg.nvidia.drivers; # "nvidia" or "nouveau"
+      services.xserver.videoDrivers =
+        cfg.nvidia.drivers; # "nvidia" or "nouveau"
       boot.blacklistedKernelModules =
         mkIf (lib.lists.elem "nvidia" cfg.nvidia.drivers) [ "nouveau" ];
       hardware.nvidia = mkIf (lib.lists.elem "nvidia" cfg.nvidia.drivers) {
@@ -49,7 +55,8 @@ in {
         # accessible via `nvidia-settings`.
         nvidiaSettings = true;
         # Optionally, you may need to select the appropriate driver version for your specific GPU.
-        package = config.boot.kernelPackages.nvidiaPackages.${cfg.nvidia.channel};
+        package =
+          config.boot.kernelPackages.nvidiaPackages.${cfg.nvidia.channel};
       };
     })
   ];

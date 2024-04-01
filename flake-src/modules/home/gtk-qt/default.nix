@@ -3,7 +3,7 @@ let
   inherit (lib) types;
   inherit (lib.xeta) mkOpt;
 in {
-  options.xeta.home = {
+  options.xeta = {
     dotfiles = mkOpt (types.nullOr types.str) null "where to put the dotfiles";
     gtk = {
       # nothing to configure yet

@@ -3,10 +3,19 @@ let
   inherit (lib) types mkIf;
   inherit (lib.xeta) mkOpt;
   isHyprland = config.xeta.system.desktop.hyprland.enable;
-  cfg = config.xeta.system.portals;
   username = config.xeta.system.user.username;
   home = config.xeta.system.user.home;
   dotfiles = config.xeta.system.user.dotfiles;
+
+  cfg = config.xeta.system.portals;
+
+  portals = with pkgs; [
+    xdg-utils
+    xdg-desktop-portal
+    xdg-desktop-portal-gtk
+    xdg-desktop-portal-wlr
+    xdg-desktop-portal-hyprland
+  ];
 in {
   options.xeta.system.portals = {
     enable = lib.mkEnableOption
@@ -14,16 +23,6 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs;
-      lib.mkMerge ([
-        [ 
-          xdg-utils
-          xdg-desktop-portal
-          xdg-desktop-portal-gtk
-          xdg-desktop-portal-wlr
-        ]
-        (mkIf (isHyprland) [ xdg-desktop-portal-hyprland ])
-      ]);
 
     snowfallorg.user.${username}.home.config = {
       programs.nushell.environmentVariables = {
@@ -34,6 +33,7 @@ in {
         SDL_VIDEODRIVER = "wayland";
         CLUTTER_BACKEND = "wayland";
       };
+
       xdg = {
         configHome = dotfiles;
         userDirs = {
@@ -50,27 +50,14 @@ in {
         };
       };
     };
-
-    xdg = {
-      portal = {
-        wlr = { enable = true; };
-        enable = true;
-        extraPortals = with pkgs; [
-          xdg-desktop-portal
-          xdg-desktop-portal-gtk
-          xdg-desktop-portal-wlr
-          # xdg-desktop-portal-hyprland
-        ];
-        configPackages = with pkgs;
-          lib.mkMerge ([
-            [ 
-              xdg-desktop-portal
-              xdg-desktop-portal-gtk
-              xdg-desktop-portal-wlr
-            ]
-            (mkIf isHyprland [ xdg-desktop-portal-hyprland ])
-          ]);
-      };
+    xdg.portal = {
+      enable = true;
+      extraPortals = [ pkgs.xdg-desktop-portal-gtk pkgs.xdg-desktop-portal ];
+      configPackages = [
+        pkgs.xdg-desktop-portal-gtk
+        pkgs.xdg-desktop-portal-hyprland
+        pkgs.xdg-desktop-portal
+      ];
     };
   };
 }
