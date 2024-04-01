@@ -20,7 +20,7 @@ in {
         fullname = "Jules Sommer";
         home = "/home/jules";
         dotfiles =
-          "${config.xeta.system.user.home}/020_config";
+          "${config.xeta.system.user.home}/.config";
       };
 
       portals = enabled;
@@ -36,6 +36,7 @@ in {
       };
 
       programs = {
+        misc = enabled;
         snowfall-utils = enabled;
         distrobox = enabled;
         rustdesk = {
@@ -102,6 +103,7 @@ in {
   };
 
   users.defaultUserShell = pkgs.nushell;
+  environment.shells = [ pkgs.nushell pkgs.zsh pkgs.bash ];
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
@@ -119,29 +121,6 @@ in {
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
-
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    busybox
-    (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
-    jujutsu
-    git
-    lazygit
-    starship
-    rnr
-    btop
-    gh
-    nil
-    github-copilot-cli
-    gitoxide
-    helix
-    pzip
-    nixfmt
-    nushell
-    alacritty
-    kitty
-  ];
 
   # Some programs need SUID wrappers, can be configured further or are
   #  started in user sessions.

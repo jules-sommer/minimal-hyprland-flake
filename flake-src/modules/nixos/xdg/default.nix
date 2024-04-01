@@ -23,7 +23,6 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-
     snowfallorg.user.${username}.home.config = {
       programs.nushell.environmentVariables = {
         XDG_SESSION_TYPE = "wayland";
