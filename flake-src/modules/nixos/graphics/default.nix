@@ -31,6 +31,12 @@ in {
     })
 
     (mkIf (cfg.nvidia.drivers != null) {
+      environment.systemPackages = with pkgs; [ nvtop ];
+
+      # Fixing suspend/wakeup issues with Nvidia drivers
+      # "https://wiki.hyprland.org/Nvidia/"
+      boot.kernelParams = [ "nvidia.NVreg_PreserveVideoMemoryAllocations=1" ];
+
       services.xserver.videoDrivers =
         cfg.nvidia.drivers; # "nvidia" or "nouveau"
       boot.blacklistedKernelModules =
