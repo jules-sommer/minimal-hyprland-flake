@@ -7,13 +7,12 @@ pkgs.rustPlatform.buildRustPackage rec {
     owner = "nushell";
     repo = pname;
     rev = version;
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    hash = "sha256-jtBw4ahSl88L0iuCXxQgZVm1EcboWRJMNtjxLVTtzts=";
   };
 
   nativeBuildInputs = with pkgs; [
     rust-bin.stable.latest.default
     rust-analyzer
-
     nushell
   ];
 
