@@ -75,23 +75,14 @@ in {
     users.users.${cfg.user.username} = {
       isNormalUser = true;
       homeMode = "755";
+      uid = 1000;
       useDefaultShell = true;
       description = cfg.user.fullname;
       extraGroups =
         [ "networkmanager" "wheel" "vboxusers" "docker" "libvirtd" "fuse" ];
     };
 
-    programs.dconf.enable = true;
-    programs.xfconf.enable = true;
-
     snowfallorg.user.${cfg.user.username}.home.config = {
-      dconf.settings = {
-        "org/virt-manager/virt-manager/connections" = {
-          autoconnect = [ "qemu:///system" ];
-          uris = [ "qemu:///system" ];
-        };
-      };
-
       programs.home-manager.enable = true;
       home.username = cfg.user.username;
       home.homeDirectory = cfg.user.home;

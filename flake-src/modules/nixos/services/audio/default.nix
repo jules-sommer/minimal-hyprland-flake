@@ -1,15 +1,16 @@
 { lib, pkgs, config, inputs, system, ... }:
 let
-  inherit (lib) types mkEnableOption mkIf mkOpt;
+  inherit (lib) types mkEnableOption mkIf;
+  inherit (lib.xeta) mkOpt;
   cfg = config.xeta.system.services.audio;
 in {
   options.xeta.system.services.audio = {
     pipewire = {
-      enable = mkEnableOption "Enable PipeWire";
+      enable = mkOpt (types.bool) true "Enable PipeWire";
       support = {
-        alsa = mkEnableOption "Support ALSA";
-        pulse = mkEnableOption "Support PulseAudio";
-        jack = mkEnableOption "Support JACK";
+        alsa = mkOpt (types.bool) true "Support ALSA";
+        pulse = mkOpt (types.bool) true "Support PulseAudio";
+        jack = mkOpt (types.bool) true "Support JACK";
       };
     };
   };

@@ -10,13 +10,21 @@ in {
   config = mkIf cfg.enable {
     services.xserver = {
       enable = true;
+      autoRepeatDelay = 200;
+      autoRepeatInterval = 30;
+      autorun = true;
+
       displayManager = {
-        sddm = enabled;
+        sddm = disabled;
         lightdm = disabled;
         gdm = disabled;
       };
-      desktopManager.gnome = disabled;
-      desktopManager.xterm = disabled;
+      desktopManager = {
+        gnome = disabled;
+        xterm = disabled;
+        xfce = disabled;
+        plasma5 = disabled;
+      };
     };
 
     programs.hyprland = {
