@@ -1,7 +1,9 @@
-{ lib, config, pkgs, ... }:
+{ lib, inputs, config, pkgs, ... }:
+
 let
-  inherit (lib) types;
-  inherit (lib.xeta) mkOpt;
+  inherit (lib) mkEnableOption mkIf types mkMerge;
+  inherit (lib.xeta) enabled mkOpt mkListOf mkBoolOpt;
+
   cfg = config.xeta.system.networking;
 in {
   options.xeta.system.networking = {
@@ -9,6 +11,13 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
+    programs = {
+      mtr = enabled;
+      wireshark = enabled;
+    };
+
+    environment.systemPackages = with pkgs; [ ];
+
     # Enable networking
     networking.networkmanager.enable = true;
     networking.hostName = config.xeta.system.hostname;
@@ -28,8 +37,6 @@ in {
     # * https://github.com/openzfs/zfs/issues/12842
     # * https://github.com/openzfs/zfs/issues/12843
     boot.kernelParams = [ "nohibernate" ];
-
-    boot.kernelPackages = pkgs.linuxPackages_latest;
 
     # Enable BBR congestion control
     boot.kernelModules = [ "tcp_bbr" ];

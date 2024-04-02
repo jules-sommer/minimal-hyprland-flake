@@ -40,6 +40,16 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    zig-overlay = {
+      url = "github:mitchellh/zig-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    zls = {
+      url = "github:zigtools/zls";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     xremap-flake = {
       url = "github:xremap/nix-flake";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -100,14 +110,11 @@
       };
 
       # Applies to all home-manager configs
-      home.modules = with inputs; [
-        hyprland.homeManagerModules.default 
-      ];
+      home.modules = with inputs; [ hyprland.homeManagerModules.default ];
 
       # Applies to all nixos systems
-      systems.modules.nixos = with inputs; [
-        home-manager.nixosModules.home-manager
-      ];
+      systems.modules.nixos = with inputs;
+        [ home-manager.nixosModules.home-manager ];
 
       overlays = with inputs; [
         fenix.overlays.default
