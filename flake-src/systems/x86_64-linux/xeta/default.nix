@@ -28,6 +28,7 @@ in {
       };
 
       programs = {
+        dconf = enabled;
         snowfall-utils = enabled;
         distrobox = enabled;
         rustdesk = {
@@ -39,7 +40,7 @@ in {
       graphics = {
         nvidia = {
           enable = true;
-          drivers = [ "nvidia" ];
+          drivers = [ "nouveau" ];
           channel = "stable";
         };
         opengl = true;
@@ -51,12 +52,15 @@ in {
       env = enabled;
       networking = enabled;
 
-      kbd = {
-        enable = true;
-        layout = "us";
+      input = {
+        kbd = {
+          enable = true;
+          layout = "us";
+        };
       };
 
       services = {
+        filesystem = enabled;
         polkit = enabled;
         audio.pipewire = {
           enable = true;
@@ -139,6 +143,9 @@ in {
     helix
     pzip
     nixfmt
+    helvum
+    webcord-vencord
+
     nushell
     alacritty
     ntfs3g
@@ -185,13 +192,6 @@ in {
   # Some programs need SUID wrappers, can be configured further or are
   #  started in user sessions.
   programs = {
-    xfconf = enabled;
-    dconf = enabled;
-    mtr = enabled;
-    gnupg.agent = {
-      enable = true;
-      enableSSHSupport = true;
-    };
     steam = {
       enable = true;
       gamescopeSession = enabled;
