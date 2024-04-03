@@ -23,20 +23,19 @@ in {
           "${config.xeta.system.user.home}/.config";
       };
 
-      portals = enabled;
-
       development = {
         rust = enabled;
         zig = enabled;
       };
 
+      portals = enabled;
       desktop = {
         hyprland = enabled;
         greeter = enabled;
       };
 
       programs = {
-        misc = enabled;
+        dconf = enabled;
         snowfall-utils = enabled;
         distrobox = enabled;
         rustdesk = {
@@ -60,12 +59,15 @@ in {
       env = enabled;
       networking = enabled;
 
-      kbd = {
-        enable = true;
-        layout = "us";
+      input = {
+        kbd = {
+          enable = true;
+          layout = "us";
+        };
       };
 
       services = {
+        filesystem = enabled;
         polkit = enabled;
         audio.pipewire = {
           enable = true;
@@ -103,35 +105,86 @@ in {
   };
 
   users.defaultUserShell = pkgs.nushell;
-  environment.shells = [ pkgs.nushell pkgs.zsh pkgs.bash ];
+  environment.shells = with pkgs; [ nushell zsh ];
+
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
   };
 
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # Set your time zone.
   time.timeZone = "America/Toronto";
-
-  # Select internationalisation properties.
   i18n.defaultLocale = "en_CA.UTF-8";
 
-  # Enable CUPS to print documents.
   services.printing.enable = true;
 
-  # Some programs need SUID wrappers, can be configured further or are
-  #  started in user sessions.
+  environment.systemPackages = with pkgs; [
+    busybox
+    (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
+    jujutsu
+    git
+    lazygit
+    starship
+    rnr
+    btop
+    gh
+    nil
+    zoxide
+    broot
+    ripgrep
+    fd
+    bat
+    github-copilot-cli
+    gitoxide
+    helix
+    pzip
+    nixfmt
+    helvum
+    webcord-vencord
+
+    nushell
+    alacritty
+    ntfs3g
+    fuseiso
+    kitty
+
+    nufmt
+
+    xz
+    jq
+    fd
+    jql
+    jq-lsp
+    zoxide
+    apx
+
+    obsidian
+    grim
+    grimblast
+    slurp
+
+    networkmanagerapplet
+    polkit_gnome
+
+    lcsync
+    librespot
+    libresprite
+
+    # broken due to 'freeimage-unstable-2021-11-01',
+    # see /overlays/librepcb-stable/default.nix
+    librepcb
+
+    ungoogled-chromium
+
+    deploy-rs
+    nixfmt
+    nix-index
+    nix-prefetch-git
+    nix-output-monitor
+    flake-checker
+
+  ];
+
   programs = {
-    xfconf = enabled;
-    dconf = enabled;
-    mtr = enabled;
-    gnupg.agent = {
-      enable = true;
-      enableSSHSupport = true;
-    };
     steam = {
       enable = true;
       gamescopeSession = enabled;
@@ -140,13 +193,14 @@ in {
     };
   };
 
-  # Enable the OpenSSH daemon.
+  security.pam.services.tuigreet = {
+    text = ''
+      auth include login
+    '';
+  };
+
   services.openssh.enable = true;
 
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
   networking.firewall.enable = false;
 
   system.stateVersion =

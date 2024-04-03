@@ -18,7 +18,6 @@ in {
         sddm = disabled;
         lightdm = disabled;
         gdm = disabled;
-        sddm = enabled;
       };
       desktopManager = {
         gnome = disabled;

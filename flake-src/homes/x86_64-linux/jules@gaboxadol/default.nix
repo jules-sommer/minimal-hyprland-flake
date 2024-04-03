@@ -12,6 +12,9 @@ in {
     alacritty = enabled;
     nushell = enabled;
     misc = enabled;
+
+    services.pueued = enabled;
+
     desktop = {
       hyprland = {
         enable = true;
