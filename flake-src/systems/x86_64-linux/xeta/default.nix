@@ -38,6 +38,7 @@ in {
       };
 
       graphics = {
+        enable = true;
         nvidia = {
           enable = true;
           drivers = [ "nouveau" ];
@@ -75,7 +76,9 @@ in {
     security = {
       doas = enabled;
       keyring = enabled;
+      tor = enabled;
     };
+    crypto = { monero = enabled; };
   };
 
   # Bootloader

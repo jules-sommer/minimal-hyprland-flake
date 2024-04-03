@@ -109,7 +109,7 @@ in {
     @theme "/dev/null"
 
     * {
-        bg: #${palette.base00};
+        bg: rgba(0, 0, 0, 0.75);
         background-color: @bg;
     }
 

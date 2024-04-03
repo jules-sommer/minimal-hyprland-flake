@@ -14,7 +14,6 @@ in {
         [ "custom/startmenu" "hyprland/window" "pulseaudio" "cpu" "memory" ];
       modules-center = [
         "network"
-        "custom/themeselector"
         "pulseaudio"
         "cpu"
         "hyprland/workspaces"
@@ -24,14 +23,12 @@ in {
       ];
 
       modules-right = [
-        "custom/hyprbindings"
         "custom/exit"
         "idle_inhibitor"
-        "custom/themeselector"
         "custom/notification"
         "battery"
-        "clock"
         "tray"
+        "clock"
       ];
 
       "hyprland/workspaces" = {
@@ -45,7 +42,11 @@ in {
         on-scroll-down = "hyprctl dispatch workspace e-1";
       };
       "clock" = {
-        format = "{: %I:%M %p}";
+        format = "{%H %M %P}";
+        tooltip-format = ''
+          <big>{%I:%M %p}</big>
+          <tt><small>{calendar}</small></tt>
+        '';
         tooltip = false;
       };
       "hyprland/window" = {
@@ -94,12 +95,6 @@ in {
         };
         on-click = "pavucontrol";
       };
-      "custom/themeselector" = {
-        tooltip = false;
-        format = "";
-        # exec = "theme-selector";
-        on-click = "theme-selector";
-      };
       "custom/startmenu" = {
         tooltip = false;
         format = "";
@@ -113,6 +108,7 @@ in {
           deactivated = "";
         };
         tooltip = "true";
+        tooltip-format = "Inhibit idle? {state}";
       };
       "custom/notification" = {
         tooltip = false;
@@ -170,159 +166,122 @@ in {
         tooltip = false;
       };
     }];
+
     style = ''
       * {
-        font-size: 16px;
+        font-size: 14px;
         font-family: 'JetBrains Mono', Font Awesome;
             font-weight: 600;
       }
       window#waybar {
-            margin: 5px;
-            padding: 5px;
-            border-radius: 15px;
-            border: 2px solid #${theme.base0F};
-            border-bottom: 1px solid rgba(26,27,38,0);
-            background-color: rgba(26,27,38,0.64);
-            color: #${theme.base0F};
+        padding: 5px;
+        border: 2px solid rgba(231,113,252,0.8);
+        background-color: rgba(85,25,95,0.40);
+        color: #${theme.base0F};
       }
       #workspaces {
-            background: linear-gradient(180deg, #${theme.base00}, #${theme.base01});
-            margin: 5px;
-            padding: 0px 1px;
-            border-radius: 15px;
-            border: 0px;
-            font-style: normal;
-            color: #${theme.base00};
+        background: black;
+        padding: 4px;
+        border-radius: 5px;
+        border: 2px solid #${theme.base0F};
+        font-style: normal;
+        color: white;
       }
       #workspaces button {
-            padding: 0px 5px;
-            margin: 4px 3px;
-            border-radius: 15px;
-            border: 0px;
-            color: #${theme.base00};
-            background-color: #${theme.base00};
-            opacity: 1.0;
-            transition: all 0.3s ease-in-out;
+        color: #${theme.base00};
+        background-color: #${theme.base00};
+        opacity: 1.0;
+        transition: all 0.3s cubic-bezier(.55,-0.68,.48,1.682);
       }
       #workspaces button.active {
-            color: #${theme.base00};
-            background: #${theme.base04};
-            border-radius: 15px;
-            min-width: 40px;
-            transition: all 0.3s ease-in-out;
-            opacity: 1.0;
+        color: #${theme.base00};
+        background: #${theme.base04};
+        min-width: 40px;
+        transition: all 0.3s cubic-bezier(.55,-0.68,.48,1.682);
+        opacity: 1.0;
       }
       #workspaces button:hover {
-            color: #${theme.base02};
-            background: #${theme.base04};
-            border-radius: 15px;
-            opacity: 1.0;
+        color: #${theme.base02};
+        background: #${theme.base04};
+        opacity: 1.0;
       }
       tooltip {
-          background: #${theme.base00};
-          border: 1px solid #${theme.base04};
-          border-radius: 10px;
+        background: black;
+        border: 1px solid rgba(255,255,255,0.2);
+        border-radius: 5px;
       }
       tooltip label {
-          color: #${theme.base07};
+        color: white;
       }
       #window {
-            color: #${theme.base05};
-            background: #${theme.base00};
-            border-radius: 0px 15px 50px 0px;
-            margin: 5px 5px 5px 0px;
-            padding: 2px 20px;
+        color: #${theme.base05};
+        background: #${theme.base00};        
+        padding: 5px;
       }
       #memory {
-            color: #${theme.base0F};
-            background: #${theme.base00};
-            border-radius: 15px 50px 15px 50px;
-            margin: 5px;
-            padding: 2px 20px;
+        color: #${theme.base0F};
+        background: #${theme.base00};        
+        padding: 5px;
       }
       #clock {
-            color: #${theme.base0B};
-            background: #${theme.base00};
-            border-radius: 15px 50px 15px 50px;
-            margin: 5px;
-            padding: 2px 20px;
+        color: #${theme.base0B};
+        background: #${theme.base00};        
+        padding: 5px;
       }
       #idle_inhibitor {
-            color: #${theme.base0A};
-            background: #${theme.base00};
-            border-radius: 50px 15px 50px 15px;
-            margin: 5px;
-            padding: 2px 20px;
+        color: #${theme.base0A};
+        background: #${theme.base00};        
+        padding: 5px;
       }
       #cpu {
-            color: #${theme.base07};
-            background: #${theme.base00};
-            border-radius: 50px 15px 50px 15px;
-            margin: 5px;
-            padding: 2px 20px;
+        color: #${theme.base07};
+        background: #${theme.base00};        
+        padding: 5px;
       }
       #disk {
-            color: #${theme.base03};
-            background: #${theme.base00};
-            border-radius: 15px 50px 15px 50px;
-            margin: 5px;
-            padding: 2px 20px;
+        color: #${theme.base03};
+        background: #${theme.base00};        
+        padding: 5px;
       }
       #battery {
-            color: #${theme.base08};
-            background: #${theme.base00};
-            border-radius: 15px;
-            margin: 5px;
-            padding: 2px 20px;
+        color: #${theme.base08};
+        background: #${theme.base00};        
+        padding: 5px;
       }
       #network {
-            color: #${theme.base09};
-            background: #${theme.base00};
-            border-radius: 50px 15px 50px 15px;
-            margin: 5px;
-            padding: 2px 20px;
+        color: #${theme.base09};
+        background: #${theme.base00};        
+        padding: 5px;
       }
       #tray {
-            color: #${theme.base05};
-            background: #${theme.base00};
-            border-radius: 15px 0px 0px 50px;
-            margin: 5px 0px 5px 5px;
-            padding: 2px 20px;
+        color: #${theme.base05};
+        background: #${theme.base00};        
+        padding: 5px;
       }
       #pulseaudio {
-            color: #${theme.base0D};
-            background: #${theme.base00};
-            border-radius: 50px 15px 50px 15px;
-            margin: 5px;
-            padding: 2px 20px;
+        color: #${theme.base0D};
+        background: #${theme.base00};        
+        padding: 5px;
       }
       #custom-notification {
-            color: #${theme.base0C};
-            background: #${theme.base00};
-            border-radius: 15px 50px 15px 50px;
-            margin: 5px;
-            padding: 2px 20px;
+        color: #${theme.base0C};
+        background: #${theme.base00};        
+        padding: 5px;
       }
-        #custom-themeselector {
-            color: #${theme.base0D};
-            background: #${theme.base00};
-            border-radius: 15px 50px 15px 50px;
-            margin: 5px;
-            padding: 2px 20px;
-        }
+      #custom-themeselector {
+        color: #${theme.base0D};
+        background: #${theme.base00};        
+        padding: 5px;
+      }
       #custom-startmenu {
-            color: #${theme.base03};
-            background: #${theme.base00};
-            border-radius: 50px 15px 50px 15px;
-            margin: 5px;
-            padding: 2px 20px;
+        color: #${theme.base03};
+        background: #${theme.base00};        
+        padding: 5px;
       }
       #idle_inhibitor {
-            color: #${theme.base09};
-            background: #${theme.base00};
-            border-radius: 15px 50px 15px 50px;
-            margin: 5px;
-            padding: 2px 20px;
+        color: #${theme.base09};
+        background: #${theme.base00};        
+        padding: 5px;
       }
     '';
   };

@@ -175,7 +175,7 @@ in {
           "swww init"
           "waybar"
           "swaync"
-          "swayidle -w timeout 720 'swaylock -f' timeout 800 'hyprctl dispatch dpms off' resume 'hyprctl dispatch dpms on' before-sleep 'swaylock -f -c 000000'"
+          "swayidle -w timeout 720 'tuigreet --greeting \"Hello, Jules! We put xeta to sleep but she's okieee dw. :)\"' timeout 800 'hyprctl dispatch dpms off' resume 'hyprctl dispatch dpms on' before-sleep 'tuigreet'"
           "swww img --filter Lanczos3 ~/Pictures/wallpapers/zoelove.jpg"
           # "swaybg - m fill - i ~/Pictures/wallpapers/zoelove.jpg" # alternative to swww for wallpaper
         ];
@@ -273,6 +273,8 @@ in {
 
         decoration = {
           rounding = "15";
+          blurls = "waybar";
+          layerrule = [ "blur,waybar" "blur,rofi" ];
           drop_shadow = true;
           blur = {
             enabled = true;
