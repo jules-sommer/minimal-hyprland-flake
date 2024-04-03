@@ -4,6 +4,7 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     stable.url = "github:nixos/nixpkgs/nixos-23.11";
+    staging.url = "github:nixos/nixpkgs/staging-next";
 
     nixos-conf-editor = {
       url = "github:snowfallorg/nixos-conf-editor";

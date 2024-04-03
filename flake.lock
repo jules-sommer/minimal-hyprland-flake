@@ -1015,6 +1015,7 @@
         "snowfall-lib": "snowfall-lib_4",
         "snowfall-thaw": "snowfall-thaw",
         "stable": "stable",
+        "staging": "staging",
         "systems": "systems_7",
         "xremap-flake": "xremap-flake",
         "zig-overlay": "zig-overlay",
@@ -1230,6 +1231,22 @@
       "original": {
         "owner": "nixos",
         "ref": "nixos-23.11",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "staging": {
+      "locked": {
+        "lastModified": 1712145681,
+        "narHash": "sha256-p40EpZDQXCuNy+qNFM5cWXRa8GAL2bVT+0svJdQ+elU=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "e74231f370d6f5927533e8ba6b23767039c49c19",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "staging-next",
         "repo": "nixpkgs",
         "type": "github"
       }
