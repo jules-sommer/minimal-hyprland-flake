@@ -9,6 +9,13 @@ in {
     settings = [{
       layer = "top";
       position = "top";
+      height = 60;
+      margin-top = 20;
+      margin-left = 20;
+      margin-right = 20;
+      spacing = 10;
+      reload-style-on-change = true;
+      include = [ "~/.config/waybar/styles-extra.css" ];
 
       modules-left =
         [ "custom/startmenu" "hyprland/window" "pulseaudio" "cpu" "memory" ];
@@ -165,6 +172,10 @@ in {
         on-click = "";
         tooltip = false;
       };
+      "custom/quit" = {
+        format = "";
+        on-click = "";
+      };
     }];
 
     style = ''
@@ -173,7 +184,15 @@ in {
         font-family: 'JetBrains Mono', Font Awesome;
             font-weight: 600;
       }
+      label.module {
+        padding: 0 10px;
+        box-shadow: inset 0 -3px;
+      }
+      box.module button:hover {
+        box-shadow: inset 0 -3px #ffffff;
+      }
       window#waybar {
+        margin: 20px;
         padding: 5px;
         border: 2px solid rgba(231,113,252,0.8);
         background-color: rgba(85,25,95,0.40);

@@ -8,6 +8,7 @@ let
   cfg = config.xeta.system.graphics;
 in {
   options.xeta.system.graphics = with types; {
+    enable = mkEnableOption "Enable graphics config.";
     nvidia = {
       enable = mkEnableOption
         "Enable nvidia drivers, either open-source nouveau or proprietary.";
@@ -21,49 +22,42 @@ in {
     opengl = mkEnableOption "Enable OpenGL support";
   };
 
-  config = mkMerge [
-    (mkIf cfg.opengl {
-      hardware.opengl = {
-        enable = true;
-        driSupport = true;
-        driSupport32Bit = true;
-      };
-    })
+  config = mkIf cfg.enable {
+    hardware.opengl = mkIf cfg.opengl ({
+      enable = true;
+      driSupport = true;
+      driSupport32Bit = true;
+    });
 
-    (mkIf (cfg.nvidia.drivers != null) {
-      environment.systemPackages = with pkgs; [ nvtop ];
+    environment.systemPackages = with pkgs; [ nvtop ];
 
-      # Fixing suspend/wakeup issues with Nvidia drivers
-      # "https://wiki.hyprland.org/Nvidia/"
-      boot.kernelParams = [ "nvidia.NVreg_PreserveVideoMemoryAllocations=1" ];
+    # Fixing suspend/wakeup issues with Nvidia drivers
+    # "https://wiki.hyprland.org/Nvidia/"
+    boot.kernelParams = [ "nvidia.NVreg_PreserveVideoMemoryAllocations=1" ];
 
-      services.xserver.videoDrivers =
-        cfg.nvidia.drivers; # "nvidia" or "nouveau"
-      boot.blacklistedKernelModules =
-        mkIf (lib.lists.elem "nvidia" cfg.nvidia.drivers) [ "nouveau" ];
-      hardware.nvidia = mkIf (lib.lists.elem "nvidia" cfg.nvidia.drivers) {
-        # Modesetting is required.
-        modesetting.enable = true;
-        # Nvidia power management. Experimental, and can cause sleep/suspend to fail.
-        powerManagement.enable = false;
-        # Fine-grained power management. Turns off GPU when not in use.
-        # Experimental and only works on modern Nvidia GPUs (Turing or newer).
-        powerManagement.finegrained = false;
-        # Use the NVidia open source kernel module (not to be confused with the
-        # independent third-party "nouveau" open source driver).
-        # Support is limited to the Turing and later architectures. Full list of
-        # supported GPUs is at:
-        # https://github.com/NVIDIA/open-gpu-kernel-modules#compatible-gpus
-        # Only available from driver 515.43.04+
-        # Currently alpha-quality/buggy, so false is currently the recommended setting.
-        open = false;
-        # Enable the Nvidia settings menu,
-        # accessible via `nvidia-settings`.
-        nvidiaSettings = true;
-        # Optionally, you may need to select the appropriate driver version for your specific GPU.
-        package =
-          config.boot.kernelPackages.nvidiaPackages.${cfg.nvidia.channel};
-      };
-    })
-  ];
+    services.xserver.videoDrivers = [ "nvidia" ];
+    boot.blacklistedKernelModules = [ "nouveau" ];
+    hardware.nvidia = {
+      # Modesetting is required.
+      modesetting.enable = true;
+      # Nvidia power management. Experimental, and can cause sleep/suspend to fail.
+      powerManagement.enable = false;
+      # Fine-grained power management. Turns off GPU when not in use.
+      # Experimental and only works on modern Nvidia GPUs (Turing or newer).
+      powerManagement.finegrained = false;
+      # Use the NVidia open source kernel module (not to be confused with the
+      # independent third-party "nouveau" open source driver).
+      # Support is limited to the Turing and later architectures. Full list of
+      # supported GPUs is at:
+      # https://github.com/NVIDIA/open-gpu-kernel-modules#compatible-gpus
+      # Only available from driver 515.43.04+
+      # Currently alpha-quality/buggy, so false is currently the recommended setting.
+      open = false;
+      # Enable the Nvidia settings menu,
+      # accessible via `nvidia-settings`.
+      nvidiaSettings = true;
+      # Optionally, you may need to select the appropriate driver version for your specific GPU.
+      package = config.boot.kernelPackages.nvidiaPackages.${cfg.nvidia.channel};
+    };
+  };
 }

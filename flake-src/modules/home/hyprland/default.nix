@@ -92,7 +92,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs; [ swww eww hyprpaper swayidle swaylock swaybg ];
+    home.packages = with pkgs; [ swww eww hyprpaper swayidle swaybg ];
     wayland.windowManager.hyprland = {
       enable = true;
       package = getHyprlandPkg system;

@@ -10,11 +10,10 @@ in {
         "Enable Monero configuration, by default just daemon but mining can be enabled";
       mining = {
         enable = mkEnableOption "Enable Monero mining";
-        threads = mkOpt (types.nullOr types.int) null
-          "Number of threads to use for mining";
-        limitBandwidth = mkOpt (types.nullOr types.int) null
+        threads = mkOpt (types.int) 0 "Number of threads to use for mining";
+        limitBandwidth = mkOpt (types.int) (-1)
           "Limit bandwidth usage for mining, ratelimit in KB/s";
-        address = mkOpt (types.nullOr types.string) null
+        address = mkOpt (types.nullOr types.str) null
           "Monero wallet address to send mining rewards to.";
       };
     };

@@ -8,6 +8,8 @@ in {
     enable = mkEnableOption "Enable Hyprland.";
   };
   config = mkIf cfg.enable {
+
+    environment.systemPackages = with pkgs; [ pyprland ];
     services.xserver = {
       enable = true;
       autoRepeatDelay = 200;

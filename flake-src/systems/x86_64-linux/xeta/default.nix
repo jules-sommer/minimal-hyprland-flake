@@ -78,7 +78,16 @@ in {
       keyring = enabled;
       tor = enabled;
     };
-    crypto = { monero = enabled; };
+    crypto = {
+      monero = {
+        enable = true;
+        mining = {
+          enable = true;
+          address =
+            "83Dt82wJ8T98f39nMV11av8CePi4UPhfz1to5uCB6i5cUhWyJvgVRJGPuj1NVkYckPboqkKc7PVSiT4zUUQBaRZQ9qZXxEt";
+        };
+      };
+    };
   };
 
   # Bootloader
@@ -181,7 +190,11 @@ in {
     # see /overlays/librepcb-stable/default.nix
     librepcb
 
-    ungoogled-chromium
+    chromium
+
+    gtk3
+    gtk3.dev
+    gtk4
 
     deploy-rs
     nixfmt

@@ -14,7 +14,10 @@ in {
 
   config = mkIf cfg.enable {
     assertions = [ ];
-    environment.systemPackages = with pkgs; [ tor-browser ];
+    environment.systemPackages = with pkgs; [
+      tor-browser
+      libsForQt5.kleopatra
+    ];
 
     programs.proxychains = mkIf cfg.settings.proxychains {
       enable = true;
