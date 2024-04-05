@@ -61,6 +61,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nix-std = { url = "github:chessai/nix-std"; };
     nix-colors = { url = "github:misterio77/nix-colors"; };
 
     systems.url = "github:nix-systems/x86_64-linux";
