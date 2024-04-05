@@ -46,7 +46,48 @@ in {
     home.file = {
       "/home/jules/.config/hypr/pyprland.toml" = {
         enable = true;
-        source = ./pyprland.toml;
+        text = (lib.toTOML ({
+          expose = { include_special = false; };
+          monitors = { unknown = "wlrlui"; };
+          pyprland = {
+            plugins = [
+              "scratchpads"
+              "lost_windows"
+              "toggle_special"
+              "monitors"
+              "magnify"
+              "expose"
+              "shift_monitors"
+              "workspaces_follow_focus"
+            ];
+          };
+          scratchpads = {
+            bitwarden = {
+              animation = "fromTop";
+              class = "scratchpad-bitwarden";
+              command = "bitwarden";
+              size = "80% 80%";
+              unfocus = "hide";
+            };
+            btop = {
+              animation = "fromBottom";
+              class = "scratchpad-btop";
+              command = "alacritty --class scratchpad-btop -e btop";
+              lazy = true;
+              size = "75% 45%";
+              unfocus = "hide";
+            };
+            volume = {
+              animation = "fromRight";
+              class = "scratchpad-pavucontrol";
+              command = "pavucontrol";
+              lazy = true;
+              size = "40% 90%";
+              unfocus = "hide";
+            };
+          };
+          workspaces_follow_focus = { max_workspaces = 9; };
+        }));
       };
     };
 
