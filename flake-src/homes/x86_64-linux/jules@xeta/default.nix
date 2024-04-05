@@ -20,6 +20,7 @@ in {
         enable = true;
         theme = "synth-midnight-dark";
       };
+      pyprland = enabled;
     };
   };
 
@@ -34,6 +35,19 @@ in {
       bitwarden
       bitwarden-cli
       floorp
+      # system utility / controls / settings / tray menus
+      gnome.gnome-disk-utility
+      gnome.gnome-calculator
+      gnome.nautilus
+      gnome.gnome-logs
+      gnome.gnome-panel
+      gnome.file-roller
+      gnome.gnome-weather
+      gnome.gnome-nettool
+      gnome.gnome-applets
+      gnome.gnome-calendar
+      gnome.gnome-screenshot
+      pavucontrol
     ];
     shellAliases = { };
   };

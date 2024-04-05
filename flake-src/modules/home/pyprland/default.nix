@@ -41,36 +41,36 @@ in {
   };
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs; [ pypr ];
+    home.packages = with pkgs; [ pyprland ];
 
-    home.file.${"~/.config/hypr/pyprland.toml"}.text =
-      (builtins.readFile ./pyprland.toml);
+    home.file = {
+      "/home/jules/.config/hypr/pyprland.toml" = {
+        enable = true;
+        source = ./pyprland.toml;
+      };
+    };
 
     wayland.windowManager.hyprland = {
       settings = {
         "$mod" = "ALT";
-        "$notify" =
-          "notify-send -h string:x-canonical-private-synchronous:hypr-cfg -u low";
+        "$dispatch" = "hyprctl dispatch";
+        "$active_to_top" = "bringactivetotop";
+
+        "$scratch_size" = "size 80% 85%";
+        "$scratch" = "class:scratchpad";
 
         # █░█░█ █ █▄░█ █▀▄ █▀█ █░█░█   █▀█ █░█ █░░ █▀▀ █▀
         # ▀▄▀▄▀ █ █░▀█ █▄▀ █▄█ ▀▄▀▄▀   █▀▄ █▄█ █▄▄ ██▄ ▄█
 
         windowrulev2 = [
-          "float,class:^(kitty)$,title:^(kitty)$"
-          "float,class:^(Bitwarden)$"
-          "float,class:^(thunar)$"
-          "float,title:^(?i).*Bitwarden.*$"
-          "float,title:^(?i).*Extension:.*$"
-          "float,title:^(?i).*Sign in.*$"
-          "idleinhibit focus, class:^(vlc)$"
-          "idleinhibit fullscreen, class:^(floorp)$"
+          "float, $scratch"
+          "$scratch_size, $scratch"
+          "workspace special silent, $scratch"
+          "center, $scratch"
         ];
+
         windowrule = [
-          "float, ^(steam)$"
-          "center, ^(steam)$"
-          "size 1200 900, ^(steam)$"
-          "float,^(alacritty)$"
-          "move 0 0,class:^(floorp)(.*)$"
+
         ];
 
         # ▄▀█ █░█ ▀█▀ █▀█    █▀▀ ▀▄▀ █▀▀ █▀▀
@@ -82,8 +82,27 @@ in {
         # ▄█ █▀█ █▄█ █▀▄ ░█░ █▄▄ █▄█ ░█░ ▄█
 
         bind = [
-          # F keypress
-          "$mod, F, exec, floorp"
+          # pyprland workspaces_follow_focus
+          "$mod, K, exec, pypr change_workspace +1"
+          "$mod, J, exec, pypr change_workspace -1"
+
+          "$mod SHIFT, right, exec, pypr change_workspace +1"
+          "$mod SHIFT, left, exec, pypr change_workspace -1"
+
+          "$mod SHIFT, K, exec, pypr shift_monitors +1"
+          "$mod SHIFT, J, exec, pypr shift_monitors -1"
+
+          "SUPER, mouse_up, exec, pypr change_workspace +1"
+          "SUPER, mouse_down, exec, pypr change_workspace -1"
+
+          "SUPER, B, exec, pypr toggle btop; $dispatch $active_to_top"
+
+          "$mod SHIFT, N, togglespecialworkspace, stash" # toggles "stash" special workspace visibility
+          "$mod, N, exec, pypr toggle_special stash" # moves window to/from the "stash" workspace
+
+          # toggles special "expose" workspace which is
+          # used to show all windows in an overview
+          "SUPER, A, exec, pypr expose"
         ];
       };
     };

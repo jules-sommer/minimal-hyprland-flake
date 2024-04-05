@@ -218,6 +218,7 @@ in {
 
           "$mod SHIFT, mouse_up, workspace, e+1"
           "$mod SHIFT, mouse_down, workspace, e-1"
+
           "ALT,Tab,cyclenext"
           "ALT,Tab,bringactivetotop"
 
@@ -242,7 +243,7 @@ in {
               in builtins.toString (x + 1 - (c * 10));
             in [
               "$mod, ${ws}, workspace, ${toString (x + 1)}"
-              "$mod SHIFT, ${ws}, movetoworkspacesilent, ${toString (x + 1)}"
+              "$mod SHIFT, ${ws}, movetoworkspace, ${toString (x + 1)}"
             ]) 10));
 
         # ▄▀█ █▄░█ █ █▀▄▀█ ▄▀█ ▀█▀ █ █▀█ █▄░█ █▀

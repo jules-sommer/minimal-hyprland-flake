@@ -9,10 +9,10 @@ in {
     settings = [{
       layer = "top";
       position = "top";
-      height = 60;
-      margin-top = 20;
-      margin-left = 20;
-      margin-right = 20;
+      height = 35;
+      margin-top = 10;
+      margin-left = 10;
+      margin-right = 10;
       spacing = 10;
       reload-style-on-change = true;
       include = [ "~/.config/waybar/styles-extra.css" ];
@@ -185,14 +185,19 @@ in {
             font-weight: 600;
       }
       label.module {
-        padding: 0 10px;
+        padding: 0 15px;
         box-shadow: inset 0 -3px;
       }
       box.module button:hover {
         box-shadow: inset 0 -3px #ffffff;
       }
+
+      box.module {
+        box-shadow: inset 0 -5px;
+      }
       window#waybar {
-        margin: 20px;
+        border-radius: 10px;
+        margin: 10px;
         padding: 5px;
         border: 2px solid rgba(231,113,252,0.8);
         background-color: rgba(85,25,95,0.40);

@@ -2,6 +2,7 @@
 plugins = [
   "scratchpads",
   "lost_windows",
+  "toggle_special",
   "monitors",
   "magnify",
   "expose",
@@ -17,8 +18,8 @@ include_special = false
 
 [scratchpads.btop]
 animation = "fromBottom"
-command = "alacritty --class alacritty-stb -e btop"
-class = "alacritty-btop"
+command = "alacritty --class scratchpad-btop -e btop"
+class = "scratchpad-btop"
 lazy = true
 size = "75% 45%"
 unfocus = "hide"
@@ -26,9 +27,16 @@ unfocus = "hide"
 [scratchpads.volume]
 animation = "fromRight"
 command = "pavucontrol"
-class = "pavucontrol"
+class = "scratchpad-pavucontrol"
 lazy = true
 size = "40% 90%"
+unfocus = "hide"
+
+[scratchpads.bitwarden]
+animation = "fromTop"
+command = "bitwarden"
+class = "scratchpad-bitwarden"
+size = "80% 80%"
 unfocus = "hide"
 
 [monitors]
