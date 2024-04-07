@@ -2,6 +2,7 @@
 let
   inherit (lib) types mkEnableOption mkIf mkOption;
   inherit (lib.xeta) mkOpt getHyprlandPkg getTheme;
+  inherit (lib.xeta.serialize) toTOML;
   cfg = config.xeta.desktop.pyprland;
 in {
   options.xeta.desktop.pyprland = {
@@ -46,7 +47,7 @@ in {
     home.file = {
       "/home/jules/.config/hypr/pyprland.toml" = {
         enable = true;
-        text = (lib.toTOML ({
+        text = (toTOML ({
           expose = { include_special = false; };
           monitors = { unknown = "wlrlui"; };
           pyprland = {
@@ -74,7 +75,7 @@ in {
               class = "scratchpad-btop";
               command = "alacritty --class scratchpad-btop -e btop";
               lazy = true;
-              size = "75% 45%";
+              size = "80% 80%";
               unfocus = "hide";
             };
             volume = {
@@ -124,8 +125,10 @@ in {
 
         bind = [
           # pyprland workspaces_follow_focus
+          "$mod, H, exec, pypr shift_monitors -1"
           "$mod, K, exec, pypr change_workspace +1"
           "$mod, J, exec, pypr change_workspace -1"
+          "$mod, L, exec, pypr shift_monitors +1"
 
           "$mod SHIFT, right, exec, pypr change_workspace +1"
           "$mod SHIFT, left, exec, pypr change_workspace -1"

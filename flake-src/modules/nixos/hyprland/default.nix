@@ -9,7 +9,16 @@ in {
   };
   config = mkIf cfg.enable {
 
-    environment.systemPackages = with pkgs; [ pyprland ];
+    environment.systemPackages = with pkgs; [
+      pyprland
+      xdg-desktop-portal-gtk
+      xdg-desktop-portal-hyprland
+      xwayland
+      meson
+      wayland-protocols
+      wayland-utils
+      wlroots
+    ];
     services.xserver = {
       enable = true;
       autoRepeatDelay = 200;

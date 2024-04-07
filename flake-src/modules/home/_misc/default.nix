@@ -15,6 +15,7 @@ in {
       rsync
       grsync
       nb
+      socat
       moreutils
       dt
       fzf

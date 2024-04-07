@@ -1,5 +1,5 @@
 { lib, inputs, ... }:
-let inherit (lib) assertMsg;
+let inherit (lib) assertMsg mkIf;
 in rec {
   dispatch = cmd: "hyprctl dispatch ${cmd};";
   active_top = cmd: "hyprctl dispatch bringactivetotop;";
@@ -15,16 +15,16 @@ in rec {
       "bind(): key and cmd are required";
     let
       final = {
-        mod = if (mod == null || mod == false) then "$mod" else mod;
-        hasShift = if (shift == null || shift == false) then true else false;
-
-        shift = if (shift == null || shift == false) then "," else "SHIFT, ";
-        hasExec = if (exec == null || exec == false) then false else true;
-        
-        key = lib.toUpper "${key}, ";
-        exec = if exec == false then "" else "exec, ";
+        mod = if (mod != null || mod == true) then mod else "$mod";
+        shift = mkIf (shift != null || shift == true) "SHIFT";
+        key = lib.toUpper key;
+        exec = mkIf (exec == true) "exec";
       };
-    in if "${final.mod} ${final.shift}${final.key}${final.exec}${cmd};";
+
+      hasShift = (shift != null && shift == true);
+      hasExec = (exec != null && exec == true);
+    in { inherit final hasShift hasExec; };
+  #if hasShift then ("${final.mod} ${final.shift},") else "${final.mod},";
   # "$mod SHIFT, J, exec, pypr shift_monitors -1";
 
 }

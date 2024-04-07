@@ -108,7 +108,7 @@ in {
           "notify-send -h string:x-canonical-private-synchronous:hypr-cfg -u low";
         monitor = [
           "DP-1,2560x1080@74.99,1920x0,1"
-          "HDMI-A-2,1920x1080@100,0x0,1"
+          "HDMI-A-2,1920x1080@60,0x0,1"
           ",highres,auto,1"
         ];
         env = [
@@ -134,7 +134,7 @@ in {
           "XDG_SESSION_TYPE,wayland"
           "XDG_CURRENT_DESKTOP, Hyprland"
           "XDG_SESSION_DESKTOP, Hyprland"
-          "GBM_BACKEND,nvidia-drm"
+          # "GBM_BACKEND,nvidia-drm"
           "__GLX_VENDOR_LIBRARY_NAME,nvidia"
           "WLR_NO_HARDWARE_CURSORS,1"
         ];
@@ -209,12 +209,23 @@ in {
           # File manager $mod + {F}
           "$mod, P, pseudo, # dwindle"
           "$mod, J, togglesplit, # dwindle"
-          "$mod, left, movefocus, l"
-          "$mod, right, movefocus, r"
-          "$mod, up, movefocus, u"
-          "$mod, down, movefocus, d"
           "$mod SHIFT, SPACE, movetoworkspace,special"
           "$mod, SPACE, togglespecialworkspace"
+
+          "$mod, left,          movefocus, l"
+          "$mod, right,         movefocus, r"
+          "$mod, up,            movefocus, u"
+          "$mod, down,          movefocus, d"
+
+          "$mod SHIFT, left,    swapwindow, l"
+          "$mod SHIFT, right,   swapwindow, r"
+          "$mod SHIFT, up,      swapwindow, u"
+          "$mod SHIFT, down,    swapwindow, d"
+
+          "$mod CTRL, left,     resizeactive, -60 0"
+          "$mod CTRL, right,    resizeactive, 60 0"
+          "$mod CTRL, up,       resizeactive, 0 -60"
+          "$mod CTRL, down,     resizeactive, 0 60"
 
           "$mod SHIFT, mouse_up, workspace, e+1"
           "$mod SHIFT, mouse_down, workspace, e-1"
@@ -334,7 +345,11 @@ in {
 
         misc = {
           vrr = 2;
-          disable_hyprland_logo = 1;
+          disable_hyprland_logo = true;
+          render_ahead_of_time = false;
+          enable_swallow = true;
+          animate_manual_resizes = true;
+          animate_mouse_windowdragging = true;
         };
       };
     };
