@@ -16,7 +16,7 @@ in {
         "If nvidia drivers are enabled, this setting specifies a list of driver pkgs to use.";
       channel = mkOpt
         (nullOr (types.enum ([ "stable" "beta" "production" "vulkan_beta" ])))
-        null
+        "beta"
         "Nvidia driver channel to track, must be stable, beta, or production.";
     };
     opengl = mkEnableOption "Enable OpenGL support";
@@ -27,6 +27,12 @@ in {
       enable = true;
       driSupport = true;
       driSupport32Bit = true;
+      extraPackages = with pkgs; [
+        nvidia-vaapi-driver
+        vaapiVdpau
+        libvdpau-va-gl
+        intel-media-driver
+      ];
     });
 
     environment.systemPackages = with pkgs; [ nvtop ];
@@ -34,9 +40,12 @@ in {
     # Fixing suspend/wakeup issues with Nvidia drivers
     # "https://wiki.hyprland.org/Nvidia/"
     boot.kernelParams = [ "nvidia.NVreg_PreserveVideoMemoryAllocations=1" ];
+    boot.extraModprobeConfig = ''
+      options nvidia NVreg_RegistryDwords="PowerMizerEnable=0x1; PerfLevelSrc=0x2222; PowerMizerLevel=0x3; PowerMizerDefault=0x3; PowerMizerDefaultAC=0x3;"
+    '';
 
-    services.xserver.videoDrivers = [ "nvidia" ];
-    boot.blacklistedKernelModules = [ "nouveau" ];
+    services.xserver.videoDrivers = [ "nouveau" ];
+    boot.blacklistedKernelModules = [ "nvidia" ];
     hardware.nvidia = {
       # Modesetting is required.
       modesetting.enable = true;
