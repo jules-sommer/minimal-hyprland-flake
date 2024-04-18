@@ -1,21 +1,35 @@
-{ lib, pkgs, config, inputs, system, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  inputs,
+  system,
+  ...
+}:
 let
-  inherit (lib) types mkEnableOption mkIf;
+  inherit (lib)
+    types
+    mkEnableOption
+    mkIf
+    mkMerge
+    ;
   inherit (lib.xeta) mkOpt enabled;
-  cfg = config.xeta.crypto.monero;
-in {
+  cfg = config.xeta.crypto;
+in
+{
   options.xeta.crypto = {
+    enable = mkEnableOption "Enable crypto configuration";
     monero = {
-      enable = mkEnableOption
-        "Enable Monero configuration, by default just daemon but mining can be enabled";
+      enable = mkEnableOption "Enable Monero configuration, by default just daemon but mining can be enabled";
       mining = {
         enable = mkEnableOption "Enable Monero mining";
         threads = mkOpt (types.int) 0 "Number of threads to use for mining";
-        limitBandwidth = mkOpt (types.int) (-1)
-          "Limit bandwidth usage for mining, ratelimit in KB/s";
-        address = mkOpt (types.nullOr types.str) null
-          "Monero wallet address to send mining rewards to.";
+        limitBandwidth = mkOpt (types.int) (-1) "Limit bandwidth usage for mining, ratelimit in KB/s";
+        address = mkOpt (types.nullOr types.str) null "Monero wallet address to send mining rewards to.";
       };
+    };
+    bitcoin = {
+      enable = mkEnableOption "Enable Bitcoin configuration";
     };
   };
 
@@ -39,19 +53,29 @@ in {
       # }
     ];
 
-    environment.systemPackages = with pkgs; [ monero-cli monero-gui ];
+    environment.systemPackages =
+      with pkgs;
+      mkMerge [
+        (mkIf cfg.bitcoin.enable [
+          electrum
+          electrum-ltc
+        ])
+        (mkIf cfg.monero.enable [
+          monero-cli
+          monero-gui
+        ])
+      ];
 
-    services.monero = {
+    services.monero = mkIf cfg.monero.enable {
       enable = true; # cfg.daemon.enable;
-      mining = mkIf cfg.mining.enable {
+      mining = mkIf cfg.monero.mining.enable {
         enable = true;
-        inherit (cfg.mining) threads address;
+        inherit (cfg.monero.mining) threads address;
       };
-      limits = mkIf (cfg.mining.limitBandwidth != null) {
-        download = cfg.mining.limitBandwidth;
-        upload = cfg.mining.limitBandwidth;
+      limits = mkIf (cfg.monero.mining.limitBandwidth != null) {
+        download = cfg.monero.mining.limitBandwidth;
+        upload = cfg.monero.mining.limitBandwidth;
       };
     };
   };
 }
-

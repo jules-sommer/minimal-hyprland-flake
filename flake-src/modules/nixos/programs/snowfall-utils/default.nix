@@ -1,9 +1,15 @@
-{ lib, config, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.xeta.system.programs.snowfall-utils;
-in {
-  options.xeta.system.programs.snowfall-utils = {
+  cfg = config.xeta.programs.snowfall-utils;
+in
+{
+  options.xeta.programs.snowfall-utils = {
     enable = mkEnableOption "Enable Snowfall system packages";
   };
 

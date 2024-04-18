@@ -1,10 +1,16 @@
-{ lib, config, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 let
   inherit (lib) mkEnableOption mkIf;
   inherit (lib.xeta) enabled disabled;
-  cfg = config.xeta.system.programs.distrobox;
-in {
-  options.xeta.system.programs.distrobox = {
+  cfg = config.xeta.programs.distrobox;
+in
+{
+  options.xeta.programs.distrobox = {
     enable = mkEnableOption "Enable distrobox";
   };
 
@@ -16,7 +22,10 @@ in {
       spice-webdavd = enabled;
     };
 
-    environment.systemPackages = with pkgs; [ distrobox boxbuddy ];
+    environment.systemPackages = with pkgs; [
+      distrobox
+      boxbuddy
+    ];
 
     virtualisation = {
       # currently docker is disabled because

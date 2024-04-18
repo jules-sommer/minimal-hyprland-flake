@@ -1,10 +1,16 @@
-{ lib, config, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 let
   inherit (lib) mkEnableOption mkIf types;
   inherit (lib.xeta) mkOpt;
-  cfg = config.xeta.system.programs.misc;
-in {
-  options.xeta.system.programs.misc = {
+  cfg = config.xeta.programs.misc;
+in
+{
+  options.xeta.programs.misc = {
     enable = mkEnableOption "Enable RustDesk";
     relayIP = mkOpt (types.str) "" "Relay IP to use for RustDesk.";
   };
@@ -28,14 +34,20 @@ in {
       bat
       github-copilot-cli
       gitoxide
+      meld
+      tree
       helix
       pzip
-      nixfmt
+      nixfmt-rfc-style
       nushell
       alacritty
       ntfs3g
       fuseiso
       kitty
+
+      firefox
+      geckodriver
+      chromedriver
 
       xz
       jq
@@ -60,7 +72,6 @@ in {
       # librepcb
 
       deploy-rs
-      nixfmt
       nix-index
       nix-prefetch-git
       nix-output-monitor

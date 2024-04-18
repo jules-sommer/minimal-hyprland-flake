@@ -1,14 +1,31 @@
-{ lib, inputs, config, pkgs, ... }:
+{
+  lib,
+  inputs,
+  config,
+  pkgs,
+  ...
+}:
 
 let
-  inherit (lib) mkEnableOption mkIf types mkMerge;
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    types
+    mkMerge
+    ;
   inherit (lib.lists) optional;
-  inherit (lib.xeta) enabled mkOpt mkListOf mkBoolOpt;
+  inherit (lib.xeta)
+    enabled
+    mkOpt
+    mkListOf
+    mkBoolOpt
+    ;
 
-  cfg = config.xeta.system.programs.dconf;
+  cfg = config.xeta.programs.dconf;
   username = config.xeta.system.user.username;
-in {
-  options.xeta.system.programs.dconf = {
+in
+{
+  options.xeta.programs.dconf = {
     enable = mkEnableOption "Enable dconf settings";
   };
 

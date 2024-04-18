@@ -1,9 +1,17 @@
-{ lib, config, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 let
   inherit (lib) types mkEnableOption mkIf;
   cfg = config.xeta.gnome;
-in {
-  options.xeta.gnome = { enable = mkEnableOption "Enable gnome GUI utils."; };
+in
+{
+  options.xeta.gnome = {
+    enable = mkEnableOption "Enable gnome GUI utils.";
+  };
   config = mkIf cfg.enable {
 
     home = {
@@ -19,8 +27,8 @@ in {
         gnome.gnome-applets
         gnome.gnome-calendar
         gnome.gnome-screenshot
+        gnome.sushi
       ];
     };
   };
 }
-

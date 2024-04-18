@@ -1,23 +1,35 @@
-{ lib, inputs, config, pkgs, ... }:
+{
+  lib,
+  inputs,
+  config,
+  pkgs,
+  ...
+}:
 
 let
-  inherit (lib) mkEnableOption mkIf types mkMerge;
+  inherit (lib) mkEnableOption mkIf types;
   inherit (lib.lists) optional;
-  inherit (lib.xeta) enabled mkOpt mkListOf mkBoolOpt;
+  inherit (lib.xeta) mkOpt;
 
   cfg = config.xeta.system.graphics;
-in {
+in
+{
   options.xeta.system.graphics = with types; {
     enable = mkEnableOption "Enable graphics config.";
     nvidia = {
-      enable = mkEnableOption
-        "Enable nvidia drivers, either open-source nouveau or proprietary.";
-      drivers = mkOpt (nullOr (listOf str)) [ ]
-        "If nvidia drivers are enabled, this setting specifies a list of driver pkgs to use.";
-      channel = mkOpt
-        (nullOr (types.enum ([ "stable" "beta" "production" "vulkan_beta" ])))
-        "beta"
-        "Nvidia driver channel to track, must be stable, beta, or production.";
+      enable = mkEnableOption "Enable nvidia drivers, either open-source nouveau or proprietary.";
+      modesetting = mkEnableOption "Enable modesetting support for nvidia drivers.";
+      drivers = mkOpt (nullOr (listOf str)) [
+        "nvidia" # default
+      ] "If nvidia drivers are enabled, this setting specifies a list of driver pkgs to use.";
+      channel = mkOpt (nullOr (
+        types.enum ([
+          "stable"
+          "beta"
+          "production"
+          "vulkan_beta"
+        ])
+      )) "beta" "Nvidia driver channel to track, must be stable, beta, or production.";
     };
     opengl = mkEnableOption "Enable OpenGL support";
   };
@@ -31,7 +43,9 @@ in {
         nvidia-vaapi-driver
         vaapiVdpau
         libvdpau-va-gl
-        intel-media-driver
+        libva-utils
+        meson
+        vulkan-tools
       ];
     });
 
@@ -40,12 +54,16 @@ in {
     # Fixing suspend/wakeup issues with Nvidia drivers
     # "https://wiki.hyprland.org/Nvidia/"
     boot.kernelParams = [ "nvidia.NVreg_PreserveVideoMemoryAllocations=1" ];
-    boot.extraModprobeConfig = ''
-      options nvidia NVreg_RegistryDwords="PowerMizerEnable=0x1; PerfLevelSrc=0x2222; PowerMizerLevel=0x3; PowerMizerDefault=0x3; PowerMizerDefaultAC=0x3;"
-    '';
 
-    services.xserver.videoDrivers = [ "nouveau" ];
-    boot.blacklistedKernelModules = [ "nvidia" ];
+    # Disabling power management for now, nuclear option for fixing graphics issues.
+    # More info on hyprland wiki: https://wiki.hyprland.org/Nvidia/
+    # 
+    # boot.extraModprobeConfig = ''
+    #   options nvidia NVreg_RegistryDwords="PowerMizerEnable=0x1; PerfLevelSrc=0x2222; PowerMizerLevel=0x3; PowerMizerDefault=0x3; PowerMizerDefaultAC=0x3;"
+    # '';
+
+    services.xserver.videoDrivers = [ "nvidia" ];
+    # boot.blacklistedKernelModules = [ ];
     hardware.nvidia = {
       # Modesetting is required.
       modesetting.enable = true;

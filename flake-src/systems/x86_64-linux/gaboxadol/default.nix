@@ -19,8 +19,7 @@ in {
         username = "jules";
         fullname = "Jules Sommer";
         home = "/home/jules";
-        dotfiles =
-          "${config.xeta.system.user.home}/.config";
+        dotfiles = "${config.xeta.system.user.home}/.config";
       };
 
       development = {
@@ -137,7 +136,7 @@ in {
     gitoxide
     helix
     pzip
-    nixfmt
+    nixfmt-rfc-style
     helvum
     webcord-vencord
 

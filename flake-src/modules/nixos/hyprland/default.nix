@@ -8,7 +8,6 @@ in {
     enable = mkEnableOption "Enable Hyprland.";
   };
   config = mkIf cfg.enable {
-
     environment.systemPackages = with pkgs; [
       pyprland
       xdg-desktop-portal-gtk

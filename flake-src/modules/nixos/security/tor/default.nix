@@ -1,9 +1,17 @@
-{ lib, pkgs, config, inputs, system, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  inputs,
+  system,
+  ...
+}:
 let
   inherit (lib) types mkEnableOption mkIf;
   inherit (lib.xeta) mkOpt enabled;
   cfg = config.xeta.security.tor;
-in {
+in
+{
   options.xeta.security.tor = {
     enable = mkEnableOption "Enable Tor browser and daemon.";
     settings = {
@@ -39,4 +47,3 @@ in {
     };
   };
 }
-

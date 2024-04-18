@@ -1,12 +1,29 @@
-{ lib, inputs, config, pkgs, ... }:
+{
+  lib,
+  inputs,
+  config,
+  pkgs,
+  ...
+}:
 
 let
-  inherit (lib) mkEnableOption mkIf types mkMerge;
-  inherit (lib.xeta) enabled mkOpt mkListOf mkBoolOpt;
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    types
+    mkMerge
+    ;
+  inherit (lib.xeta)
+    enabled
+    mkOpt
+    mkListOf
+    mkBoolOpt
+    ;
 
-  cfg = config.xeta.system.networking;
-in {
-  options.xeta.system.networking = {
+  cfg = config.xeta.networking;
+in
+{
+  options.xeta.networking = {
     enable = lib.mkEnableOption "Enable networking tweaks";
   };
 
@@ -16,7 +33,12 @@ in {
       wireshark = enabled;
     };
 
-    environment.systemPackages = with pkgs; [ ];
+    environment.systemPackages = with pkgs; [
+      nmap
+      wireshark
+      tshark
+      termshark
+    ];
 
     # Enable networking
     networking.networkmanager.enable = true;
@@ -41,8 +63,7 @@ in {
     # Enable BBR congestion control
     boot.kernelModules = [ "tcp_bbr" ];
     boot.kernel.sysctl."net.ipv4.tcp_congestion_control" = "bbr";
-    boot.kernel.sysctl."net.core.default_qdisc" =
-      "fq"; # see https://news.ycombinator.com/item?id=14814530
+    boot.kernel.sysctl."net.core.default_qdisc" = "fq"; # see https://news.ycombinator.com/item?id=14814530
 
     # Increase TCP window sizes for high-bandwidth WAN connections, assuming
     # 10 GBit/s Internet over 200ms latency as worst case.
@@ -67,10 +88,8 @@ in {
     # equally.
     boot.kernel.sysctl."net.core.wmem_max" = 1073741824; # 1 GiB
     boot.kernel.sysctl."net.core.rmem_max" = 1073741824; # 1 GiB
-    boot.kernel.sysctl."net.ipv4.tcp_rmem" =
-      "4096 87380 1073741824"; # 1 GiB max
-    boot.kernel.sysctl."net.ipv4.tcp_wmem" =
-      "4096 87380 1073741824"; # 1 GiB max
+    boot.kernel.sysctl."net.ipv4.tcp_rmem" = "4096 87380 1073741824"; # 1 GiB max
+    boot.kernel.sysctl."net.ipv4.tcp_wmem" = "4096 87380 1073741824"; # 1 GiB max
     # We do not need to adjust `net.ipv4.tcp_mem` (which limits the total
     # system-wide amount of memory to use for TCP, counted in pages) because
     # the kernel sets that to a high default of ~9% of system memory, see:
