@@ -1,7 +1,6 @@
 [pyprland]
 plugins = [
   "scratchpads",
-  "lost_windows",
   "toggle_special",
   "monitors",
   "magnify",
@@ -22,22 +21,20 @@ command = "alacritty --class scratchpad-btop -e btop"
 class = "scratchpad-btop"
 lazy = true
 size = "75% 45%"
-unfocus = "hide"
 
 [scratchpads.volume]
 animation = "fromRight"
 command = "pavucontrol"
 class = "scratchpad-pavucontrol"
 lazy = true
-size = "40% 90%"
+size = "40% 40%"
 unfocus = "hide"
 
 [scratchpads.bitwarden]
 animation = "fromTop"
 command = "bitwarden"
 class = "scratchpad-bitwarden"
-size = "80% 80%"
-unfocus = "hide"
+size = "65% 65%"
 
 [monitors]
 unknown = "wlrlui"

@@ -1,40 +1,55 @@
-{ lib, pkgs, config, inputs, system, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  inputs,
+  system,
+  ...
+}:
 let
-  inherit (lib) types mkEnableOption mkIf mkOption;
+  inherit (lib)
+    types
+    mkEnableOption
+    mkIf
+    mkOption
+    ;
   inherit (lib.xeta) mkOpt getHyprlandPkg getTheme;
   inherit (lib.xeta.serialize) toTOML;
   cfg = config.xeta.desktop.pyprland;
-in {
+in
+{
   options.xeta.desktop.pyprland = {
     enable = mkEnableOption "Enable Pyprland ( plugin system for Hyprland ).";
 
     settings = {
       keybindings = mkOption {
-        type = types.listOf (types.submodule {
-          options = {
-            modifiers = mkOption {
-              type = types.listOf types.str;
-              default = [ ]; # Empty list means "$mod" will be used by default
-              description = ''
-                List of modifier keys for the binding. If empty, "$mod" is assumed as the default modifier.
-                Explicitly specify modifiers (e.g., ["ALT"], ["$mod", "SHIFT"]) to override the default.
-              '';
+        type = types.listOf (
+          types.submodule {
+            options = {
+              modifiers = mkOption {
+                type = types.listOf types.str;
+                default = [ ]; # Empty list means "$mod" will be used by default
+                description = ''
+                  List of modifier keys for the binding. If empty, "$mod" is assumed as the default modifier.
+                  Explicitly specify modifiers (e.g., ["ALT"], ["$mod", "SHIFT"]) to override the default.
+                '';
+              };
+              key = mkOption {
+                type = types.str;
+                description = "The key associated with the binding.";
+              };
+              action = mkOption {
+                type = types.str;
+                description = "The action to perform.";
+              };
+              args = mkOption {
+                type = types.nullOr types.str;
+                default = null;
+                description = "Optional arguments for the action.";
+              };
             };
-            key = mkOption {
-              type = types.str;
-              description = "The key associated with the binding.";
-            };
-            action = mkOption {
-              type = types.str;
-              description = "The action to perform.";
-            };
-            args = mkOption {
-              type = types.nullOr types.str;
-              default = null;
-              description = "Optional arguments for the action.";
-            };
-          };
-        });
+          }
+        );
         default = [ ];
         description = "Keybindings for Pyprland.";
       };
@@ -47,48 +62,56 @@ in {
     home.file = {
       "/home/jules/.config/hypr/pyprland.toml" = {
         enable = true;
-        text = (toTOML ({
-          expose = { include_special = false; };
-          monitors = { unknown = "wlrlui"; };
-          pyprland = {
-            plugins = [
-              "scratchpads"
-              "lost_windows"
-              "toggle_special"
-              "monitors"
-              "magnify"
-              "expose"
-              "shift_monitors"
-              "workspaces_follow_focus"
-            ];
-          };
-          scratchpads = {
-            bitwarden = {
-              animation = "fromTop";
-              class = "scratchpad-bitwarden";
-              command = "bitwarden";
-              size = "80% 80%";
-              unfocus = "hide";
+        text = (
+          toTOML ({
+            expose = {
+              include_special = false;
             };
-            btop = {
-              animation = "fromBottom";
-              class = "scratchpad-btop";
-              command = "alacritty --class scratchpad-btop -e btop";
-              lazy = true;
-              size = "80% 80%";
-              unfocus = "hide";
+            monitors = {
+              unknown = "wlrlui";
             };
-            volume = {
-              animation = "fromRight";
-              class = "scratchpad-pavucontrol";
-              command = "pavucontrol";
-              lazy = true;
-              size = "40% 90%";
-              unfocus = "hide";
+            pyprland = {
+              plugins = [
+                "scratchpads"
+                "lost_windows"
+                "toggle_special"
+                "monitors"
+                "magnify"
+                "expose"
+                "shift_monitors"
+                "workspaces_follow_focus"
+              ];
             };
-          };
-          workspaces_follow_focus = { max_workspaces = 9; };
-        }));
+            scratchpads = {
+              bitwarden = {
+                animation = "fromTop";
+                class = "scratchpad-bitwarden";
+                command = "bitwarden";
+                size = "80% 80%";
+                unfocus = "hide";
+              };
+              btop = {
+                animation = "fromBottom";
+                class = "scratchpad-btop";
+                command = "alacritty --class scratchpad-btop -e btop";
+                lazy = true;
+                size = "80% 80%";
+                unfocus = "hide";
+              };
+              volume = {
+                animation = "fromRight";
+                class = "scratchpad-pavucontrol";
+                command = "pavucontrol";
+                lazy = true;
+                size = "40% 90%";
+                unfocus = "hide";
+              };
+            };
+            workspaces_follow_focus = {
+              max_workspaces = 9;
+            };
+          })
+        );
       };
     };
 
@@ -138,6 +161,9 @@ in {
 
           "SUPER, mouse_up, exec, pypr change_workspace +1"
           "SUPER, mouse_down, exec, pypr change_workspace -1"
+
+          "SUPER, P, exec, pypr toggle bitwarden; $dispatch $active_to_top"
+          "SUPER, V, exec, pypr toggle volume; $dispatch $active_to_top"
 
           "SUPER, B, exec, pypr toggle btop; $dispatch $active_to_top"
 
