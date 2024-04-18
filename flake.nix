@@ -5,12 +5,12 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     stable.url = "github:nixos/nixpkgs/nixos-23.11";
     staging.url = "github:nixos/nixpkgs/staging-next";
+    master.url = "github:nixos/nixpkgs/master";
 
     nixos-conf-editor = {
       url = "github:snowfallorg/nixos-conf-editor";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -61,13 +61,22 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nix-std = { url = "github:chessai/nix-std"; };
-    nix-colors = { url = "github:misterio77/nix-colors"; };
+    nix-std = {
+      url = "github:chessai/nix-std";
+    };
+    nix-colors = {
+      url = "github:misterio77/nix-colors";
+    };
 
     systems.url = "github:nix-systems/x86_64-linux";
     flake-utils = {
       url = "github:numtide/flake-utils";
       inputs.systems.follows = "systems";
+    };
+
+    pyprland = {
+      url = "github:hyprland-community/pyprland/";
+      inputs.flake-utils.follows = "flake-utils";
     };
 
     hyprland = {
@@ -76,7 +85,8 @@
     };
   };
 
-  outputs = inputs:
+  outputs =
+    inputs:
     let
       lib = inputs.snowfall-lib.mkLib {
         inherit inputs;
@@ -86,7 +96,9 @@
           # Move .nix files to  `./nixos/` dir for organization.
           root = ./flake-src;
 
-          channels-config = { allowUnfree = true; };
+          channels-config = {
+            allowUnfree = true;
+          };
 
           meta = {
             name = meta;
@@ -95,7 +107,8 @@
         };
       };
       meta = (lib.getMeta ./systems.toml);
-    in (lib.mkFlake {
+    in
+    (lib.mkFlake {
       channels-config = {
         allowUnfree = lib.mkDefault true;
         permittedUnfreePackages = [
@@ -104,7 +117,8 @@
           "github-copilot-cli-0.1.36"
           "warp-terminal-0.2024.03.19.08.01.stable_01"
         ];
-        allowUnfreePredicate = pkg:
+        allowUnfreePredicate =
+          pkg:
           builtins.elem (lib.getName pkg) [
             "github-copilot-cli-0.1.36"
             "warp-terminal-0.2024.03.19.08.01.stable_01"
@@ -115,8 +129,10 @@
       home.modules = with inputs; [ hyprland.homeManagerModules.default ];
 
       # Applies to all nixos systems
-      systems.modules.nixos = with inputs;
-        [ home-manager.nixosModules.home-manager ];
+      systems.modules.nixos = with inputs; [
+        home-manager.nixosModules.home-manager
+        xremap-flake.nixosModules.default
+      ];
 
       overlays = with inputs; [
         fenix.overlays.default
@@ -124,7 +140,8 @@
         snowfall-thaw.overlays.default
         snowfall-drift.overlays.default
       ];
-    }) // {
+    })
+    // {
       inherit meta;
     };
 }

@@ -1,13 +1,19 @@
-{ lib, config, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 let
   inherit (lib) types mkEnableOption recursiveUpdate;
   inherit (lib.xeta) mkOpt;
   cfg = config.xeta.misc;
-
-in {
-  options.xeta.home =
-    mkOpt (types.nullOr types.str) null "The home directory of the user";
-  options.xeta.misc = { enable = mkEnableOption "Enable misc packages."; };
+in
+{
+  options.xeta.home = mkOpt (types.nullOr types.str) null "The home directory of the user";
+  options.xeta.misc = {
+    enable = mkEnableOption "Enable misc packages.";
+  };
 
   config = lib.mkIf cfg.enable {
     home.packages = with pkgs; [
@@ -15,6 +21,11 @@ in {
       rsync
       grsync
       nb
+      inkscape-with-extensions
+      gimp
+      qbittorrent
+      transmission
+      zellij
       socat
       moreutils
       dt
