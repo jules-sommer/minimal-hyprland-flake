@@ -1,6 +1,13 @@
-{ pkgs, lib, config, ... }:
-let inherit (lib.xeta) enabled;
-in {
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
+let
+  inherit (lib.xeta) enabled;
+in
+{
 
   imports = [ ./hardware.nix ];
 
@@ -12,8 +19,7 @@ in {
         username = "jules";
         fullname = "Jules Sommer";
         home = "/home/jules";
-        dotfiles =
-          "${config.xeta.system.user.home}/070_dotfiles/010_nix-managed";
+        dotfiles = "${config.xeta.system.user.home}/070_dotfiles/010_nix-managed";
       };
 
       development = {
@@ -27,22 +33,13 @@ in {
         greeter = enabled;
       };
 
-      programs = {
-        dconf = enabled;
-        snowfall-utils = enabled;
-        distrobox = enabled;
-        rustdesk = {
-          enable = true;
-          relayIP = "24.141.46.69";
-        };
-      };
-
       graphics = {
         enable = true;
         nvidia = {
           enable = true;
-          drivers = [ "nouveau" ];
-          channel = "stable";
+          modesetting = enabled;
+          drivers = [ "nvidia" ];
+          channel = "beta";
         };
         opengl = true;
         electron_support = enabled;
@@ -51,7 +48,6 @@ in {
       hostname = "xeta";
       fonts = enabled;
       env = enabled;
-      networking = enabled;
 
       input = {
         kbd = {
@@ -73,19 +69,42 @@ in {
         };
       };
     };
+    services = {
+      ollama = enabled;
+    };
+    programs = {
+      media = enabled;
+      dconf = enabled;
+      misc = enabled;
+      snowfall-utils = enabled;
+      distrobox = enabled;
+      metasploit = enabled;
+      rustdesk = {
+        enable = true;
+        relayIP = "24.141.46.69";
+      };
+    };
+    networking = enabled;
     security = {
       doas = enabled;
       keyring = enabled;
       tor = enabled;
     };
+    development = {
+      nix = enabled;
+      go = enabled;
+    };
     crypto = {
+      enable = true;
       monero = {
         enable = true;
         mining = {
           enable = true;
-          address =
-            "83Dt82wJ8T98f39nMV11av8CePi4UPhfz1to5uCB6i5cUhWyJvgVRJGPuj1NVkYckPboqkKc7PVSiT4zUUQBaRZQ9qZXxEt";
+          address = "83Dt82wJ8T98f39nMV11av8CePi4UPhfz1to5uCB6i5cUhWyJvgVRJGPuj1NVkYckPboqkKc7PVSiT4zUUQBaRZQ9qZXxEt";
         };
+      };
+      bitcoin = {
+        enable = true;
       };
     };
   };
@@ -104,13 +123,15 @@ in {
     };
     plymouth = {
       enable = true;
-      font =
-        "${pkgs.jetbrains-mono}/share/fonts/truetype/JetBrainsMono-Regular.ttf";
+      font = "${pkgs.jetbrains-mono}/share/fonts/truetype/JetBrainsMono-Regular.ttf";
     };
   };
 
   users.defaultUserShell = pkgs.nushell;
-  environment.shells = with pkgs; [ nushell zsh ];
+  environment.shells = with pkgs; [
+    nushell
+    zsh
+  ];
 
   home-manager = {
     useGlobalPkgs = true;
@@ -202,7 +223,6 @@ in {
     nix-prefetch-git
     nix-output-monitor
     flake-checker
-
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -231,6 +251,5 @@ in {
   # Or disable the firewall altogether.
   networking.firewall.enable = false;
 
-  system.stateVersion =
-    "23.11"; # This is not the system version, don't change it!!
+  system.stateVersion = "23.11"; # This is not the system version, don't change it!!
 }
