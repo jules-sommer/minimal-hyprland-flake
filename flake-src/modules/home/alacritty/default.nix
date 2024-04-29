@@ -1,10 +1,18 @@
-{ lib, config, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 let
   inherit (lib) types mkEnableOption;
   inherit (lib.xeta) mkOpt;
   cfg = config.xeta.alacritty;
-in {
-  options.xeta.alacritty = { enable = mkEnableOption "Enable Alacritty"; };
+in
+{
+  options.xeta.alacritty = {
+    enable = mkEnableOption "Enable Alacritty";
+  };
 
   config = lib.mkIf cfg.enable {
     programs = {
@@ -14,16 +22,16 @@ in {
         settings = {
           window = {
             decorations = "None";
-            opacity = 0.75;
+            opacity = 0.65;
             blur = true;
             padding = {
-              x = 15;
-              y = 15;
+              x = 8;
+              y = 8;
             };
           };
 
           font = {
-            size = 12;
+            size = 10;
             builtin_box_drawing = true;
             normal = {
               family = "JetBrains Mono";
@@ -43,7 +51,9 @@ in {
             };
           };
 
-          selection = { save_to_clipboard = true; };
+          selection = {
+            save_to_clipboard = true;
+          };
 
           # Catppuccin Mocha
           # "https://raw.githubusercontent.com/catppuccin/alacritty/main/catppuccin-mocha.toml"

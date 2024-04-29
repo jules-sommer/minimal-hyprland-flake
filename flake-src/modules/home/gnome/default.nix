@@ -18,7 +18,6 @@ in
       packages = with pkgs; [
         gnome.gnome-disk-utility
         gnome.gnome-calculator
-        gnome.nautilus
         gnome.gnome-logs
         gnome.gnome-panel
         gnome.file-roller
@@ -27,7 +26,6 @@ in
         gnome.gnome-applets
         gnome.gnome-calendar
         gnome.gnome-screenshot
-        gnome.sushi
       ];
     };
   };

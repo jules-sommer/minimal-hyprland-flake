@@ -1,8 +1,15 @@
-{ pkgs, inputs, config, lib, ... }:
+{
+  pkgs,
+  inputs,
+  config,
+  lib,
+  ...
+}:
 let
   inherit (lib) types;
   inherit (lib.xeta) mkOpt;
-in {
+in
+{
   options.xeta = {
     dotfiles = mkOpt (types.nullOr types.str) null "where to put the dotfiles";
     gtk = {
@@ -39,14 +46,18 @@ in {
         name = "Bibata-Modern-Ice";
         package = pkgs.lib.mkDefault pkgs.bibata-cursors;
       };
-      gtk3.extraConfig = { gtk-application-prefer-dark-theme = 1; };
-      gtk4.extraConfig = { gtk-application-prefer-dark-theme = 1; };
+      gtk3.extraConfig = {
+        gtk-application-prefer-dark-theme = 1;
+      };
+      gtk4.extraConfig = {
+        gtk-application-prefer-dark-theme = 1;
+      };
     };
 
     # Theme QT -> GTK
     qt = {
       enable = true;
-      platformTheme = "gtk";
+      platformTheme.name = "gtk";
       style = {
         name = "adwaita-dark";
         package = pkgs.adwaita-qt;

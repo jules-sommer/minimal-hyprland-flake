@@ -1,12 +1,17 @@
-{ lib, pkgs, config, inputs, system, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  inputs,
+  system,
+  ...
+}:
 let
   inherit (lib) types mkEnableOption mkIf;
   inherit (lib.xeta) mkOpt;
-  cfg = config.xeta.system.development.zig;
-in {
-  options.xeta.system.development.zig = {
-    enable = mkEnableOption "Enable Zig support";
-  };
+  cfg = config.xeta.development.zig;
+in
+{
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       zig

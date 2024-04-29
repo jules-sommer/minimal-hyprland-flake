@@ -118,6 +118,7 @@ in
       notify-desktop
       dunst
       clipnotify
+      cliphist
 
       swaybg
     ];
@@ -129,16 +130,17 @@ in
       settings = {
         "$mod" = "ALT";
         "$terminal" = "alacritty";
+        "$multiplexer" = "alacritty -e zellij";
         "$files" = "alacritty -e joshuto";
-        "$screenshot" = "nu ~/_dev/nu_tools/screenshot.nu";
+        "$screenshot" = "nu ~/000_dev/030_nushell/screenshot.nu";
         "$menu" = "rofi -show drun";
         "$notify" = "notify-send -h string:x-canonical-private-synchronous:hypr-cfg -u low";
         monitor = [
-          # "DP-1,2560x1080@74.99,1920x0,1"
-          # "HDMI-A-1,1920x1080@100,0x0,1"
-          "DP-1,2560x1080@80,0x0,1"
-          "HDMI-A-1,1920x1080@60,-1080x-540,1,transform,3"
-          "DVI-D-1,1920x1080@60,2560x-540,1,transform,3"
+          "DP-1,2560x1080@74.99,1920x0,1"
+          "HDMI-A-1,1920x1080@100,0x0,1"
+          # "DP-1,2560x1080@80,0x0,1"
+          # "HDMI-A-1,1920x1080@60,-1080x-540,1,transform,3"
+          # "DVI-D-1,1920x1080@60,2560x-540,1,transform,3"
           ",highres,auto,1"
         ];
         env = [
@@ -158,29 +160,37 @@ in
           "MOZ_ENABLE_WAYLAND, 1"
 
           # nvidia related
-          "GDK_BACKEND=wayland,x11" # use wayland if available, fallback to x11
+          "GDK_BACKEND=wayland,x11"
           "CLUTTER_BACKEND, wayland"
           "SDL_VIDEODRIVER, wayland"
-          "LIBVA_DRIVER_NAME,nvidia"
+          "LIBVA_DRIVER_NAME,radeonsi"
           "XDG_SESSION_TYPE,wayland"
           "XDG_CURRENT_DESKTOP, Hyprland"
           "XDG_SESSION_DESKTOP, Hyprland"
           # "GBM_BACKEND,nvidia-drm"
-          "__GLX_VENDOR_LIBRARY_NAME,nvidia"
+          # "__GLX_VENDOR_LIBRARY_NAME,nvidia"
           "WLR_NO_HARDWARE_CURSORS,1"
-          "__NV_PRIME_RENDER_OFFLOAD,1"
+          # "__NV_PRIME_RENDER_OFFLOAD,1"
         ];
 
         # █░█░█ █ █▄░█ █▀▄ █▀█ █░█░█   █▀█ █░█ █░░ █▀▀ █▀
         # ▀▄▀▄▀ █ █░▀█ █▄▀ █▄█ ▀▄▀▄▀   █▀▄ █▄█ █▄▄ ██▄ ▄█
 
         windowrulev2 = [
-          "float,class:^(kitty)$,title:^(kitty)$"
           "float,class:^(Bitwarden)$"
-          "float,class:^(thunar)$"
+
           "float,title:^(?i).*Bitwarden.*$"
           "float,title:^(?i).*Extension:.*$"
           "float,title:^(?i).*Sign in.*$"
+
+          "center,title:^(?i).*Bitwarden.*$"
+          "center,title:^(?i).*Extension:.*$"
+          "center,title:^(?i).*Sign in.*$"
+
+          "size 60% 80%,title:^(?i).*Bitwarden.*$"
+          "size 60% 80%,title:^(?i).*Extension:.*$"
+          "size 60% 80%,title:^(?i).*Sign in.*$"
+
           "idleinhibit focus, class:^(vlc)$"
           "idleinhibit fullscreen, class:^(floorp)$"
         ];
@@ -208,8 +218,11 @@ in
           "waybar"
           "swaync"
           "swayidle -w timeout 720 'tuigreet --greeting \"Hello, Jules! We put xeta to sleep but she's okieee dw. :)\"' timeout 800 'hyprctl dispatch dpms off' resume 'hyprctl dispatch dpms on' before-sleep 'tuigreet'"
-          "swww img --filter Lanczos3 ~/Pictures/wallpapers/zoelove.jpg"
           # "swaybg - m fill - i ~/Pictures/wallpapers/zoelove.jpg" # alternative to swww for wallpaper
+          # "swww img --filter Lanczos3 ~/Pictures/wallpapers/zoelove.jpg" # SINGLE monitor
+          "swww img - -filter Lanczos3 ~/060_media/010_wallpapers/zoe-love-bg/center-uw.png - o DP-3"
+          "swww img - -filter Lanczos3 ~/060_media/010_wallpapers/zoe-love-bg/left-vertical.png - o HDMI-A-1"
+          "swww img - -filter Lanczos3 ~/060_media/010_wallpapers/zoe-love-bg/right-vertical.png - o DVI-D-1"
         ];
 
         # █▀ █░█ █▀█ █▀█ ▀█▀ █▀▀ █░█ ▀█▀ █▀
@@ -227,23 +240,23 @@ in
             # C keypress
             "$mod, C, killactive, "
             # M keypress
-            "$mod, M, exit, "
+            "$mod SHIFT, M, exit, "
             # W keypress
             "$mod, W, exec, $menu"
             "$mod SHIFT, W, exec, $terminal"
 
-            "$mod SHIFT,I,togglesplit"
+            "$mod, code:51, togglesplit" # | key (BAR/PIPE)
 
-            "$mod, E, exec, $gui_files"
-            "$mod SHIFT, E, exec, $tui_files"
+            "$mod, E, exec, $files"
             "CTRL SHIFT, S, exec, $screenshot"
+
             "$mod, D, exec, swaync-client -t"
             # Terminal and Alacritty for $mod + {T, A}
-            "$mod, T, exec, $terminal $multiplexer"
-            "$mod SHIFT, T, exec, $terminal"
+            "$mod, code:36, exec, $multiplexer" # ENTER key
+            "$mod SHIFT, code:36, exec, $terminal"
+
             # File manager $mod + {F}
             "$mod, P, pseudo, # dwindle"
-            "$mod, J, togglesplit, # dwindle"
             "$mod SHIFT, SPACE, movetoworkspace,special"
             "$mod, SPACE, togglespecialworkspace"
 
@@ -334,6 +347,11 @@ in
           layerrule = [
             "blur,waybar"
             "blur,rofi"
+            "blur,dunst"
+            "blur,swaybg"
+            "blur,swayidle"
+            "blur,alacritty"
+            "blur,pavucontrol"
           ];
           drop_shadow = true;
           blur = {
@@ -349,9 +367,9 @@ in
         # █░▀░█ █ ▄█ █▄▄ ▄
 
         general = {
-          "gaps_in" = 6;
+          "gaps_in" = 4;
           "gaps_out" = 8;
-          "border_size" = 2;
+          "border_size" = 3;
           "col.active_border" = "rgba(${theme.base0C}ff) rgba(${theme.base0D}ff) rgba(${theme.base0B}ff) rgba(${theme.base0E}ff) 45deg";
           "col.inactive_border" = "rgba(${theme.base0C}40) rgba(${theme.base0D}40) rgba(${theme.base0B}40) rgba(${theme.base0E}40) 45deg";
           "layout" = "dwindle";
@@ -366,18 +384,13 @@ in
           touchpad = {
             natural_scroll = false;
           };
-          sensitivity = 0.5; # -1.0 - 1.0, 0 means no modification.
-          accel_profile = "adaptive";
+          sensitivity = 0.7; # -1.0 - 1.0, 0 means no modification.
+          accel_profile = "none";
         };
 
         gestures = {
           workspace_swipe = true;
           workspace_swipe_fingers = 3;
-        };
-
-        misc = {
-          mouse_move_enables_dpms = true;
-          key_press_enables_dpms = false;
         };
 
         dwindle = {
@@ -400,6 +413,10 @@ in
           enable_swallow = true;
           animate_manual_resizes = true;
           animate_mouse_windowdragging = true;
+          close_special_on_empty = false;
+          mouse_move_enables_dpms = true;
+          key_press_enables_dpms = true;
+          swallow_regex = "^(alacritty)$";
         };
       };
     };

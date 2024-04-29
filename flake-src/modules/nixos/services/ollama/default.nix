@@ -23,9 +23,15 @@ in
       package = pkgs.ollama;
       home = "${home}/070_dotfiles/";
       listenAddress = "127.0.0.1:11434";
-      # acceleration = "cuda";
+      acceleration = "rocm";
     };
     environment.systemPackages = with pkgs; [
+      llm-ls
+      llm
+      gorilla-cli
+      lmstudio
+      promptfoo
+      jan
       ollama
       oterm
     ];

@@ -61,9 +61,27 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    hyprkeys = {
+      url = "github:hyprland-community/hyprkeys";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    zjharpoon = {
+      url = "path:/home/jules/000_dev/010_rust/200_zellij/harpoon";
+    };
+
+    zjmonocle = {
+      url = "path:/home/jules/000_dev/010_rust/200_zellij/monocle";
+    };
+
+    zjstatus = {
+      url = "github:dj95/zjstatus";
+    };
+
     nix-std = {
       url = "github:chessai/nix-std";
     };
+
     nix-colors = {
       url = "github:misterio77/nix-colors";
     };
@@ -75,13 +93,20 @@
     };
 
     pyprland = {
-      url = "github:hyprland-community/pyprland/";
+      url = "github:hyprland-community/pyprland";
+      # url = "/home/jules/000_dev/060_python/000_pyprland";
       inputs.flake-utils.follows = "flake-utils";
+    };
+
+    nixvim = {
+      url = "github:nix-community/nixvim";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     hyprland = {
       url = "github:hyprwm/Hyprland";
-      inputs.nixpkgs.follows = "nixpkgs";
+      # url = "/home/jules/000_dev/015_C/000_hyprland";
+      inputs.nixpkgs.follows = "master";
     };
   };
 
@@ -126,10 +151,16 @@
       };
 
       # Applies to all home-manager configs
-      home.modules = with inputs; [ hyprland.homeManagerModules.default ];
+      home.modules = with inputs; [
+        nixvim.homeManagerModules.default
+        hyprland.homeManagerModules.default
+        xremap-flake.homeManagerModules.default
+      ];
 
       # Applies to all nixos systems
       systems.modules.nixos = with inputs; [
+        nixvim.nixosModules.nixvim
+        hyprland.nixosModules.default
         home-manager.nixosModules.home-manager
         xremap-flake.nixosModules.default
       ];

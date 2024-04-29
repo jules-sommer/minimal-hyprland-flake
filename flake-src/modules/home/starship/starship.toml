@@ -19,7 +19,7 @@ home_symbol = "~"
 read_only_style = "#ff2200"
 
 [directory.substitutions]
-"Documents" = " "
+"Documents" = "🗎"
 "Downloads" = " "
 "Music" = " "
 "Pictures" = " "
@@ -34,6 +34,9 @@ ahead = "⇡${count}"
 diverged = "⇕⇡${ahead_count}⇣${behind_count}"
 behind = "⇣${count}"
 deleted = "x"
+
+# ╭───╮
+# ╰───╯
 
 [shell]
 bash_indicator = "^^BASH"

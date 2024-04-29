@@ -1,10 +1,18 @@
-{ lib, pkgs, config, inputs, system, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  inputs,
+  system,
+  ...
+}:
 let
   inherit (lib) types mkEnableOption mkIf;
   inherit (lib.xeta) mkOpt;
-  cfg = config.xeta.system.services.audio;
-in {
-  options.xeta.system.services.audio = {
+  cfg = config.xeta.services.audio;
+in
+{
+  options.xeta.services.audio = {
     pipewire = {
       enable = mkOpt (types.bool) true "Enable PipeWire";
       support = {
@@ -16,11 +24,16 @@ in {
   };
 
   config = mkIf cfg.pipewire.enable {
-    sound.enable = true;
-    hardware.pulseaudio.enable = false;
-    security.rtkit.enable = true;
+    environment.systemPackages = with pkgs; [
+      pavucontrol
+      helvum
+    ];
+    sound.enable = cfg.pipewire.enable;
+    # disable pulseaudio if pipewire is enabled
+    hardware.pulseaudio.enable = !cfg.pipewire.enable;
+    security.rtkit.enable = cfg.pipewire.enable;
     services.pipewire = {
-      enable = true;
+      enable = cfg.pipewire.enable;
       alsa.enable = cfg.pipewire.support.alsa;
       alsa.support32Bit = cfg.pipewire.support.alsa;
       pulse.enable = cfg.pipewire.support.pulse;

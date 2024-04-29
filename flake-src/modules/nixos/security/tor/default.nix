@@ -36,8 +36,7 @@ in
       enable = true;
       client = enabled;
       settings = {
-        SocksPort = 9050;
-        ControlPort = 9051;
+        ControlPort = [ { port = 9051; } ];
       };
       torsocks = mkIf cfg.settings.torsocks {
         enable = true;

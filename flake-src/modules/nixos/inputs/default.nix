@@ -9,10 +9,10 @@
 let
   inherit (lib) types mkEnableOption mkIf;
   inherit (lib.xeta) mkOpt;
-  cfg = config.xeta.system.input.kbd;
+  cfg = config.xeta.input;
 in
 {
-  options.xeta.system.input = {
+  options.xeta.input = {
     kbd = {
       enable = mkEnableOption "Enable kbd-input related configuration.";
       layout = mkOpt (types.str) "us" "Keyboard layout to use, i.e 'us', 'fr', etc.";
@@ -20,13 +20,13 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf cfg.kbd.enable {
     console.useXkbConfig = true;
     services.xserver = {
       libinput.enable = true;
       xkb = {
-        layout = cfg.layout;
-        variant = cfg.variant;
+        layout = cfg.kbd.layout;
+        variant = cfg.kbd.variant;
       };
     };
 
@@ -35,47 +35,16 @@ in
       # Modmap for single key rebinds
       modmap = [
         {
-          name = "Global";
+          name = "Swap Caps Lock and Escape";
           remap = {
-            CapsLock = "Escape";
-            Escape = "CapsLock";
-            # "CapsLock" = {
-            #   held = "KEY_SUPER_L";
-            #   alone = "Escape";
-            #   alone_timeout_millis = 150;
-            # };
+            KEY_CAPSLOCK = "KEY_ESC";
+            KEY_ESC = "KEY_CAPSLOCK";
           };
         }
       ];
 
       # Keymap for key combo rebinds
-      keymap = [
-        {
-          # Rebind shift+escape to tilda
-          name = "Shift+Esc > Tilda";
-          remap = {
-            "SHIFT_L-Esc" = "KEY_GRAVE";
-          };
-        }
-        {
-          # Rebind shift+escape to tilda
-          name = "Shift+Esc > Tilda";
-          remap = {
-            "C_L-SHIFT_L-Esc" = "C-SHIFT-KEY_GRAVE";
-          };
-        }
-        {
-          # Rebind shift+escape to tilda
-          name = "Shift+Esc > Tilda";
-          remap = {
-            "Escape" = {
-              held = "KEY_CAPSLOCK";
-              alone = "KEY_GRAVE";
-              alone_timeout_millis = 150; # Adjust the timeout as needed
-            };
-          };
-        }
-      ];
+      keymap = [ ];
     };
   };
 }

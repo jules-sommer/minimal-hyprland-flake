@@ -35,8 +35,16 @@ in
 
     environment.systemPackages = with pkgs; [
       nmap
+      lurk
+      tcpdump
+      strace
+      strace-analyzer
+      netcat
+      dnstracer
       wireshark
       tshark
+      blahaj
+      networkmanagerapplet
       termshark
     ];
 

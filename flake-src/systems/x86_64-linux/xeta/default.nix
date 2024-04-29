@@ -6,6 +6,7 @@
 }:
 let
   inherit (lib.xeta) enabled;
+  home = config.xeta.system.user.home;
 in
 {
 
@@ -19,12 +20,7 @@ in
         username = "jules";
         fullname = "Jules Sommer";
         home = "/home/jules";
-        dotfiles = "${config.xeta.system.user.home}/070_dotfiles/010_nix-managed";
-      };
-
-      development = {
-        rust = enabled;
-        zig = enabled;
+        dotfiles = "${home}/070_dotfiles/010_nix-managed";
       };
 
       portals = enabled;
@@ -35,44 +31,39 @@ in
 
       graphics = {
         enable = true;
-        nvidia = {
-          enable = true;
-          modesetting = enabled;
-          drivers = [ "nvidia" ];
-          channel = "beta";
-        };
         opengl = true;
+        amd = enabled;
         electron_support = enabled;
       };
 
       hostname = "xeta";
       fonts = enabled;
       env = enabled;
-
-      input = {
-        kbd = {
-          enable = true;
-          layout = "us";
-        };
-      };
-
-      services = {
-        filesystem = enabled;
-        polkit = enabled;
-        audio.pipewire = {
-          enable = true;
-          support = {
-            alsa = true;
-            pulse = true;
-            jack = true;
-          };
-        };
-      };
     };
+
+    nixvim = enabled;
+
     services = {
+      audio.pipewire = {
+        enable = true;
+        support = {
+          alsa = true;
+          pulse = true;
+          jack = true;
+        };
+      };
+      filesystem = enabled;
+      polkit = enabled;
       ollama = enabled;
     };
+    input = {
+      kbd = {
+        enable = true;
+        layout = "us";
+      };
+    };
     programs = {
+      chat = enabled;
       media = enabled;
       dconf = enabled;
       misc = enabled;
@@ -84,22 +75,35 @@ in
         relayIP = "24.141.46.69";
       };
     };
+    # kernel = {
+    #   enable = true;
+    #   v4l2loopback = true;
+    #   package = pkgs.linuxPackages_latest;
+    # };
     networking = enabled;
     security = {
       doas = enabled;
       keyring = enabled;
-      tor = enabled;
+      tor = {
+        enable = true;
+        settings = {
+          proxychains = true;
+          torsocks = true;
+        };
+      };
     };
     development = {
       nix = enabled;
       go = enabled;
+      rust = enabled;
+      zig = enabled;
     };
     crypto = {
       enable = true;
       monero = {
         enable = true;
         mining = {
-          enable = true;
+          enable = false;
           address = "83Dt82wJ8T98f39nMV11av8CePi4UPhfz1to5uCB6i5cUhWyJvgVRJGPuj1NVkYckPboqkKc7PVSiT4zUUQBaRZQ9qZXxEt";
         };
       };
@@ -156,73 +160,9 @@ in
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    busybox
-    (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
-    jujutsu
-    git
-    lazygit
-    starship
-    rnr
-    btop
-    gh
-    nil
-    zoxide
-    broot
-    ripgrep
-    fd
-    bat
-    github-copilot-cli
-    gitoxide
-    helix
-    pzip
-    nixfmt
-    helvum
+    # CLI & Development Tools
+
     webcord-vencord
-
-    nushell
-    alacritty
-    ntfs3g
-    fuseiso
-    kitty
-
-    nufmt
-
-    xz
-    jq
-    fd
-    jql
-    jq-lsp
-    zoxide
-    apx
-
-    obsidian
-    grim
-    grimblast
-    slurp
-
-    networkmanagerapplet
-    polkit_gnome
-
-    lcsync
-    librespot
-    libresprite
-
-    # broken due to 'freeimage-unstable-2021-11-01',
-    # see /overlays/librepcb-stable/default.nix
-    librepcb
-
-    chromium
-
-    gtk3
-    gtk3.dev
-    gtk4
-
-    deploy-rs
-    nixfmt
-    nix-index
-    nix-prefetch-git
-    nix-output-monitor
-    flake-checker
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

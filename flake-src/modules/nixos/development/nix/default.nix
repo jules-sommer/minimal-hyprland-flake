@@ -10,10 +10,6 @@ let
   cfg = config.xeta.development.go;
 in
 {
-  options.xeta.development.nix = {
-    enable = mkEnableOption "Enable Nix toolchain..";
-  };
-
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       nvd

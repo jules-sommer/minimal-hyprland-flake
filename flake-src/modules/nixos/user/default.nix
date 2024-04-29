@@ -109,6 +109,7 @@ in
         "wheel"
         "vboxusers"
         "docker"
+        "wireshark"
         "libvirtd"
         "fuse"
       ];
