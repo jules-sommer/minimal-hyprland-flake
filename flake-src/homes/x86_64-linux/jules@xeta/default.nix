@@ -1,15 +1,22 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 # User information gathered by Snowfall Lib is available.
 let
   inherit (lib.xeta) enabled mkOpt;
   inherit (lib) types;
-in {
+in
+{
 
   xeta = {
     home = "/home/jules";
     dotfiles = "${config.xeta.home}/070_dotfiles/010_nix-managed";
     starship = enabled;
     alacritty = enabled;
+    zellij = enabled;
     nushell = enabled;
     misc = enabled;
     gnome = enabled;
