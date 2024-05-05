@@ -1,8 +1,7 @@
-{
-  lib,
-  pkgs,
-  config,
-  ...
+{ lib
+, pkgs
+, config
+, ...
 }:
 # User information gathered by Snowfall Lib is available.
 let
@@ -10,12 +9,14 @@ let
   inherit (lib) types;
 in
 {
-
   xeta = {
     home = "/home/jules";
     dotfiles = "${config.xeta.home}/070_dotfiles/010_nix-managed";
     starship = enabled;
-    alacritty = enabled;
+    tty = {
+      kitty = enabled;
+      alacritty = enabled;
+    };
     zellij = enabled;
     nushell = enabled;
     misc = enabled;
@@ -24,9 +25,10 @@ in
     services.pueued = enabled;
 
     desktop = {
+      waybar = enabled;
       hyprland = {
         enable = true;
-        theme = "synth-midnight-dark";
+        theme = "tokyo-night-dark";
       };
       pyprland = enabled;
     };

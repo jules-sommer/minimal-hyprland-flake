@@ -23,12 +23,14 @@ in
   config = mkIf cfg.kbd.enable {
     console.useXkbConfig = true;
     services.xserver = {
-      libinput.enable = true;
       xkb = {
         layout = cfg.kbd.layout;
         variant = cfg.kbd.variant;
+        options = "caps:swapescape";
       };
     };
+
+    services.libinput.enable = true;
 
     services.xremap.withWlroots = true;
     services.xremap.config = {

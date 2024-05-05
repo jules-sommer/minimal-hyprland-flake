@@ -1,9 +1,8 @@
-{
-  options,
-  config,
-  pkgs,
-  lib,
-  ...
+{ options
+, config
+, pkgs
+, lib
+, ...
 }:
 
 with lib;
@@ -29,6 +28,11 @@ in
         message = "Error: doas is misconfigured, the flake option is out of sync with the system configuration.";
       }
     ];
+
+    environment.systemPackages = with pkgs; [
+      doas
+    ];
+
     # Disable sudo
     security.sudo.enable = false;
 

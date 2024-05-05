@@ -1,16 +1,15 @@
-{
-  pkgs,
-  config,
-  lib,
-  inputs,
-  ...
+{ pkgs
+, config
+, lib
+, inputs
+, ...
 }:
 let
   plugins = pkgs.vimPlugins;
   theme = lib.xeta.getTheme "tokyo-night-dark";
 
   inherit (lib) mkEnableOption mkIf;
-  inherit (lib.xeta) disabled;
+  inherit (lib.xeta) disabled enabled;
   cfg = config.xeta.nixvim;
 in
 {
@@ -42,13 +41,23 @@ in
         updatetime = 50;
       };
 
-      colorschemes.tokyonight.enable = true;
+      colorschemes.tokyonight = {
+        enable = true;
+        settings = {
+          style = "night";
+          terminal_colors = true;
+          transparent = false;
+        };
+      };
 
       plugins = {
-        crates-nvim.enable = true;
         lsp-format.enable = true;
         nix-develop.enable = true;
         barbecue.enable = true;
+        rust-tools = enabled;
+        harpoon = enabled;
+        none-ls = enabled;
+        ccc.enable = true;
         gitsigns.enable = true;
         telescope = {
           enable = true;
@@ -60,15 +69,23 @@ in
         indent-blankline.enable = true;
         nvim-colorizer.enable = true;
         nvim-autopairs.enable = true;
-        nix.enable = true;
         comment.enable = true;
         lualine = {
           enable = true;
         };
+        nix = enabled;
+        crates-nvim.enable = true;
+        direnv.enable = true;
+        lazy.enable = true;
+        lazygit.enable = true;
+        codeium-nvim = enabled;
         startup = {
           enable = true;
           theme = "dashboard";
         };
+        coq-nvim = enabled;
+        coq-thirdparty = enabled;
+        hop = enabled;
         lsp = {
           enable = true;
           servers = {
@@ -105,37 +122,43 @@ in
           enable = true;
           nixGrammars = true;
         };
-        cmp = {
+        cmp.settings = {
           enable = true;
-          settings = {
-          	enable = true;
-          	autoEnableSources = true;
-          	sources = [
-          	  { name = "nvim_lsp"; }
-          	  { name = "path"; }
-          	  { name = "buffer"; }
-          	];
-          	mapping = {
-          	  "<CR>" = "cmp.mapping.confirm({ select = true })";
-          	  "<Tab>" = {
-          	    action = ''cmp.mapping.select_next_item()'';
-          	    modes = [ "i" "s" ];
-          	  };
-          	};
+          autoEnableSources = true;
+          sources = [
+            { name = "codeium"; }
+            { name = "nvim_lsp"; }
+            { name = "path"; }
+            { name = "buffer"; }
+          ];
+          mapping = {
+            "<CR>" = "cmp.mapping.confirm({ select = true })";
+            "<Tab>" = {
+              action = ''cmp.mapping.select_next_item()'';
+              modes = [
+                "i"
+                "s"
+              ];
+            };
           };
         };
       };
 
       extraPlugins = [
         {
-          plugin = pkgs.vimPlugins.lsp-inlayhints-nvim;
-          config = ''
-            lua require("lsp-inlayhints").setup()
-          '';
+          plugin = plugins.lsp-inlayhints-nvim;
+          config = "lua require(\"lsp-inlayhints\").setup()";
         }
-        pkgs.vimPlugins.telescope-file-browser-nvim
         {
-          plugin = pkgs.vimPlugins.comment-nvim;
+          plugin = plugins.nvim-nu;
+          config = "lua require(\"nu\").setup()";
+        }
+        plugins.fzf-lsp-nvim
+        plugins.fzf-vim
+        plugins.ai-vim
+        plugins.telescope-file-browser-nvim
+        {
+          plugin = plugins.comment-nvim;
           config = "lua require(\"Comment\").setup()";
         }
       ];
@@ -143,6 +166,18 @@ in
       extraConfigLua = ''
         vim.opt.guifont = "JetBrainsMono\\ NFM,Noto_Color_Emoji:h14"
         vim.g.neovide_cursor_animation_length = 0.05
+
+        vim.diagnostic.config({
+          virtual_text = false,
+        })
+        
+        require("rust-tools").setup({
+          tools = {
+            inlay_hints = {
+              auto = false
+            }
+          }
+        })
 
         vim.api.nvim_create_augroup("LspAttach_inlayhints", {})
         vim.api.nvim_create_autocmd("LspAttach", {
@@ -156,6 +191,17 @@ in
             local client = vim.lsp.get_client_by_id(args.data.client_id)
             require("lsp-inlayhints").on_attach(client, bufnr)
           end,
+        })
+
+        require("cmp").setup({
+          formatting = {
+            format = require('lspkind').cmp_format({
+              mode = "symbol",
+              maxwidth = 50,
+              ellipsis_char = '...',
+              symbol_map = { Codeium = "", }
+            })
+          }
         })
 
         local colors = {
@@ -231,20 +277,33 @@ in
       };
 
       keymaps = [
-        # {
-        #   mode = "n";
-        #   key = "<space>fb";
-        #   action = ":Telescope file_browser<CR>";
-        #   options.noremap = true;
-        # }
+        {
+          key = "<space>f";
+          action = ":Telescope find_files<CR>";
+          options.noremap = true;
+        }
         {
           action = "<cmd>Telescope live_grep<CR>";
           key = "<leader>g";
+          options.noremap = true;
         }
         {
-          mode = "n";
+          action = "<cmd>lua require(\"lsp_lines\").toggle<CR>";
+          key = "<leader>l";
+        }
+        {
+          action = "<cmd>Telescope help_tags<CR>";
+          key = "<leader>ht";
+          options.noremap = true;
+        }
+        {
+          action = "<cmd>Telescope buffers<CR>";
+          key = "<leader>bf";
+          options.noremap = true;
+        }
+        {
           action = "<cmd>Telescope file_browser<CR>";
-          key = "<leader>f";
+          key = "<leader>fb";
           options.noremap = true;
         }
         {
@@ -256,6 +315,56 @@ in
           key = "<S-Tab>";
           action = ":bprev<CR>";
           options.silent = false;
+        }
+        {
+          key = "f";
+          action.__raw = ''
+            function()
+              require'hop'.hint_char1({
+                direction = require'hop.hint'.HintDirection.AFTER_CURSOR,
+                current_line_only = true
+              })
+            end
+          '';
+          options.remap = true;
+        }
+        {
+          key = "F";
+          action.__raw = '' 
+            function()
+              require'hop'.hint_char1({
+                direction = require'hop.hint'.HintDirection.BEFORE_CURSOR,
+                current_line_only = true
+              })
+            end
+         '';
+          options.remap = true;
+        }
+        {
+          key = "t";
+          action.__raw = '' 
+            function()
+              require'hop'.hint_char1({
+                direction = require'hop.hint'.HintDirection.AFTER_CURSOR,
+                current_line_only = true,
+                hint_offset = -1
+              })
+            end
+         '';
+          options.remap = true;
+        }
+        {
+          key = "T";
+          action.__raw = '' 
+            function()
+              require'hop'.hint_char1({
+                direction = require'hop.hint'.HintDirection.BEFORE_CURSOR,
+                current_line_only = true,
+                hint_offset = 1
+              })
+            end
+         '';
+          options.remap = true;
         }
       ];
     };

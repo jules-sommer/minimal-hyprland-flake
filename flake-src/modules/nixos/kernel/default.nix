@@ -47,8 +47,8 @@ in
       }
     ];
 
-    # boot.kernelModules = [ "v4l2loopback" ];
-    # boot.extraModulePackages = [ pkgs.linuxPackages_latest.v4l2loopback ];
-    # boot.kernelPackages = pkgs.linuxPackages_latest;
+    boot.kernelModules = [ "v4l2loopback" ];
+    boot.extraModulePackages = [ pkgs.linuxPackages_latest.v4l2loopback ];
+    boot.kernelPackages = pkgs.linuxPackages_latest;
   };
 }

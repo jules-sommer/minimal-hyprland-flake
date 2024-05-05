@@ -45,7 +45,6 @@ in
         XCURSOR_SIZE = "24";
         XCURSOR_THEME = "Bibata-Modern-Ice";
         QT_QPA_PLATFORMTHEME = pkgs.lib.mkDefault "qt5ct";
-        QT_QPA_PLATFORM = "wayland";
         QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
         QT_AUTO_SCREEN_SCALE_FACTOR = "1";
         # NIX_PATH = "nixpkgs=${home}/.nix-defexpr/channels_root/nixos";

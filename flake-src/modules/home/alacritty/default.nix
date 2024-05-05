@@ -1,28 +1,54 @@
-{
-  lib,
-  config,
-  pkgs,
-  ...
+{ lib
+, config
+, pkgs
+, ...
 }:
 let
-  inherit (lib) types mkEnableOption;
+  inherit (lib) mkIf types mkEnableOption;
   inherit (lib.xeta) mkOpt;
-  cfg = config.xeta.alacritty;
+  cfg = config.xeta.tty;
 in
 {
-  options.xeta.alacritty = {
-    enable = mkEnableOption "Enable Alacritty";
+  options.xeta.tty = {
+    alacritty = {
+      enable = mkEnableOption "Enable Alacritty";
+    };
+    kitty = {
+      enable = mkEnableOption "Enable Kitty";
+    };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = {
     programs = {
-      alacritty = {
+      kitty = mkIf (cfg.kitty.enable) {
+        enable = true;
+        package = pkgs.kitty;
+        font = {
+          name = "JetBrains Mono Nerd Font";
+          size = 12;
+        };
+        settings = {
+          cursor = "#f61eaf";
+          cursor_text_color = "#ffffff";
+          scrollback_lines = 10000;
+          copy_on_select = "yes";
+          background_opacity = "0.65";
+          background_blur = 10;
+        };
+      };
+      alacritty = mkIf (cfg.alacritty.enable) {
         enable = true;
         package = pkgs.alacritty;
         settings = {
+          general = {
+            shell = lib.getBin pkgs.nushell;
+            args = [ "-l" ];
+          };
           window = {
             decorations = "None";
             opacity = 0.65;
+            dynamic_padding = true;
+            position = "None";
             blur = true;
             padding = {
               x = 8;
@@ -33,22 +59,28 @@ in
           font = {
             size = 10;
             builtin_box_drawing = true;
+
             normal = {
-              family = "JetBrains Mono";
+              family = "JetBrains Mono Nerd Font";
               style = "Regular";
             };
             bold = {
-              family = "JetBrains Mono";
+              family = "JetBrains Mono Nerd Font";
               style = "Bold";
             };
             italic = {
-              family = "JetBrains Mono";
+              family = "JetBrains Mono Nerd Font";
               style = "Italic";
             };
             bold_italic = {
-              family = "JetBrains Mono";
+              family = "JetBrains Mono Nerd Font";
               style = "Bold Italic";
             };
+          };
+
+          scrolling = {
+            history = 10000;
+            multiplier = 6;
           };
 
           selection = {

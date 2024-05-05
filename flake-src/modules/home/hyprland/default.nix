@@ -177,11 +177,11 @@ in
         # ▀▄▀▄▀ █ █░▀█ █▄▀ █▄█ ▀▄▀▄▀   █▀▄ █▄█ █▄▄ ██▄ ▄█
 
         windowrulev2 = [
-          "float,class:^(Bitwarden)$"
+          "float,class:^(bitwarden)$"
 
-          "float,title:^(?i).*Bitwarden.*$"
-          "float,title:^(?i).*Extension:.*$"
-          "float,title:^(?i).*Sign in.*$"
+          "float,title:^(?i).*bitwarden.*$"
+          "float,title:^(?i).*extension:.*$"
+          "float,title:^(?i).*sign in.*$"
 
           "center,title:^(?i).*Bitwarden.*$"
           "center,title:^(?i).*Extension:.*$"
@@ -195,11 +195,10 @@ in
           "idleinhibit fullscreen, class:^(floorp)$"
         ];
         windowrule = [
-          "float, ^(steam)$"
-          "center, ^(steam)$"
-          "size 1200 900, ^(steam)$"
-          "float,^(alacritty)$"
-          "move 0 0,class:^(floorp)(.*)$"
+          "float,class:^(pavucontrol)$"
+          "move 10% 50,class:^(pavucontrol)$"
+          "size 550 550,class:^(pavucontrol)$"
+          "pin,class:^(pavucontrol)$"
         ];
 
         # ▄▀█ █░█ ▀█▀ █▀█    █▀▀ ▀▄▀ █▀▀ █▀▀
@@ -210,7 +209,6 @@ in
           "pueued -dv"
           "$POLKIT_BIN"
           "nm-applet --indicator"
-          # "dbus-update-activation-environment --systemd --all"
           "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
           "systemctl --user import-environment QT_QPA_PLATFORMTHEME WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
           "hyprctl setcursor Bibata-Modern-Ice 24"
@@ -416,7 +414,7 @@ in
           close_special_on_empty = false;
           mouse_move_enables_dpms = true;
           key_press_enables_dpms = true;
-          swallow_regex = "^(alacritty)$";
+          swallow_regex = "^(Alacritty)$";
         };
       };
     };

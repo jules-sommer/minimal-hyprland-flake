@@ -1,11 +1,17 @@
-{ lib, pkgs, config, systems, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  systems,
+  ...
+}:
 # User information gathered by Snowfall Lib is available.
 let
   inherit (lib.xeta) enabled;
-  meta = (builtins.fromTOML
-    (builtins.readFile (lib.snowfall.fs.get-file "systems.toml")));
+  meta = (builtins.fromTOML (builtins.readFile (lib.snowfall.fs.get-file "systems.toml")));
   traced = builtins.trace meta "meta";
-in {
+in
+{
   xeta = {
     dotfiles = "/home/jules/020_config";
     starship = enabled;
@@ -44,11 +50,35 @@ in {
       defaultEditor = true;
       settings = {
         theme = "github_dark_high_contrast";
-        editor.cursor-shape = {
-          normal = "block";
-          insert = "bar";
-          select = "underline";
+        editor = {
+          cursor-shape = {
+            normal = "block";
+            insert = "bar";
+            select = "underline";
+          };
+          lsp = {
+            display-messages = true;
+            display-inlay-hints = true;
+          };
+          indent-guides = {
+            render = true;
+            character = "╎"; # Some characters that work well: "▏", "┆", "┊", "⸽"
+            skip-levels = 1;
+          };
         };
+        language = [
+          {
+            name = "rust";
+            autopairs = {
+              "(" = ")";
+              "{" = "}";
+              "[" = "]";
+              "\"" = "\"";
+              "`" = "`";
+              "<" = ">";
+            };
+          }
+        ];
       };
     };
     direnv = {

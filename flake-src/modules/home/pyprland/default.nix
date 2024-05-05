@@ -69,10 +69,7 @@ in
             notify = dur: msg: "hyprctl notify 5 ${dur} \"green\" \"${msg}\"";
             launch =
               { name, cmd }:
-              ''
-                alacritty --class scratchpad-${name} -e ${cmd};
-                ${notify "1000" "Launched ${name} scratchpad"}
-              '';
+              "alacritty --class scratchpad-${name} -e ${cmd}; ${notify "1000" "Launched ${name} scratchpad"}";
           in
           {
             enable = true;
@@ -93,7 +90,7 @@ in
                 };
 
                 workspaces_follow_focus = {
-                  max_workspaces = 9;
+                  max_workspaces = 15;
                 };
 
                 expose = {
@@ -109,6 +106,14 @@ in
                     size = "75% 45%";
                   };
 
+                  nautilus = {
+                    animation = "fromBottom";
+                    command = "nautilus";
+                    class = "scratchpad-nautilus";
+                    size = "75% 45%";
+                    lazy = false;
+                  };
+
                   calculator = {
                     animation = "fromLeft";
                     command = "alacritty --class scratchpad-calculator -e gnome-calculator";
@@ -118,20 +123,24 @@ in
 
                   snapchat = {
                     animation = "fromBottom";
-                    command = launch {
-                      name = "snapchat";
-                      cmd = "chromium --app=https://web.snapchat.com/";
-                    };
+                    command = (
+                      launch {
+                        name = "snapchat";
+                        cmd = "chromium --app=https://web.snapchat.com/";
+                      }
+                    );
                     class = "scratchpad-calculator";
                     size = "65% 65%";
                   };
 
                   webcord = {
                     animation = "fromBottom";
-                    command = launch {
-                      name = "webcord";
-                      cmd = "webcord";
-                    };
+                    command = (
+                      launch {
+                        name = "webcord";
+                        cmd = "webcord";
+                      }
+                    );
                     class = "scratchpad-webcord";
                     size = "65% 65%";
                   };
@@ -214,6 +223,9 @@ in
 
           windowrulev2 = [
             "float, $scratch"
+            "float, class:pavucontrol"
+            "size 60% 80%, class:pavucontrol"
+            "pin, class:pavucontrol"
             "$scratch_size, $scratch"
             "workspace special scratch, $scratch"
             "float,class:scratchpad"
@@ -262,17 +274,18 @@ in
             "$mod SUPER, F2, exec, pypr toggle_special special"
 
             "SUPER, P, exec, pypr toggle bitwarden; $dispatch $active_to_top"
+            "SUPER, F, exec, pypr toggle nautilus; $dispatch $active_to_top"
             "SUPER, D, exec, pypr toggle webcord; $dispatch $active_to_top"
             "SUPER, V, exec, pypr toggle volume; $dispatch $active_to_top"
             "SUPER, B, exec, pypr toggle btop; $dispatch $active_to_top"
-            "SUPER, =, exec, pypr toggle calculator; $dispatch $active_to_top"
+            "SUPER, equal, exec, pypr toggle calculator; $dispatch $active_to_top"
             "SUPER, ENTER, exec, pypr toggle alacritty; $dispatch $active_to_top"
 
             "$mod, N, togglespecialworkspace, stash" # toggles "stash" special workspace visibility
             "$mod SHIFT, N, exec, pypr toggle_special stash" # moves windows to/from the "stash" workspace
 
             "SUPER SHIFT, C, togglespecialworkspace, minimize"
-            "SUPER, C, exec, pypr toggle_special minimize"
+            "SUPER, C, exec, pypr toggle_speci al minimize"
 
             # toggles special "expose" workspace which is
             # used to show all windows in an overview

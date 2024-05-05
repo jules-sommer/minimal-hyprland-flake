@@ -2,10 +2,11 @@
   description = "Jules' Xetamine Flake";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     stable.url = "github:nixos/nixpkgs/nixos-23.11";
     staging.url = "github:nixos/nixpkgs/staging-next";
-    master.url = "github:nixos/nixpkgs/master";
+    nixpkgs.url = "github:nixos/nixpkgs/master";
+
+    oxalica.url = "github:oxalica/rust-overlay";
 
     nixos-conf-editor = {
       url = "github:snowfallorg/nixos-conf-editor";
@@ -106,7 +107,7 @@
     hyprland = {
       url = "github:hyprwm/Hyprland";
       # url = "/home/jules/000_dev/015_C/000_hyprland";
-      inputs.nixpkgs.follows = "master";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
@@ -167,6 +168,7 @@
 
       overlays = with inputs; [
         fenix.overlays.default
+        oxalica.overlays.default
         snowfall-flake.overlays.default
         snowfall-thaw.overlays.default
         snowfall-drift.overlays.default
