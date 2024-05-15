@@ -1,22 +1,17 @@
-{
-  lib,
-  pkgs,
-  config,
-  inputs,
-  system,
-  ...
+{ lib
+, pkgs
+, config
+, ...
 }:
 let
   inherit (lib) types mkEnableOption mkIf;
   inherit (lib.xeta) mkOpt;
-  cfg = config.xeta.development.zig;
+  cfg = config.xeta.development.ocaml;
 in
 {
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      zig
-      zls
-      vscode-extensions.ziglang.vscode-zig
+      ocaml
     ];
   };
 }

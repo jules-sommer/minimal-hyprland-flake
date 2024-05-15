@@ -1,32 +1,39 @@
-{
-  lib,
-  pkgs,
-  config,
-  inputs,
-  system,
-  ...
+{ lib
+, pkgs
+, config
+, inputs
+, system
+, ...
 }:
 let
   inherit (lib) types mkEnableOption mkIf;
   inherit (lib.xeta) mkOpt;
   cfg = config.xeta.langs;
-  anyLangEnabled = lib.any (
-    lang:
-    lib.attrByPath [
-      lang
-      "enable"
-    ] false cfg
-  ) (lib.attrNames cfg);
+  anyLangEnabled = lib.any
+    (
+      lang:
+      lib.attrByPath [
+        lang
+        "enable"
+      ]
+        false
+        cfg
+    )
+    (lib.attrNames cfg);
 in
 {
   options.xeta.development = {
     rust = {
       enable = mkEnableOption "Enable Rust toolchain via/Fenix overlay.";
-      profile = mkOpt (types.enum [
-        "default"
-        "minimal"
-        "complete"
-      ]) "complete" "Profile of Rust toolchain to use, must be one of: default, minimal, complete.";
+      profile = mkOpt
+        (types.enum [
+          "default"
+          "minimal"
+          "complete"
+        ]) "complete" "Profile of Rust toolchain to use, must be one of: default, minimal, complete.";
+    };
+    ocaml = {
+      enable = mkEnableOption "Enable OCaml support";
     };
     zig = {
       enable = mkEnableOption "Enable Zig support";
