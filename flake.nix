@@ -4,7 +4,8 @@
   inputs = {
     stable.url = "github:nixos/nixpkgs/nixos-23.11";
     staging.url = "github:nixos/nixpkgs/staging-next";
-    nixpkgs.url = "github:nixos/nixpkgs/master";
+    master.url = "github:nixos/nixpkgs/master";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
     oxalica.url = "github:oxalica/rust-overlay";
 
@@ -12,6 +13,7 @@
       url = "github:snowfallorg/nixos-conf-editor";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -20,6 +22,7 @@
     snowfall-lib = {
       url = "github:snowfallorg/lib";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils-plus.follows = "flake-utils-plus";
     };
 
     snowfall-flake = {
@@ -54,7 +57,7 @@
 
     xremap-flake = {
       url = "github:xremap/nix-flake";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "master";
     };
 
     nixos-generators = {
@@ -93,21 +96,46 @@
       inputs.systems.follows = "systems";
     };
 
+    flake-utils-plus = {
+      url = "/home/jules/030_sandbox/020_flake-utils-plus";
+      # url = "github:gytis-ivaskevicius/flake-utils-plus";
+      inputs.nixpkgs.follows = "master";
+    };
+
     pyprland = {
       url = "github:hyprland-community/pyprland";
       # url = "/home/jules/000_dev/060_python/000_pyprland";
       inputs.flake-utils.follows = "flake-utils";
     };
 
+    neovim-flake = {
+      url = "github:neovim/neovim?dir=contrib";
+      inputs.nixpkgs.follows = "master";
+    };
+
+    neovim-nightly-overlay = {
+      url = "github:nix-community/neovim-nightly-overlay";
+      inputs.nixpkgs.follows = "master";
+    };
+
+    neovim-git = {
+      url = "github:neovim/neovim";
+      flake = false;
+    };
+
     nixvim = {
       url = "github:nix-community/nixvim";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "master";
+    };
+
+    hyprland-vdesk = {
+      url = "github:levnikmyskin/hyprland-virtual-desktops";
     };
 
     hyprland = {
       url = "github:hyprwm/Hyprland";
       # url = "/home/jules/000_dev/015_C/000_hyprland";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "master";
     };
   };
 
@@ -167,6 +195,7 @@
       ];
 
       overlays = with inputs; [
+        neovim-nightly-overlay.overlay
         fenix.overlays.default
         oxalica.overlays.default
         snowfall-flake.overlays.default
