@@ -1,3 +1,3 @@
 { channels, ... }:
 
-final: prev: { inherit (channels.master) electron-unwrapped obsidian bitwarden-desktop; }
+final: prev: { inherit (channels.stable) electrum-ltc electrum; }

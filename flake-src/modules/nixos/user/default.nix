@@ -1,10 +1,9 @@
-{
-  lib,
-  pkgs,
-  config,
-  inputs,
-  system,
-  ...
+{ lib
+, pkgs
+, config
+, inputs
+, system
+, ...
 }:
 let
   inherit (lib) types mkEnableOption mkIf;
@@ -17,9 +16,11 @@ in
     user = {
       username = mkOpt (types.nullOr types.str) null "The username of the user";
       fullname = mkOpt (types.nullOr types.str) null "The full name of the user";
-      home = mkOpt (types.nullOr (
-        types.either types.path types.str
-      )) null "The home directory of the user";
+      home = mkOpt
+        (types.nullOr (
+          types.either types.path types.str
+        ))
+        null "The home directory of the user";
       dotfiles = mkOpt (types.nullOr types.str) null "The dotfiles directory for the user's config.";
     };
     hostname = mkOpt (types.nullOr types.str) null "The hostname of the system";
@@ -46,10 +47,12 @@ in
     ];
     # This will additionally add your inputs to the system's legacy channels
     # Making legacy nix commands consistent as well, awesome!
-    environment.etc = lib.mapAttrs' (name: value: {
-      name = "${cfg.user.home}/.nix-defexpr/channels_root/nixos/${name}";
-      value.source = value.flake;
-    }) config.nix.registry;
+    environment.etc = lib.mapAttrs'
+      (name: value: {
+        name = "${cfg.user.home}/.nix-defexpr/channels_root/nixos/${name}";
+        value.source = value.flake;
+      })
+      config.nix.registry;
 
     # Configure the Nix package manager
     nix = {
@@ -74,8 +77,8 @@ in
           # Deduplicate and optimize nix store
           auto-optimise-store = true;
           # Use binary caches
-          substituters = [ "https://hyprland.cachix.org" ];
-          trusted-public-keys = [ "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc=" ];
+          substituters = [ "https://hyprland.cachix.org" "https://cache.nixos.org" ];
+          trusted-public-keys = [ "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc=" "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
           http-connections = 50;
           log-lines = 50;
           sandbox = "relaxed";
