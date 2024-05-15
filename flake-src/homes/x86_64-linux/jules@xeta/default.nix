@@ -71,8 +71,16 @@ in
     };
     git = {
       enable = true;
-      userName = "jules-sommer";
+      userName = "jules";
       userEmail = "jules@rcsrc.shop";
+      extraConfig = {
+        safe = {
+          directory = [
+            "/home/jules/000_dev/000_config"
+            "/home/jules/000_dev/000_config/010_minimal-hyprland-flake"
+          ];
+        };
+      };
     };
   };
 
