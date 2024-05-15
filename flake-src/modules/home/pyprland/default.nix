@@ -1,10 +1,9 @@
-{
-  lib,
-  pkgs,
-  config,
-  inputs,
-  system,
-  ...
+{ lib
+, pkgs
+, config
+, inputs
+, system
+, ...
 }:
 let
   inherit (lib)
@@ -247,8 +246,8 @@ in
           bind = [
             # pyprland workspaces_follow_focus
             # "$mod, H, exec, pypr shift_monitors -1"
-            "$mod, K, exec, pypr change_workspace +1"
-            "$mod, J, exec, pypr change_workspace -1"
+            # "$mod, K, exec, pypr change_workspace +1"
+            # "$mod, J, exec, pypr change_workspace -1"
             # "$mod, L, exec, pypr shift_monitors +1"
 
             # "$mod SHIFT, right, exec, pypr change_workspace +1"

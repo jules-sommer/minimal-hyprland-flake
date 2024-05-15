@@ -10,6 +10,7 @@ let
 in
 {
   options.xeta.tty = {
+    default = mkOpt (types.nullOr types.enum ([ pkgs.alacritty pkgs.kitty ])) null "The default terminal emulator to use";
     alacritty = {
       enable = mkEnableOption "Enable Alacritty";
     };

@@ -1,10 +1,9 @@
-{
-  lib,
-  pkgs,
-  config,
-  inputs,
-  system,
-  ...
+{ lib
+, pkgs
+, config
+, inputs
+, system
+, ...
 }:
 let
   inherit (lib)
@@ -27,11 +26,12 @@ in
     theme = mkOpt (types.nullOr types.str) "synth-midnight-dark" "Theme to use";
 
     settings = {
-      modifier = mkOpt (types.nullOr types.enum ([
-        "CTRL"
-        "ALT"
-        "SUPER"
-      ])) "ALT" "Modifier key to use for Hyprland keybindings.";
+      modifier = mkOpt
+        (types.nullOr types.enum ([
+          "CTRL"
+          "ALT"
+          "SUPER"
+        ])) "ALT" "Modifier key to use for Hyprland keybindings.";
       keybindings = mkOption {
         type = types.listOf (
           types.submodule {
@@ -64,26 +64,29 @@ in
         description = "Keybindings for Hyprland.";
       };
 
-      actions = mkOpt (types.attrsOf (
-        types.submodule {
-          options = {
-            command = mkOpt (types.nullOr types.str) null "The command to execute for this action.";
-            description = mkOpt (types.nullOr types.str) null "A description of the action.";
-          };
-        }
-      )) { } "Default actions for Hyprland.";
+      actions = mkOpt
+        (types.attrsOf (
+          types.submodule {
+            options = {
+              command = mkOpt (types.nullOr types.str) null "The command to execute for this action.";
+              description = mkOpt (types.nullOr types.str) null "A description of the action.";
+            };
+          }
+        ))
+        { } "Default actions for Hyprland.";
 
-      applications = mkOpt (types.attrsOf (types.submodule { })) {
-        options = {
-          command = mkOpt (types.nullOr types.str) null "The command to execute for this application.";
-          script =
-            mkOpt (types.nullOr types.path) null
-              "The path of the script to execute for this application.";
-          description =
-            mkOpt (types.nullOr types.str) null
-              "A description of the application or script and it's function.";
-        };
-      } "Default applications for Hyprland.";
+      applications = mkOpt (types.attrsOf (types.submodule { }))
+        {
+          options = {
+            command = mkOpt (types.nullOr types.str) null "The command to execute for this application.";
+            script =
+              mkOpt (types.nullOr types.path) null
+                "The path of the script to execute for this application.";
+            description =
+              mkOpt (types.nullOr types.str) null
+                "A description of the application or script and it's function.";
+          };
+        } "Default applications for Hyprland.";
 
       defaults = {
         terminal = mkOpt (types.nullOr types.str) "alacritty" "Default terminal to use for Hyprland.";
@@ -296,20 +299,21 @@ in
             # workspaces
             # binds $mod + [shift +] {1..10} to [move to] workspace {1..10}
             builtins.concatLists (
-              builtins.genList (
-                x:
-                let
-                  ws =
-                    let
-                      c = (x + 1) / 10;
-                    in
-                    builtins.toString (x + 1 - (c * 10));
-                in
-                [
-                  "$mod, ${ws}, workspace, ${toString (x + 1)}"
-                  "$mod SHIFT, ${ws}, movetoworkspace, ${toString (x + 1)}"
-                ]
-              ) 10
+              builtins.genList
+                (
+                  x:
+                  let
+                    ws =
+                      let
+                        c = (x + 1) / 10;
+                      in
+                      builtins.toString (x + 1 - (c * 10));
+                  in
+                  [
+                    "$mod, ${ws}, workspace, ${toString (x + 1)}"
+                    "$mod SHIFT, ${ws}, movetoworkspace, ${toString (x + 1)}"
+                  ]
+                ) 10
             )
           );
 
@@ -350,11 +354,20 @@ in
             "blur,swayidle"
             "blur,alacritty"
             "blur,pavucontrol"
+            "unset, rofi"
+            "blur, rofi"
+            "ignorezero, rofi"
+            "blur, swaync-control-center"
+            "blur, swaync-notification-window"
+            "ignorezero, swaync-control-center"
+            "ignorezero, swaync-notification-window"
+            "ignorealpha 0.1, swaync-control-center"
+            "ignorealpha 0.1, swaync-notification-window"
           ];
           drop_shadow = true;
           blur = {
             enabled = true;
-            size = "5";
+            size = "6";
             passes = "3";
             new_optimizations = "on";
             ignore_opacity = "on";
@@ -401,7 +414,7 @@ in
         };
 
         plugin = {
-          # optional plugin configuration here
+          # hyprland-virtual-desktops = inputs.hyprland-vdesk.packages.${pkgs.system}.virtual-desktops;
         };
 
         misc = {

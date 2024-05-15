@@ -1,8 +1,7 @@
-{
-  pkgs,
-  config,
-  lib,
-  ...
+{ pkgs
+, config
+, lib
+, ...
 }:
 let
   inherit (config.lib.formats.rasi) mkLiteral;
@@ -11,13 +10,22 @@ in
 {
   programs.rofi = {
     enable = true;
-    terminal = "${pkgs.alacritty}/bin/alacritty";
     cycle = true;
-    font = "JetBrains Mono";
+    terminal = builtins.toString (lib.getBin pkgs.kitty);
+    font = "Jetbrains Mono Nerd Font";
     package = pkgs.rofi-wayland;
     theme = {
       "*" = {
-        bg = mkLiteral "#${palette.base00}";
+        bg-col = mkLiteral "#1e1e2e";
+        bg-col-light = mkLiteral "#1e1e2e";
+        border-col = mkLiteral "#1e1e2e";
+        selected-col = mkLiteral "#1e1e2e";
+        blue = mkLiteral "#89b4fa";
+        fg-col = mkLiteral "#cdd6f4";
+        fg-col2 = mkLiteral "#f38ba8";
+        grey = mkLiteral "#6c7086";
+        width = mkLiteral "600";
+        bg = mkLiteral "rgba(130, 32, 104, 0.35)";
         "background-color" = mkLiteral "@bg";
       };
 
@@ -25,11 +33,11 @@ in
         "show-icons" = true;
         "icon-theme" = "Papirus";
         location = 0;
-        font = "JetBrains Mono";
-        "display-drun" = "Launch:";
+        font = "Jetbrains Mono Nerd Font";
+        "display-drun" = "=>> ";
         modi = "run,drun";
         lines = 8;
-        columns = 1;
+        columns = 2;
       };
 
       window = {
@@ -48,7 +56,8 @@ in
       };
 
       element = {
-        padding = mkLiteral "4 12";
+        padding = mkLiteral "10";
+        font-size = mkLiteral "16px";
         "text-color" = mkLiteral "#${palette.base05}";
         "border-radius" = 5;
       };
@@ -87,7 +96,8 @@ in
       };
 
       inputbar = {
-        "background-image" = mkLiteral ''url("~/.config/rofi/rofi.jpg", width)'';
+        background-color = mkLiteral "rgba(212, 36, 108, 0.7)";
+        border-radius = 10;
         padding = mkLiteral "180 0 0";
         margin = mkLiteral "0 0 0 0";
       };

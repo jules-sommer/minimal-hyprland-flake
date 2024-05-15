@@ -1,9 +1,8 @@
-{
-  pkgs,
-  config,
-  lib,
-  inputs,
-  ...
+{ pkgs
+, config
+, lib
+, inputs
+, ...
 }:
 let
   inherit (lib) mkIf types mkEnableOption;
@@ -34,13 +33,13 @@ in
         {
           layer = "top";
           position = "top";
-          height = 35;
+          height = 30;
           margin-top = 6;
           margin-left = 8;
           margin-right = 8;
           spacing = 8;
           reload-style-on-change = true;
-          include = [ "~/.config/waybar/styles-extra.css" ];
+          include = [ "~/.config/waybar/extra.conf" ];
 
           modules-left = [
             "custom/startmenu"
@@ -53,52 +52,58 @@ in
           modules-center = [ "clock" ];
 
           modules-right = [
-            "custom/quit"
             "idle_inhibitor"
             "custom/notification"
             "battery"
             "tray"
             "pulseaudio"
+            "custom/quit"
           ];
 
           "hyprland/workspaces" = {
-            format = "<sub>{icon} %s {name}</sub>\n{windows}";
+            format = "{icon}";
             format-icons = {
-              default = "%s";
-              active = "";
-              urgent = "";
+              default = " ";
+              active = " ";
+              urgent = " ";
             };
             on-scroll-up = "hyprctl dispatch workspace e+1";
             on-scroll-down = "hyprctl dispatch workspace e-1";
           };
+
           clock = {
-            format = " {:%I:%M %p}";
-            format-alt = "{:%a, %d. %b  %H:%M}";
+            format = "󰃭 {:%a, %d %b   %I:%M %p}";
+            format-alt = "  {:%I:%M %p}";
             tooltip-format = ''
-              <big>{%I:%M %p}</big>
+              <big>{:%I:%M %p}</big>
               <tt><small>{calendar}</small></tt>
             '';
             tooltip = true;
           };
+
           "hyprland/window" = {
-            max-length = 25;
+            max-length = 40;
             separate-outputs = false;
           };
+
           memory = {
             interval = 5;
-            format = " {}%";
+            format = " {}%";
             tooltip = true;
           };
+
           cpu = {
             interval = 5;
             format = " {usage:2}%";
             tooltip = true;
           };
+
           disk = {
-            format = "  {free} / {total}";
+            format = "󰋊 {free} / {total}";
             tooltip = true;
             on-click = "hyprctl dispatch 'exec alacritty -e broot -hipsw'";
           };
+
           network = {
             format-icons = [
               "󰤯"
@@ -113,9 +118,11 @@ in
             tooltip = false;
             on-click = "nm-applet";
           };
+
           tray = {
             spacing = 12;
           };
+
           pulseaudio = {
             format = "{icon} {volume}% {format_source}";
             format-bluetooth = "{volume}% {icon} {format_source}";
@@ -138,12 +145,14 @@ in
             };
             on-click = "pavucontrol";
           };
+
           "custom/startmenu" = {
             tooltip = false;
-            format = "";
+            format = "󱄅";
             # exec = "rofi -show drun";
             on-click = "rofi -show drun";
           };
+
           idle_inhibitor = {
             format = "{icon}";
             format-icons = {
@@ -153,6 +162,7 @@ in
             tooltip = "true";
             tooltip-format = "Inhibit idle? {state}";
           };
+
           "custom/notification" = {
             tooltip = false;
             format = "{icon} {}";
@@ -172,6 +182,7 @@ in
             on-click = "swaync-client -t";
             escape = true;
           };
+
           privacy = {
             icon-spacing = 4;
             icon-size = 18;
@@ -194,6 +205,7 @@ in
               }
             ];
           };
+
           battery = {
             states = {
               warning = 30;
@@ -217,52 +229,46 @@ in
             on-click = "";
             tooltip = false;
           };
+
           "custom/quit" = {
             format = "";
             on-click = "";
+            tooltip = true;
           };
         }
       ];
 
       style = ''
         * {
-          font-size: 14px;
+          font-size: 12px;
           font-family: 'JetBrains Mono', Font Awesome;
               font-weight: 600;
         }
 
-        span.hyprland-workspaces {
-          font-size: 8px;
-        }
         label.module {
           padding: 0 15px;
-          box-shadow: inset 0 -3px;
         }
+
         box.module button:hover {
           box-shadow: inset 0 -3px #ffffff;
         }
 
         box.module {
           box-shadow: inset 0 -2.5px;
-          border-radius: 8px;
           margin-top: 4px;
           margin-bottom: 4px;
-          background-color: rgba(85,25,95,0.20);
         }
+
         window#waybar {
           border-radius: 10px;
           margin: 10px;
           padding: 5px;
-          border: 2px solid rgba(231,113,252,0.8);
-          background-color: rgba(85,25,95,0.40);
+          background-color: rgba(231, 29, 117, 0.65);
           color: #${theme.base0F};
         }
+
         #workspaces {
-          background: black;
-          padding: 4px;
           border-radius: 5px;
-          border: 2px solid #${theme.base0F};
-          font-style: normal;
           color: white;
         }
         #workspaces button {
@@ -284,7 +290,7 @@ in
           opacity: 1.0;
         }
         tooltip {
-          background: black;
+          background: rgba(129, 19, 64, 0.80);
           border: 1px solid rgba(255,255,255,0.2);
           border-radius: 5px;
         }
@@ -295,6 +301,8 @@ in
           color: #${theme.base05};
           background: #${theme.base00};        
           padding: 5px;
+          padding-left: 15px;
+          padding-right: 15px;
         }
         #memory {
           color: #${theme.base0F};
@@ -302,8 +310,8 @@ in
           padding: 5px;
         }
         #clock {
-          color: #${theme.base0B};
-          background: #${theme.base00};        
+          color: #${theme.base06};
+          background: transparent;
           padding: 5px;
         }
         #idle_inhibitor {
@@ -328,8 +336,8 @@ in
         }
         #network {
           color: #${theme.base09};
-          background: #${theme.base00};        
           padding: 5px;
+          background: transparent;
         }
         #tray {
           color: #${theme.base05};
@@ -337,24 +345,30 @@ in
           padding: 5px;
         }
         #pulseaudio {
-          color: #${theme.base0D};
-          background: #${theme.base00};        
+          color: #${theme.base00};
+          background: transparent;
           padding: 5px;
         }
         #custom-notification {
           color: #${theme.base0C};
-          background: #${theme.base00};        
+          background: transparent;
           padding: 5px;
         }
         #custom-themeselector {
           color: #${theme.base0D};
-          background: #${theme.base00};        
           padding: 5px;
+        }
+        #custom-quit {
+          margin-right: 15px;
+          margin-left: 15px;
+          border-radius: 50%;
+          border: 2px solid hotpink;
         }
         #custom-startmenu {
           color: #${theme.base03};
-          background: #${theme.base00};        
+          background: transparent;
           padding: 5px;
+          margin-left: 5px;
         }
         #idle_inhibitor {
           color: #${theme.base09};
@@ -365,3 +379,23 @@ in
     };
   };
 }
+
+
+# base00: "#1A1B26"
+# base01: "#16161E"
+# base02: "#2F3549"
+# base03: "#444B6A"
+# base04: "#787C99"
+# base05: "#A9B1D6"
+# base06: "#CBCCD1"
+# base07: "#D5D6DB"
+# base08: "#C0CAF5"
+# base09: "#A9B1D6"
+# base0A: "#0DB9D7"
+# base0B: "#9ECE6A"
+# base0C: "#B4F9F8"
+# base0D: "#2AC3DE"
+# base0E: "#BB9AF7"
+# base0F: "#F7768E"
+
+
