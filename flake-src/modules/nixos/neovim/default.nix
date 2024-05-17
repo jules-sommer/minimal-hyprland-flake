@@ -5,73 +5,13 @@
 , ...
 }:
 let
-  inherit (lib) mkEnableOption mkIf;
-  inherit (lib.xeta) disabled enabled list path optional;
+  inherit (lib) mkEnableOption mkIf types;
+  inherit (lib.xeta) disabled enabled list path optional mkOpt;
+  inherit (pkgs.xeta) treesitter-nu supermaven-nvim;
 
   home = config.xeta.system.user.home;
   plugins = pkgs.vimPlugins;
   theme = lib.xeta.getTheme "tokyo-night-dark";
-
-  treesitter-nu = (pkgs.tree-sitter.buildGrammar {
-    language = "nu";
-    version = "0.0.0+786689b";
-    src = (pkgs.fetchFromGitHub {
-      owner = "nushell";
-      repo = "tree-sitter-nu";
-      rev = "786689b0562b9799ce53e824cb45a1a2a04dc673";
-      hash = "sha256-ENyK0l2KhhNfyuXCz0faLwVHMJjJxlRCqitJkJ8fD+w=";
-    });
-  });
-
-  mkNeovimPlugin = inputs.nixvim.lib.${pkgs.system}.helpers.mkNeovimPlugin;
-  buildVimPlugin = pkgs.vimUtils.buildVimPlugin;
-  supermaven-nvim = (buildVimPlugin {
-    pname = "supermaven-nvim";
-    version = "2024-05-12";
-    src = pkgs.fetchFromGitHub {
-      owner = "supermaven-inc";
-      repo = "supermaven-nvim";
-      rev = "2d24b099c37c865e278a3e0b4f252770a04901c";
-      hash = "sha256-WplJCb9JzBRwByVPRUFVZq3fKegNRjydM6HvSmxdShQ=";
-    };
-    meta.homepage = "https://github.com/supermaven-inc/supermaven-nvim";
-  });
-
-  themeLuaSource = ''
-    local M = {}
-
-    M.colors = {
-      blue   = '#2AC3DE',
-      cyan   = '#B4F9F8',
-      black  = '#1A1B26',
-      white  = '#A9B1D6',
-      red    = '#C0CAF5',
-      violet = '#BB9AF7',
-      warn   = '#ebdbb2',
-      grey   = '#2F3549',
-      error  = '#b16286',
-    }
-
-    M.theme = {
-      normal = {
-        a = { fg = M.colors.black, bg = M.colors.violet },
-        b = { fg = M.colors.white, bg = M.colors.grey },
-        c = { fg = M.colors.black, bg = nil },
-      },
-
-      insert = { a = { fg = M.colors.black, bg = M.colors.blue } },
-      visual = { a = { fg = M.colors.black, bg = M.colors.cyan } },
-      replace = { a = { fg = M.colors.black, bg = M.colors.red } },
-
-      inactive = {
-        a = { fg = M.colors.white, bg = nil },
-        b = { fg = M.colors.white, bg = nil },
-        c = { fg = M.colors.black, bg = nil },
-      },
-    }
-
-    return M
-  '';
 
   cfg = config.xeta.nixvim;
 in
@@ -82,9 +22,46 @@ in
 
   config = mkIf cfg.enable {
     snowfallorg.user.${config.xeta.system.user.username}.home.config = {
-      home.file."/home/jules/.local/share/nvim/xeta/theme.lua".text = themeLuaSource;
+      home.file."/home/jules/.local/share/nvim/xeta/theme.lua".text = with theme; ''
+        local M = {}
+
+        M.colors = {
+          blue = '#${base08}',
+          cyan = '#${base0C}',
+          black = '#${base01}',
+          white = '#${base06}',
+          red = '#${base0F}',
+          violet = '#${base0E}',
+          warning = '#${base0A}',
+          grey = '#${base04}',
+          error = '#${base03}',
+          success = '#${base0B}',
+          info = '#${base0D}',
+        }
+
+        M.theme = {
+          normal = {
+            a = { fg = M.colors.black, bg = M.colors.violet },
+            b = { fg = M.colors.white, bg = M.colors.grey },
+            c = { fg = M.colors.black, bg = nil },
+          },
+
+          insert = { a = { fg = M.colors.black, bg = M.colors.blue } },
+          visual = { a = { fg = M.colors.black, bg = M.colors.cyan } },
+          replace = { a = { fg = M.colors.black, bg = M.colors.red } },
+
+          inactive = {
+            a = { fg = M.colors.white, bg = nil },
+            b = { fg = M.colors.white, bg = nil },
+            c = { fg = M.colors.white, bg = nil },
+          },
+        }
+
+        return M
+      '';
       home.file."/home/jules/.local/share/nvim/xeta/extraConfig.lua".source = ./extraConfig.lua;
     };
+
     programs.nixvim = {
       enable = true;
       globals.mapleader = " "; # Sets the leader key to space
@@ -118,8 +95,6 @@ in
       };
 
       plugins = {
-        lsp-format = enabled;
-        nix-develop = enabled;
         barbecue = enabled;
         rust-tools = enabled;
         harpoon = enabled;
@@ -134,47 +109,11 @@ in
             "<leader>g" = "live_grep";
           };
         };
-        indent-blankline = enabled;
-        improved-search = enabled;
-        indent-o-matic = enabled;
-        nvim-colorizer = enabled;
-        nvim-autopairs = enabled;
-        comment = enabled;
         lualine = enabled;
-        lspkind = {
-          enable = true;
-          extraOptions = {
-            cmp.enable = true;
-          };
-          mode = "symbol_text";
-        };
-        nix = enabled;
-        crates-nvim = enabled;
-        direnv = enabled;
         lazy = {
           enable = true;
         };
         lazygit = enabled;
-        # codeium-nvim = enabled;
-        obsidian = {
-          settings = {
-            workspaces = [
-              {
-                name = "jules-main";
-                path = "~/010_documents";
-              }
-              {
-                name = "jules-old";
-                path = "~/_vault";
-              }
-            ];
-            new_notes_location = "current_dir";
-            completion = {
-              nvim_cmp = true;
-              min_chars = 1;
-            };
-          };
-        };
         ollama = {
           enable = true;
           action = "display_replace";
@@ -187,131 +126,9 @@ in
           enable = true;
           theme = "dashboard";
         };
-        rainbow-delimiters = enabled;
-        better-escape = enabled;
-        cmp-treesitter = enabled;
-        cmp-fuzzy-buffer = enabled;
-        cmp-fuzzy-path = enabled;
-        cmp-cmdline = enabled;
-        cmp-calc = enabled;
-        cmp-nvim-lsp-document-symbol = enabled;
-        cmp-nvim-lsp-signature-help = enabled;
-        # cmp-vsnip = enabled;
-        cmp_luasnip = enabled;
-        coq-nvim = enabled;
-        zellij = enabled;
-        coq-thirdparty = enabled;
         transparent = enabled;
-        luasnip = enabled;
+        zellij = enabled;
         hop = enabled;
-        lsp = {
-          enable = true;
-          servers = {
-            lua-ls = {
-              enable = true;
-              settings = {
-                telemetry = disabled;
-              };
-            };
-            nushell = enabled;
-            tsserver = enabled;
-            htmx = enabled;
-            zls = enabled;
-            rnix-lsp = enabled;
-            bashls = enabled;
-            rust-analyzer = {
-              enable = true;
-              installRustc = false;
-              installCargo = false;
-            };
-            html = enabled;
-            ccls = enabled;
-            cmake = enabled;
-            csharp-ls = enabled;
-            cssls = enabled;
-            gopls = enabled;
-            jsonls = enabled;
-            pyright = enabled;
-            tailwindcss = enabled;
-          };
-        };
-        lsp-lines = enabled;
-        treesitter = {
-          enable = true;
-          nixGrammars = true;
-          indent = true;
-          languageRegister.nu = "nu";
-          parserInstallDir = "${home}/.local/share/treesitter/parsers";
-          grammarPackages = plugins.nvim-treesitter.passthru.allGrammars ++ [
-            treesitter-nu
-          ];
-        };
-        cmp = {
-          enable = true;
-          settings = {
-            enable = true;
-            autoEnableSources = true;
-            snippet.expand = ''
-              function(args)
-                -- vim.fn["vsnip#anonymous"](args.body)
-                require('luasnip').lsp_expand(args.body)
-              end
-            '';
-            sources = [
-              { name = "nvim_lsp"; }
-              { name = "nvim_lsp_document_symbol"; }
-              { name = "nvim_lsp_signature_help"; }
-              # { name = "codeium"; }
-              { name = "path"; }
-              { name = "buffer"; }
-              { name = "calc"; }
-            ];
-            mapping = {
-              "<C-b>" = "cmp.mapping.scroll_docs(-4)";
-              "<C-f>" = "cmp.mapping.scroll_docs(4)";
-              "<C-Space>" = "cmp.mapping.complete()";
-              "<C-e>" = "cmp.mapping.close()";
-              "<C-p>" = "cmp.mapping.select_prev_item()";
-              "<C-n>" = "cmp.mapping.select_next_item()";
-              "<CR>" = ''
-                cmp.mapping.confirm({
-                  behavior = cmp.ConfirmBehavior.Insert,
-                  select = true,
-                })
-              '';
-              "<Tab>" = ''
-                cmp.mapping(function(fallback)
-                  local supermaven = require("supermaven-nvim.completion_preview")
-                  local inlay_instance = supermaven.inlay_instance
-                  local accept_cmp = function()
-
-                  end
-
-                  if supermaven.inlay_instance ~= nil then
-                    supermaven:accept_completion_text()
-                  else
-
-                  end
-
-                  if cmp.visible() then
-                    cmp.select_next_item()
-                  else
-                    fallback()
-                  end
-                end, {'i', 's'})
-              '';
-              "<S-Tab>" = ''
-                cmp.mapping(function(fallback)
-                  if cmp.visible() then
-                    cmp.select_prev_item()
-                  else
-                    fallback()
-                  end
-                end, {'i', 's'})
-              '';
-            };
-          };
-        };
       };
 
       extraPlugins = [
@@ -326,11 +143,6 @@ in
         plugins.telescope-file-browser-nvim
       ];
 
-      extraFiles = {
-        "queries/nu/highlights.scm" = builtins.readFile "${treesitter-nu}/queries/highlights.scm";
-        "queries/nu/injections.scm" = builtins.readFile "${treesitter-nu}/queries/injections.scm";
-      };
-
       extraConfigLua =
         let
           extraConfigPath = path.fromString "/home/jules/000_dev/000_config/010_minimal-hyprland-flake/flake-src/modules/nixos/neovim/extraConfig.lua";
@@ -339,9 +151,6 @@ in
         (lib.concatStringsSep "\n" [
           "vim.opt.runtimepath:append(vim.fn.stdpath('data') .. '/xeta')" # ~/.local/share/nvim/xeta
           "package.path = package.path .. ';' .. vim.fn.stdpath('data') .. '/xeta/?.lua'"
-          "local theme_module = require('theme')"
-          "local colors = theme_module.colors"
-          "local theme = theme_module.theme"
           extraConfigLua
         ]);
 
@@ -499,11 +308,13 @@ in
         {
           action = "<cmd>bnext<CR>";
           key = "<Tab>";
+          mode = [ "n" ];
           options.silent = false;
         }
         {
           action = "<cmd>bprev<CR>";
           key = "<S-Tab>";
+          mode = [ "n" ];
           options.silent = false;
         }
         {
@@ -511,10 +322,10 @@ in
           lua = true;
           action = ''
             function()
-            require('hop').hint_char1({
-            direction = require'hop.hint'.HintDirection.AFTER_CURSOR,
-            current_line_only = true
-            })
+              require('hop').hint_char1({
+                direction = require'hop.hint'.HintDirection.AFTER_CURSOR,
+                current_line_only = true
+              })
             end
           '';
           options.noremap = true;
@@ -524,10 +335,10 @@ in
           lua = true;
           action = ''
             function()
-            require('hop').hint_char1({
-            direction = require'hop.hint'.HintDirection.BEFORE_CURSOR,
-            current_line_only = true
-            })
+              require('hop').hint_char1({
+                direction = require'hop.hint'.HintDirection.BEFORE_CURSOR,
+                current_line_only = true
+              })
             end
           '';
           options.noremap = true;
@@ -537,11 +348,11 @@ in
           lua = true;
           action = ''
             function()
-            require('hop').hint_char1({
-            direction = require'hop.hint'.HintDirection.AFTER_CURSOR,
-            current_line_only = true,
-            hint_offset = -1
-            })
+              require('hop').hint_char1({
+                direction = require'hop.hint'.HintDirection.AFTER_CURSOR,
+                current_line_only = true,
+                hint_offset = -1
+              })
             end
           '';
           options.noremap = true;
@@ -551,11 +362,11 @@ in
           lua = true;
           action = ''
             function()
-            require('hop').hint_char1({
-            direction = require'hop.hint'.HintDirection.BEFORE_CURSOR,
-            current_line_only = true,
-            hint_offset = 1
-            })
+              require('hop').hint_char1({
+                direction = require'hop.hint'.HintDirection.BEFORE_CURSOR,
+                current_line_only = true,
+                hint_offset = 1
+              })
             end
           '';
           options.noremap = true;
@@ -640,9 +451,9 @@ in
         }
       ];
 
-      highlight = {
-        Comment.fg = "#ff00ff";
-        Comment.bg = "#000000";
+      highlight = with theme; {
+        Comment.fg = "#${base0F}";
+        Comment.bg = "#${base01}";
         Comment.underline = true;
         Comment.bold = true;
       };
@@ -650,3 +461,18 @@ in
   };
 }
 
+
+#
+# M.colors = {
+#   blue   = '#2AC3DE',
+#   cyan   = '#B4F9F8',
+#   black  = '#1A1B26',
+#   white  = '#A9B1D6',
+#   red    = '#C0CAF5',
+#   violet = '#BB9AF7',
+#   warn   = '#ebdbb2',
+#   grey   = '#2F3549',
+#   error  = '#b16286',
+# }
+#
+#

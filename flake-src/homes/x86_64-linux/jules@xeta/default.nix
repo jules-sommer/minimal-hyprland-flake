@@ -53,6 +53,7 @@ in
   };
 
   programs = {
+    # nixvim.enable = true;
     helix = {
       enable = true;
       defaultEditor = true;

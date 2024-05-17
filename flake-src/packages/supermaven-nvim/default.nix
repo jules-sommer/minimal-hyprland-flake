@@ -5,7 +5,7 @@ let
 in
 (buildVimPlugin {
   pname = "supermaven-nvim";
-  version = "2024-05-12";
+  version = "2024-05-15";
   src = pkgs.fetchFromGitHub {
     owner = "supermaven-inc";
     repo = "supermaven-nvim";

@@ -1,10 +1,9 @@
-{
-  lib,
-  pkgs,
-  config,
-  inputs,
-  system,
-  ...
+{ lib
+, pkgs
+, config
+, inputs
+, system
+, ...
 }:
 let
   inherit (lib) types mkEnableOption mkIf;
@@ -36,13 +35,13 @@ in
     services.xremap.config = {
       # Modmap for single key rebinds
       modmap = [
-        {
-          name = "Swap Caps Lock and Escape";
-          remap = {
-            KEY_CAPSLOCK = "KEY_ESC";
-            KEY_ESC = "KEY_CAPSLOCK";
-          };
-        }
+        # {
+        #   name = "Swap Caps Lock and Escape";
+        #   remap = {
+        #     KEY_CAPSLOCK = "KEY_ESC";
+        #     KEY_ESC = "KEY_CAPSLOCK";
+        #   };
+        # }
       ];
 
       # Keymap for key combo rebinds

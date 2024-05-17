@@ -181,7 +181,10 @@
 
       # Applies to all home-manager configs
       home.modules = with inputs; [
-        nixvim.homeManagerModules.default
+        nixvim.homeManagerModules.nixvim
+        ({
+          home-manager.users.jules.programs.nixvim.enable = true;
+        })
         hyprland.homeManagerModules.default
         xremap-flake.homeManagerModules.default
       ];

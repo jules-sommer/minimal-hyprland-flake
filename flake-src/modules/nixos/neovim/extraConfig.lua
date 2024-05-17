@@ -1,3 +1,7 @@
+local theme_module = require('theme')
+local colors = theme_module.colors
+local theme = theme_module.theme
+
 vim.opt.guifont = "JetBrainsMono\\ NFM,Noto_Color_Emoji:h14"
 vim.g.neovide_cursor_animation_length = 0.05
 
@@ -103,7 +107,7 @@ require('lualine').setup {
         'diagnostics',
         sources = { 'nvim_diagnostic' },
         symbols = { error = ' ', warn = ' ', info = ' ' },
-        color = { fg = colors.warn, bg = colors.error }
+        color = { fg = colors.warn, bg = colors.cyan }
       }
     },
     lualine_c = {

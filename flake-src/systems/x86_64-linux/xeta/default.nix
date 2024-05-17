@@ -1,8 +1,7 @@
-{
-  pkgs,
-  lib,
-  config,
-  ...
+{ pkgs
+, lib
+, config
+, ...
 }:
 let
   inherit (lib.xeta) enabled;
@@ -41,7 +40,17 @@ in
       env = enabled;
     };
 
-    nixvim = enabled;
+    nixvim = {
+      enable = true;
+      plugins = {
+        cmp = enabled;
+        oil = enabled;
+        treesitter = enabled;
+        obsidian = enabled;
+        lsp = enabled;
+        hop = enabled;
+      };
+    };
 
     services = {
       audio.pipewire = {

@@ -3,14 +3,18 @@ base-rebuild update="false":
   print "Building system flake..."
   with-env [FLAKE $"(pwd)"] {
     print $env.FLAKE
-    nu ./.build/rebuild.nu
+    nu ./build/mod.nu
   }
 
 
 # Default NixOS rebuild command
 
 rebuild:
-    sudo nixos-rebuild switch --flake .#
+  #!/run/current-system/sw/bin/nu
+  print ($env.PWD);
+  print (hostname);
+  # rebuild --hostname (hostname)
+  
 
 # Rebuild and update the flake lock file
 rebuild-update:
