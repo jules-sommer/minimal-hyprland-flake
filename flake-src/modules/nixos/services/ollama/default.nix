@@ -28,7 +28,6 @@ in
       llm-ls
       llm
       gorilla-cli
-      lmstudio
       promptfoo
       jan
       ollama

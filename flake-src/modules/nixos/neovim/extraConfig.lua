@@ -120,11 +120,7 @@ require('lualine').setup {
     lualine_x = {
       'encoding',
       'fileformat',
-      {
-        'get_status_icon',
-        cond = function() return get_condition() end,
-        right_padding = 2
-      }
+      get_status_icon,
     },
     lualine_y = {
       'filetype',

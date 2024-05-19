@@ -108,14 +108,9 @@
       inputs.flake-utils.follows = "flake-utils";
     };
 
-    neovim-flake = {
-      url = "github:neovim/neovim?dir=contrib";
-      inputs.nixpkgs.follows = "master";
-    };
-
     neovim-nightly-overlay = {
       url = "github:nix-community/neovim-nightly-overlay";
-      inputs.nixpkgs.follows = "master";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     neovim-git = {
@@ -128,12 +123,19 @@
       inputs.nixpkgs.follows = "master";
     };
 
+    split-monitor-workspaces = {
+      url = "github:Duckonaut/split-monitor-workspaces";
+      inputs.hyprland.follows = "hyprland";
+      inputs.nixpkgs.follows = "master";
+    };
+
     hyprland-vdesk = {
       url = "github:levnikmyskin/hyprland-virtual-desktops";
+      inputs.hyprland.follows = "hyprland";
     };
 
     hyprland = {
-      url = "github:hyprwm/Hyprland";
+      url = "github:hyprwm/Hyprland/aaf35b9f1f0ce49080f2a0b1e7943336b1ba6057";
       # url = "/home/jules/000_dev/015_C/000_hyprland";
       inputs.nixpkgs.follows = "master";
     };

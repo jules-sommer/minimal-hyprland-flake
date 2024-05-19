@@ -6,6 +6,8 @@ base-rebuild update="false":
     nu ./build/mod.nu
   }
 
+simple-rebuild cores=12 hostname="xeta" impure="--impure":
+    sudo nixos-rebuild switch --cores {{cores}} --flake .#{{flake}} {{impure}}
 
 # Default NixOS rebuild command
 

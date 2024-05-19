@@ -20,12 +20,11 @@ in
       programs.nixvim = {
         plugins = {
           luasnip = enabled;
-          rainbow-delimiters = enabled;
-          better-escape = enabled;
           indent-blankline = enabled;
           improved-search = enabled;
           indent-o-matic = enabled;
           nvim-colorizer = enabled;
+          none-ls = enabled;
           nvim-autopairs = enabled;
           comment = enabled;
           nix = enabled;
@@ -57,6 +56,8 @@ in
               htmx = enabled;
               zls = enabled;
               rnix-lsp = enabled;
+              nixd = enabled;
+              nil_ls = enabled;
               bashls = enabled;
               rust-analyzer = {
                 enable = true;
@@ -77,6 +78,30 @@ in
         };
 
         keymaps = [
+          {
+            action = "require('lsp_lines').toggle";
+            lua = true;
+            key = "<leader>l";
+            options = {
+              desc = "Toggle LSP virtual line diagnostics";
+              noremap = true;
+            };
+          }
+          {
+            action = "<cmd>vim.lsp.buf.declaration<CR>";
+            key = "gD";
+            options = { noremap = true; desc = "Go to declaration"; };
+          }
+          {
+            action = "vim.lsp.buf.code_action";
+            key = "<leader>ca";
+            options = { noremap = true; desc = "See available code actions"; };
+          }
+          {
+            action = "vim.lsp.buf.rename";
+            key = "<leader>rn";
+            options = { noremap = true; desc = "Smart rename"; };
+          }
           {
             action = "<cmd>vim.diagnostic.open_float<CR>";
             key = "<leader>d";

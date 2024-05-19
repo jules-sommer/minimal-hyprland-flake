@@ -53,7 +53,7 @@ in
               { name = "nvim_lsp_document_symbol"; }
               { name = "nvim_lsp_signature_help"; }
               { name = "path"; }
-              { name = "buffer"; }
+              # { name = "buffer"; }
               { name = "calc"; }
             ];
 
@@ -63,7 +63,7 @@ in
               "<C-b>" = "cmp.mapping.scroll_docs(-4)";
               "<C-f>" = "cmp.mapping.scroll_docs(4)";
               "<C-Space>" = "cmp.mapping.complete()";
-              "<C-c>" = "cmp.mapping.close()";
+              "<C-c>" = "cmp.mapping.abort()";
 
               "<C-p>" = "cmp.mapping.select_prev_item()";
               "<C-n>" = "cmp.mapping.select_next_item()";
@@ -72,7 +72,7 @@ in
 
               "<CR>" = ''
                 cmp.mapping.confirm({
-                  behavior = cmp.ConfirmBehavior.Insert,
+                  behavior = cmp.ConfirmBehavior.Replace,
                   select = true,
                 })
               '';
@@ -82,13 +82,15 @@ in
                   local completion = require('supermaven-nvim.completion_preview')
 
                   if cmp.visible() then
-                    cmp.mapping.abort()
-                  elseif completion.inlay_instance ~= nil then
-                    completion.on_dispose_inlay()
-                  else
-                    fallback()
+                    cmp.abort()
                   end
-                end, {'i'})
+
+                  if completion.inlay_instance ~= nil then
+                    completion.on_dispose_inlay()
+                  end
+
+                  fallback()
+                end, {'i', 's'})
               '';
 
               "<Tab>" = ''

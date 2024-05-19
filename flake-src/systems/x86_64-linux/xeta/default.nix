@@ -49,6 +49,10 @@ in
         obsidian = enabled;
         lsp = enabled;
         hop = enabled;
+        theme = enabled;
+        ollama = enabled;
+        startup = enabled;
+        telescope = enabled;
       };
     };
 
@@ -65,12 +69,14 @@ in
       polkit = enabled;
       ollama = enabled;
     };
+
     input = {
       kbd = {
         enable = true;
         layout = "us";
       };
     };
+
     programs = {
       chat = enabled;
       media = enabled;

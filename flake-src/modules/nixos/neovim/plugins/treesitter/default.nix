@@ -25,6 +25,7 @@ in
       plugins.treesitter = {
         enable = true;
         nixGrammars = true;
+        nixvimInjections = true;
         indent = true;
         languageRegister.nu = "nu";
         parserInstallDir = "${home}/.local/share/treesitter/parsers";
