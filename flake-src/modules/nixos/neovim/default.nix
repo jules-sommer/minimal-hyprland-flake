@@ -142,19 +142,3 @@ in
     };
   };
 }
-
-
-#
-# M.colors = {
-#   blue   = '#2AC3DE',
-#   cyan   = '#B4F9F8',
-#   black  = '#1A1B26',
-#   white  = '#A9B1D6',
-#   red    = '#C0CAF5',
-#   violet = '#BB9AF7',
-#   warn   = '#ebdbb2',
-#   grey   = '#2F3549',
-#   error  = '#b16286',
-# }
-#
-#
